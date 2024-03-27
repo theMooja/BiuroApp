@@ -30,6 +30,7 @@
               "projects/biuro-app/src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/purple-green.css",
               "projects/biuro-app/src/styles.scss"
             ],
             "scripts": []
@@ -91,6 +92,7 @@
               "projects/biuro-app/src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/purple-green.css",
               "projects/biuro-app/src/styles.scss"
             ],
             "scripts": []
