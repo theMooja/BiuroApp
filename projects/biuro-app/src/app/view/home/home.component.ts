@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { TestDataService } from '../../service/test-data.service';
 
 
 
@@ -15,4 +16,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class HomeComponent {
   testVal: String = "tu";
+
+  constructor(private dataService: TestDataService) {
+
+  }
+
+  onTestButtonClick(): void {
+    this.testVal = this.dataService.getString();
+  }
+
 }
