@@ -18,11 +18,10 @@ export class HomeComponent {
   testVal: String = "tu";
 
   constructor(private dataService: TestDataService) {
-
   }
 
-  onTestButtonClick(): void {
-    this.testVal = this.dataService.getString();
+  async onTestButtonClick(): Promise<void> {
+    this.testVal = await this.dataService.getString();
   }
 
 }

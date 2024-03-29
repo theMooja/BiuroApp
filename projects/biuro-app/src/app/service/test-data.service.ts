@@ -7,7 +7,7 @@ export class TestDataService {
 
   constructor() { }
 
-  getString(): String {
-    return window.electron.testData();
+  async getString(): Promise<String> {
+    return await window.electron.testData();
   }
 }

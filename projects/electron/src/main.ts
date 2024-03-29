@@ -1,5 +1,8 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from 'path';
+import mongoose from 'mongoose';
+import dbApi from './api/db';
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -19,20 +22,23 @@ const createWindow = (): void => {
     }
   });
 
+  const startURL = app.isPackaged ? `file://${path.join(__dirname, 'BiuroApp', 'index.html')}` : `http://localhost:4200`;
 
-
-  const startURL = app.isPackaged ? `file://${path.join(__dirname, 'BiuroApp','index.html')}` : `http://localhost:4200`;
-  
   mainWindow.loadURL(startURL);
-
 };
+
+const setupDatabase = (): void => {
+  mongoose.connect('mongodb://localhost:27017/test');
+
+  ipcMain.handle('db:testData', dbApi.testData);
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createWindow();
-
+  setupDatabase();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

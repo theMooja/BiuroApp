@@ -1,7 +1,7 @@
 {
   "name": "biuro-app",
   "version": "0.0.0",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
     "build-electron": "tsc --project projects/electron/tsconfig.json",
     "ng": "ng",

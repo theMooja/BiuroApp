@@ -1,15 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-
-//import dbApi from './api/db';
-const dbApi = {
-  testData(): string {
-    return 'dbTestData';
-  }
-}
-
 const contextBridgeApi = {
-  ...dbApi
+  testData: () => ipcRenderer.invoke('db:testData')
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);
