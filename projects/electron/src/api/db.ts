@@ -11,9 +11,9 @@ const userSchema = new Schema<IUser>({
 const User = model<IUser>('User', userSchema);
 
 export default {
-    testData(): string {
+    testData(name: string): string {
         const user = new User({
-            name: 'testowy'
+            name: name
         });
         user.save();
 

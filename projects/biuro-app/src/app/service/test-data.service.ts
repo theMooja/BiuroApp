@@ -8,6 +8,6 @@ export class TestDataService {
   constructor() { }
 
   async getString(): Promise<String> {
-    return await window.electron.testData();
+    return await window.electron.testData('jantestowy');
   }
 }

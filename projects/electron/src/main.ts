@@ -30,7 +30,7 @@ const createWindow = (): void => {
 const setupDatabase = (): void => {
   mongoose.connect('mongodb://localhost:27017/test');
 
-  ipcMain.handle('db:testData', dbApi.testData);
+  ipcMain.handle('db:testData', (e, data) => dbApi.testData(data));
 }
 
 // This method will be called when Electron has finished
