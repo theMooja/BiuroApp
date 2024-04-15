@@ -1,1 +1,18 @@
-<app-home></app-home>
+<div class="view">
+    <div class="menu-bar">
+        <div class="button-container">
+            <button mat-fab aria-label="home" routerLink="/home">
+                <mat-icon>home</mat-icon>
+            </button>
+        </div>
+        <div class="button-container">
+            <button mat-fab aria-label="settings" routerLink="/settings">
+                <mat-icon>settings</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="outlet">
+        <router-outlet></router-outlet>
+    </div>
+
+</div>
