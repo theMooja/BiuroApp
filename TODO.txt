@@ -1,0 +1,20 @@
+HOME
+
+-dodać grid/liste tak zeby mozna w niektóre kolumny dać swoj własny template + expansion panel
+-dodac funkcje, która pobierze wszystkie dane z bazy i je wyświetli (ClientDataService.get())
+
+kolumny:
+-clientName [string]
+-...definiowalne columny string/number/date, na początku majl/vat/program
+-process(postęp prac) [complex]
+-time icons (play, stop, +/-)
+
+SETTINGS
+    
+    ekran definicji postępu prac
+
+    -liczba kroków
+    -taski dla kroku
+    
+
+
