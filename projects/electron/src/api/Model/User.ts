@@ -4,11 +4,11 @@ interface IUser {
     name: string;
 }
 
-const userSchema = new Schema<IUser>({
+const schema = new Schema<IUser>({
     name: { type: String, required: true }
 });
 
-const User = model<IUser>('User', userSchema);
+const User = model<IUser>('User', schema);
 
 export default {
     testData(name: string): string {

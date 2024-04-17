@@ -1,7 +1,7 @@
-import Clients from './Users';
-
-
+import User from './Model/User';
+import March from './Model/March';
 
 export default {
-    ...Clients
+    User: { ...User },
+    March: { ...March }
 }
