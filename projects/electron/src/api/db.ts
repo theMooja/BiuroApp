@@ -1,22 +1,7 @@
-import { Schema, model } from 'mongoose';
-
-interface IUser {
-    name: string;
-}
-
-const userSchema = new Schema<IUser>({
-    name: { type: String, required: true }
-});
-
-const User = model<IUser>('User', userSchema);
+import User from './Model/User';
+import March from './Model/March';
 
 export default {
-    testData(name: string): string {
-        const user = new User({
-            name: name
-        });
-        user.save();
-
-        return 'dbTestData';
-    }
+    User: { ...User },
+    March: { ...March }
 }
