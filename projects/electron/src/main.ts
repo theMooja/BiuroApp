@@ -31,7 +31,7 @@ const setupDatabase = (): void => {
   mongoose.connect('mongodb://localhost:27017/test');
 
   ipcMain.handle('db:testData', (e, data) => dbApi.User.testData(data));
-  ipcMain.handle('db:createMarch', (e, data) => dbApi.March.create(data));
+  ipcMain.handle('db:createMarchTemplate', (e, data) => dbApi.March.createTemplate(data));
 }
 
 // This method will be called when Electron has finished

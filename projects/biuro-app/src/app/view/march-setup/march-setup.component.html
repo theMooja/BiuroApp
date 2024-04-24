@@ -2,19 +2,23 @@
     <button mat-fab color="primary" aria-label="Add">
         <mat-icon>add</mat-icon>
     </button>
-    <form id="marchForm" [formGroup]="marchForm">
+    <form id="marchForm" [formGroup]="marchForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
             <mat-label>Nazwa</mat-label>
             <input matInput formControlName="name">
         </mat-form-field>
-        <button mat-fab color="primary" aria-label="Add" (click)="addStep()">
+        <button mat-fab color="primary" aria-label="Add" (click)="addStep()" type='button'>
             <mat-icon>add</mat-icon>
         </button>
-        <div *ngFor="let step of steps; let i=index">
-            <mat-form-field>
-                <mat-label>Czynność</mat-label>
-                <input matInput formControlName="name">
-            </mat-form-field>
+        <div formArrayName="steps">
+            <div *ngFor="let step of steps.controls; let i=index" [formGroupName]="i">
+                <mat-form-field>
+                    <mat-label>Czynność</mat-label>
+                    <input matInput formControlName="title">
+                </mat-form-field>
+            </div>
         </div>
+
+        <button mat-raised-button color="primary" type="submit">Zapisz</button>
     </form>
 </div>

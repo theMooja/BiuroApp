@@ -5,6 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
+import { MarchDataService } from '../../service/march-data.service';
 
 
 @Component({
@@ -15,23 +16,34 @@ import { CommonModule } from '@angular/common';
   styleUrl: './march-setup.component.scss'
 })
 export class MarchSetupComponent {
-  marchForm: FormGroup = this.formBuilder.group({
-    name: new FormControl(''),
-    steps: this.formBuilder.array([])
-  });
+  marchForm: FormGroup
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+    private dataService: MarchDataService
+  ) {
 
-  addStep() {
-    const step = this.formBuilder.group({
-      name: ['', Validators.required],
-      type: ['', Validators.required],
+    this.marchForm = this.formBuilder.group({
+      name: this.formBuilder.control(''),
+      steps: this.formBuilder.array([])
     });
-
-    (this.marchForm.get('steps') as FormArray).push(step);
   }
 
-  get steps(): FormControl[] {
-    return (this.marchForm.get('steps') as FormArray).controls as FormControl[];
+  get steps() {
+    return this.marchForm.get('steps') as FormArray;
+  }
+
+  addStep() {
+    this.steps.push(this.createStepGroup());
+  }
+
+  createStepGroup(): FormGroup {
+    return this.formBuilder.group({
+      title: this.formBuilder.control('')
+    });
+  }
+
+  onSubmit() {
+    console.log(this.marchForm.value);
+    this.dataService.createTemplate(this.marchForm.value);
   }
 }

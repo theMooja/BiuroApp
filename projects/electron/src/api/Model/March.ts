@@ -10,7 +10,7 @@ interface IMarch {
 
 
 const stepSchema = new Schema<IMarchStep>({
-    value: { type: Number },
+    title: { type: String },
 });
 const MarchStep = model<IMarchStep>('MarchStep', stepSchema);
 
@@ -23,10 +23,10 @@ const March = model<IMarch>('March', marchSchema);
 
 
 export default {
-    create(name: string, steps: IMarchStep[]) {
+    createTemplate(value: any) {
         const march = new March({
-            name: name,
-            children: steps
+            name: value.name,
+            children: value.steps
         });
         march.save();
     }
