@@ -1,0 +1,20 @@
+<div id="view">
+    <button mat-fab color="primary" aria-label="Add">
+        <mat-icon>add</mat-icon>
+    </button>
+    <form id="marchForm" [formGroup]="marchForm">
+        <mat-form-field>
+            <mat-label>Nazwa</mat-label>
+            <input matInput formControlName="name">
+        </mat-form-field>
+        <button mat-fab color="primary" aria-label="Add" (click)="addStep()">
+            <mat-icon>add</mat-icon>
+        </button>
+        <div *ngFor="let step of steps; let i=index">
+            <mat-form-field>
+                <mat-label>Czynność</mat-label>
+                <input matInput formControlName="name">
+            </mat-form-field>
+        </div>
+    </form>
+</div>
