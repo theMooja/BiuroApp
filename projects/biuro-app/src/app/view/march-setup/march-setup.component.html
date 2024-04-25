@@ -11,11 +11,26 @@
             <mat-icon>add</mat-icon>
         </button>
         <div formArrayName="steps">
-            <div *ngFor="let step of steps.controls; let i=index" [formGroupName]="i">
+            <div *ngFor="let step of steps.controls; let i=index" [formGroupName]="i" class="step-container">
                 <mat-form-field>
                     <mat-label>Czynność</mat-label>
                     <input matInput formControlName="title">
                 </mat-form-field>
+                <mat-select formControlName="type">
+                    <mat-option *ngFor="let type of stepTypes" [value]="type">{{ type }}</mat-option>
+                </mat-select>
+                <div class="button-container">
+                    <button mat-icon-button (click)="removeStep(i)" type='button'>
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="moveStepUp(i)" [disabled]="i === 0" type='button'>
+                        <mat-icon>arrow_upward</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="moveStepDown(i)" [disabled]="i === steps.controls.length - 1"
+                        type='button'>
+                        <mat-icon>arrow_downward</mat-icon>
+                    </button>
+                </div>
             </div>
         </div>
 

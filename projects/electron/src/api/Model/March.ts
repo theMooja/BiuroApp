@@ -1,32 +1,20 @@
 import { Schema, model } from 'mongoose';
+import { IMarchStepTemplate, IMarchTemplate } from './../../../../interfaces'
 
-interface IMarchStep {
-
-}
-interface IMarch {
-    name: string;
-    children: [IMarchStep]
-}
-
-
-const stepSchema = new Schema<IMarchStep>({
+const stepSchema = new Schema<IMarchStepTemplate>({
     title: { type: String },
 });
-const MarchStep = model<IMarchStep>('MarchStep', stepSchema);
-
-const marchSchema = new Schema<IMarch>({
+const marchSchema = new Schema<IMarchTemplate>({
     name: { type: String, required: true },
-    children: [stepSchema]
+    steps: [stepSchema]
 });
-const March = model<IMarch>('March', marchSchema);
-
-
+const March = model<IMarchTemplate>('March', marchSchema);
 
 export default {
     createTemplate(value: any) {
         const march = new March({
             name: value.name,
-            children: value.steps
+            steps: value.steps
         });
         march.save();
     }

@@ -10,4 +10,6 @@ export class MarchDataService {
   async createTemplate(value: any) {
     window.electron.createMarchTemplate(value)
   }
+
+  
 }

@@ -6,17 +6,22 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MarchDataService } from '../../service/march-data.service';
+import { StepType } from '../../../../../interfaces';
+import { MatSelectModule } from '@angular/material/select';
+
 
 
 @Component({
   selector: 'app-march-setup',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule],
+  imports: [CommonModule, MatSelectModule, MatIconModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule],
   templateUrl: './march-setup.component.html',
   styleUrl: './march-setup.component.scss'
 })
 export class MarchSetupComponent {
-  marchForm: FormGroup
+  marchForm: FormGroup;
+  stepTypes = Object.values(StepType);
+
 
   constructor(private formBuilder: FormBuilder,
     private dataService: MarchDataService
@@ -28,6 +33,29 @@ export class MarchSetupComponent {
     });
   }
 
+  createStepGroup(): FormGroup {
+    return this.formBuilder.group({
+      title: this.formBuilder.control(''),
+      type: StepType.Double
+    });
+  }
+
+  moveStepUp(i: number) {
+    const temp = this.steps.at(i).value;
+    this.steps.at(i).setValue(this.steps.at(i - 1).value);
+    this.steps.at(i - 1).setValue(temp);
+  }
+
+  moveStepDown(i: number) {
+    const temp = this.steps.at(i).value;
+    this.steps.at(i).setValue(this.steps.at(i + 1).value);
+    this.steps.at(i + 1).setValue(temp);
+  }
+
+  removeStep(i: number) {
+    this.steps.removeAt(i);
+  }
+
   get steps() {
     return this.marchForm.get('steps') as FormArray;
   }
@@ -36,13 +64,14 @@ export class MarchSetupComponent {
     this.steps.push(this.createStepGroup());
   }
 
-  createStepGroup(): FormGroup {
-    return this.formBuilder.group({
-      title: this.formBuilder.control('')
+  updateSequenceNumbers() {
+    this.steps.controls.forEach((step, index) => {
+      step.get('sequence')?.setValue(index);
     });
   }
 
   onSubmit() {
+    this.updateSequenceNumbers();
     console.log(this.marchForm.value);
     this.dataService.createTemplate(this.marchForm.value);
   }
