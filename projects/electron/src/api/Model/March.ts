@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IMarchStepTemplate, IMarchTemplate } from './../../../../interfaces'
+import { IMarchStepTemplate, IMarchTemplate } from '../../interfaces'
 
 const stepSchema = new Schema<IMarchStepTemplate>({
     title: { type: String },
