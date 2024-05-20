@@ -1,19 +1,24 @@
 import { Schema, model } from 'mongoose';
-import { IMarchStepTemplate, IMarchTemplate } from '../../interfaces'
+import { IMarchStepTemplate, IMarchTemplate, StepType } from '../../interfaces'
 
 const stepTemplateSchema = new Schema<IMarchStepTemplate>({
     title: { type: String },
+    sequence: { type: Number },
+    type: { type: String }
 });
 const marchTemplateSchema = new Schema<IMarchTemplate>({
     name: { type: String },
     steps: [stepTemplateSchema]
 });
-const March = model<IMarchTemplate>('March', marchTemplateSchema);
+const MarchTemplateModel = model<IMarchTemplate>('MarchTemplate', marchTemplateSchema);
+const MarchStepTemplateModel = model<IMarchStepTemplate>('MarchStepTemplate', stepTemplateSchema);
 
 export default {
+    marchTemplateModel: MarchTemplateModel,
+    marchStepTemplateModel: MarchStepTemplateModel,
     createTemplate(value: IMarchTemplate) {
 
-        const march = new March({
+        const march = new MarchTemplateModel({
             name: value.name,
             steps: value.steps
         });
@@ -27,7 +32,7 @@ export default {
 
     async findTemplates(value?: string): Promise<IMarchTemplate[]> {
         try {
-            const templates: IMarchTemplate[] = await March.find({}, '-_id -__v').lean().exec();
+            const templates: IMarchTemplate[] = await MarchTemplateModel.find({}, '-_id -__v').lean().exec();
             return templates;
         } catch (error) {
             throw new Error(`Error finding March templates: ${error}`);

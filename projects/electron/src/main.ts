@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import path from 'path';
 import mongoose from 'mongoose';
 import dbApi from './api/db';
+import testdata from './testdata';
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -28,7 +29,8 @@ const createWindow = (): void => {
 };
 
 const setupDatabase = (): void => {
-  mongoose.connect('mongodb://localhost:27017/test');
+  mongoose.connect('mongodb://localhost:27017/biuro');
+  testdata.populate();
 
   ipcMain.handle('db:testData', (e, data) => dbApi.User.testData(data));
   ipcMain.handle('db:March:createTemplate', (e, data) => dbApi.March.createTemplate(data));
