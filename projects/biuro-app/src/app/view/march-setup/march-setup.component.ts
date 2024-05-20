@@ -14,7 +14,9 @@ import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-march-setup',
   standalone: true,
-  imports: [CommonModule, MatSelectModule, MatIconModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule],
+  imports: [CommonModule, MatFormFieldModule, MatSelectModule,
+    MatInputModule, MatIconModule, MatButtonModule,
+    ReactiveFormsModule, MatInputModule, MatFormFieldModule],
   templateUrl: './march-setup.component.html',
   styleUrl: './march-setup.component.scss'
 })
@@ -22,15 +24,36 @@ export class MarchSetupComponent {
   marchForm: FormGroup;
   stepTypes = Object.values(StepType);
 
+  selectedOption?: string;
+  templateOptions = [
+    { value: 'option1', viewValue: 'Option 1' },
+    { value: 'option2', viewValue: 'Option 2' },
+    { value: 'option3', viewValue: 'Option 3' }
+  ];
 
   constructor(private formBuilder: FormBuilder,
     private dataService: MarchDataService
   ) {
-
     this.marchForm = this.formBuilder.group({
       name: this.formBuilder.control(''),
       steps: this.formBuilder.array([])
     });
+  }
+
+  async ngOnInit() {
+    let templates = await this.dataService.findTemplates("");
+    this.templateOptions = templates.map(x => {
+      return {
+        value: x.name,
+        viewValue: x.name
+      }
+    });
+  }
+
+  onSelectionChange(event?: any) {
+    this.selectedOption = event?.value;
+    let t = this.dataService.findTemplates(event.value ?? "");
+    console.log(t);
   }
 
   createStepGroup(): FormGroup {

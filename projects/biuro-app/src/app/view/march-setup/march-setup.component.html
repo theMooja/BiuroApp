@@ -2,6 +2,15 @@
     <button mat-fab color="primary" aria-label="Add">
         <mat-icon>add</mat-icon>
     </button>
+    <button mat-fab aria-label="Search">
+        <mat-icon>search</mat-icon>
+    </button>
+    <mat-select (selectionChange)="onSelectionChange($event)">
+        <mat-option *ngFor="let option of templateOptions" [value]="option.value">
+          {{ option.viewValue }}
+        </mat-option>
+      </mat-select>
+
     <form id="marchForm" [formGroup]="marchForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
             <mat-label>Nazwa</mat-label>

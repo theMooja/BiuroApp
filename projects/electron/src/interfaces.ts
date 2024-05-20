@@ -13,3 +13,8 @@ export interface IMarchTemplate {
     name: string;
     steps: [IMarchStepTemplate]
 }
+
+export interface IMarchFilters {
+    name: string;
+    steps: [IMarchStepTemplate]
+}

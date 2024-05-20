@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IMarchTemplate } from "./../../../../electron/src/interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -11,5 +12,8 @@ export class MarchDataService {
     window.electron.createMarchTemplate(value)
   }
 
-  
+  async findTemplates(filter: string): Promise<IMarchTemplate[]> { //IMarchTemplate[]
+    return await window.electron.findMarchTemplates(filter);// as IMarchTemplate[];
+  }
+
 }
