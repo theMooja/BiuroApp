@@ -32,7 +32,8 @@ export default {
 
     async findTemplates(value?: string): Promise<IMarchTemplate[]> {
         try {
-            const templates: IMarchTemplate[] = await MarchTemplateModel.find({}, '-_id -__v').lean().exec();
+            const templates: IMarchTemplate[] = 
+            await MarchTemplateModel.find({}, '-_id -__v').lean().exec();
             return templates;
         } catch (error) {
             throw new Error(`Error finding March templates: ${error}`);

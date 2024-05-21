@@ -19,5 +19,10 @@ const ClientMonthlyModel = model<IClientMonthly>('ClientMonthly', clientMonthlyS
 
 export default {
     ClientModel: ClientModel,
-    ClientMonthlyModel: ClientMonthlyModel
+    ClientMonthlyModel: ClientMonthlyModel,
+
+    async getClientsMonthly(yeah: number, month: number){
+        const clients = await ClientModel.find().lean().exec();
+        return clients;
+    }
 }
