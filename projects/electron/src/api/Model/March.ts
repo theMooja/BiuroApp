@@ -26,7 +26,7 @@ export default {
         try {
             march.save()
         } catch {
-            console.log("EEE March::BDtemplate");
+            console.log("EEE March::createTemplate");
         }
     },
 

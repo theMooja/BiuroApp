@@ -10,11 +10,24 @@ export interface IMarchStepTemplate {
 }
 
 export interface IMarchTemplate {
-    name: string;
+    name: string,
     steps: [IMarchStepTemplate]
 }
 
 export interface IMarchFilters {
-    name: string;
+    name: string,
     steps: [IMarchStepTemplate]
+}
+
+export interface IClient {
+    name: string,
+    marchName: string
+}
+
+export interface IClientMonthly {
+    clientName: string,
+    month: number,
+    year: number,
+    marchName: string,
+    marchValues: [number]
 }

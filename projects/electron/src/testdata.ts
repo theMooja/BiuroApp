@@ -1,8 +1,10 @@
 import { IMarchTemplate, StepType } from './interfaces';
 import March from './api/Model/March';
+import Client from './api/Model/Client';
 
 const clearDB = async function () {
     await March.marchTemplateModel.collection.drop();
+    await Client.ClientModel.collection.drop();
 }
 
 const createMarchTemplates = function () {
@@ -29,9 +31,24 @@ const createMarchTemplates = function () {
     model2.save();
 }
 
+const createClients = function () {
+    let c1 = new Client.ClientModel({
+        name: 'c1',
+        marchName: 'tpl1'
+    });
+    let c2 = new Client.ClientModel({
+        name: 'c2',
+        marchName: 'tpl2'
+    });
+
+    c1.save();
+    c2.save();
+}
+
 export default {
     async populate(): Promise<void> {
         await clearDB();
         createMarchTemplates();
+        createClients();
     }
 }
