@@ -6,8 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MarchDataService } from '../../service/march-data.service';
-import { StepType } from './../../../../../electron/src/interfaces';
+import { IMarchStepTemplate, IMarchTemplate, StepType } from './../../../../../electron/src/interfaces';
 import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 
@@ -16,20 +17,14 @@ import { MatSelectModule } from '@angular/material/select';
   standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatSelectModule,
     MatInputModule, MatIconModule, MatButtonModule,
-    ReactiveFormsModule, MatInputModule, MatFormFieldModule],
+    ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatMenuModule],
   templateUrl: './march-setup.component.html',
   styleUrl: './march-setup.component.scss'
 })
 export class MarchSetupComponent {
   marchForm: FormGroup;
   stepTypes = Object.values(StepType);
-
-  selectedOption?: string;
-  templateOptions = [
-    { value: 'option1', viewValue: 'Option 1' },
-    { value: 'option2', viewValue: 'Option 2' },
-    { value: 'option3', viewValue: 'Option 3' }
-  ];
+  templates: IMarchTemplate[] = [];
 
   constructor(private formBuilder: FormBuilder,
     private dataService: MarchDataService
@@ -41,26 +36,34 @@ export class MarchSetupComponent {
   }
 
   async ngOnInit() {
-    let templates = await this.dataService.findTemplates("");
-    this.templateOptions = templates.map(x => {
-      return {
-        value: x.name,
-        viewValue: x.name
-      }
+    this.templates = await this.dataService.findTemplates("");
+  }
+
+  onEdit(template: IMarchTemplate) {
+    this.steps.clear();
+    this.marchForm.get('name')?.setValue(template.name);
+    template.steps.forEach(s => {
+      this.addStep(s);
     });
   }
 
-  onSelectionChange(event?: any) {
-    this.selectedOption = event?.value;
-    let t = this.dataService.findTemplates(event.value ?? "");
-    console.log(t);
+  onNew() {
+    this.marchForm.get('name')?.setValue('');
+    this.steps.clear();
   }
 
-  createStepGroup(): FormGroup {
-    return this.formBuilder.group({
+  createStepGroup(step?: IMarchStepTemplate): FormGroup {
+    let group = this.formBuilder.group({
       title: this.formBuilder.control(''),
       type: StepType.Double
     });
+
+    if(step){
+      group.controls.title.setValue(step.title);
+      group.controls.type.setValue(step.type);
+    }
+
+    return group;
   }
 
   moveStepUp(i: number) {
@@ -83,8 +86,8 @@ export class MarchSetupComponent {
     return this.marchForm.get('steps') as FormArray;
   }
 
-  addStep() {
-    this.steps.push(this.createStepGroup());
+  addStep(step?: IMarchStepTemplate) {
+    this.steps.push(this.createStepGroup(step));
   }
 
   updateSequenceNumbers() {

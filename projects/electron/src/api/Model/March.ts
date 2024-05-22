@@ -14,8 +14,8 @@ const MarchTemplateModel = model<IMarchTemplate>('MarchTemplate', marchTemplateS
 const MarchStepTemplateModel = model<IMarchStepTemplate>('MarchStepTemplate', stepTemplateSchema);
 
 export default {
-    marchTemplateModel: MarchTemplateModel,
-    marchStepTemplateModel: MarchStepTemplateModel,
+    MarchTemplateModel: MarchTemplateModel,
+    MarchStepTemplateModel: MarchStepTemplateModel,
     createTemplate(value: IMarchTemplate) {
 
         const march = new MarchTemplateModel({

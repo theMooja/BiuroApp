@@ -1,15 +1,19 @@
 <div id="view">
-    <button mat-fab color="primary" aria-label="Add">
+    <button mat-fab color="primary" aria-label="Add" (click)="onNew()">
         <mat-icon>add</mat-icon>
     </button>
-    <button mat-fab aria-label="Search">
-        <mat-icon>search</mat-icon>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>
+            edit_square
+        </mat-icon>
     </button>
-    <mat-select (selectionChange)="onSelectionChange($event)">
-        <mat-option *ngFor="let option of templateOptions" [value]="option.value">
-          {{ option.viewValue }}
-        </mat-option>
-      </mat-select>
+    <mat-menu #menu="matMenu">
+        @for(template of templates; track template.name){
+        <button mat-menu-item (click)="onEdit(template)">
+            <span>{{template.name}}</span>
+        </button>}
+    </mat-menu>
 
     <form id="marchForm" [formGroup]="marchForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
