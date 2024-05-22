@@ -16,24 +16,21 @@ const MarchStepTemplateModel = model<IMarchStepTemplate>('MarchStepTemplate', st
 export default {
     MarchTemplateModel: MarchTemplateModel,
     MarchStepTemplateModel: MarchStepTemplateModel,
-    createTemplate(value: IMarchTemplate) {
 
-        const march = new MarchTemplateModel({
-            name: value.name,
-            steps: value.steps
-        });
-
-        try {
-            march.save()
-        } catch {
-            console.log("EEE March::createTemplate");
-        }
+    async saveTemplate(value: IMarchTemplate) {
+        console.log(value);
+        let update = await MarchTemplateModel.findOneAndUpdate(
+            { name: value.name },
+            { steps: value.steps },
+            { upsert: true, new: true }
+        );
+        update ?? update.save();
     },
 
     async findTemplates(value?: string): Promise<IMarchTemplate[]> {
         try {
-            const templates: IMarchTemplate[] = 
-            await MarchTemplateModel.find({}, '-_id -__v').lean().exec();
+            const templates: IMarchTemplate[] =
+                await MarchTemplateModel.find({}, '-_id -__v').lean().exec();
             return templates;
         } catch (error) {
             throw new Error(`Error finding March templates: ${error}`);
