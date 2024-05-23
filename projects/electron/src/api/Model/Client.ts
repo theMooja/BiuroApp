@@ -21,8 +21,28 @@ export default {
     ClientModel: ClientModel,
     ClientMonthlyModel: ClientMonthlyModel,
 
-    async getClientsMonthly(yeah: number, month: number){
-        const clients = await ClientModel.find().lean().exec();
+    async getClientsMonthly(year: number, month: number) {
+        const clients = await ClientModel.aggregate([
+            {
+                $lookup:
+                {
+                    from: "clientmonthlies",
+                    as: "clientmonthlies",
+                    localField: "name",
+                    foreignField: "clientName",
+
+                }
+            },
+            {
+                $unwind: "$clientmonthlies"
+            },
+            {
+                $match: {
+                    "clientmonthlies.month": month,
+                    "clientmonthlies.year": year
+                }
+            }
+        ]);
         return clients;
     }
 }

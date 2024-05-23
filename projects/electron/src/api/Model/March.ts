@@ -18,7 +18,6 @@ export default {
     MarchStepTemplateModel: MarchStepTemplateModel,
 
     async saveTemplate(value: IMarchTemplate) {
-        console.log(value);
         let update = await MarchTemplateModel.findOneAndUpdate(
             { name: value.name },
             { steps: value.steps },

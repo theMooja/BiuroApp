@@ -18,7 +18,7 @@ export class HomeComponent {
   }
 
   async ngOnInit() {
-    this.clients = await this.dataService.getClientsMonthly(1, 1);
+    this.clients = await this.dataService.getClientsMonthly(2024, 1);
     console.log('got', this.clients);
   }
 }

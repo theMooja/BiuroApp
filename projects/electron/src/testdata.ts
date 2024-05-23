@@ -5,6 +5,7 @@ import Client from './api/Model/Client';
 const clearDB = async function () {
     await March.MarchTemplateModel.collection.drop();
     await Client.ClientModel.collection.drop();
+    await Client.ClientMonthlyModel.collection.drop();
 }
 
 const createMarchTemplates = function () {
@@ -44,6 +45,13 @@ const createClients = function () {
         year: 2024
     });
     cm1.save();
+    let cm11 = new Client.ClientMonthlyModel({
+        clientName: 'c1',
+        marchName: 'tpl1',
+        month: 2,
+        year: 2024
+    });
+    cm11.save();
 
     let c2 = new Client.ClientModel({
         name: 'c2',
