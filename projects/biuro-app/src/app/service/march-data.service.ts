@@ -12,8 +12,8 @@ export class MarchDataService {
     window.electron.saveMarchTemplate(value)
   }
 
-  async findTemplates(filter: string): Promise<IMarchTemplate[]> { //IMarchTemplate[]
-    return await window.electron.findMarchTemplates(filter);// as IMarchTemplate[];
+  async findTemplates(filter?: string): Promise<IMarchTemplate[]> { 
+    return await window.electron.findMarchTemplates(filter);
   }
 
 }

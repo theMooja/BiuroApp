@@ -11,4 +11,8 @@ export class ClientDataService {
   async getClientsMonthly(year: number, month: number): Promise<IClient[]> {
     return await window.electron.getClientsMonthly(year, month);
   }
+
+  async updateClient(client: string, data: any) {
+    return await window.electron.updateClient(client, data);
+  }
 }

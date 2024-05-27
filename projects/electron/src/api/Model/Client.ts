@@ -44,5 +44,13 @@ export default {
             }
         ]);
         return clients;
+    },
+
+    async updateClient(client: string, update: Object) {
+        let operation = await ClientModel.findOneAndUpdate(
+            { name: client },
+            update
+        );
+        operation ?? operation.save();
     }
 }

@@ -36,6 +36,8 @@ const setupDatabase = (): void => {
   ipcMain.handle('db:March:saveTemplate', (e, data) => dbApi.March.saveTemplate(data));
   ipcMain.handle('db:March:findTemplates', (e, data) => dbApi.March.findTemplates(data));
   ipcMain.handle('db:Client:getClientsMonthly', (e, year, month) => dbApi.Client.getClientsMonthly(year, month));
+  ipcMain.handle('db:Client:updateClient', (e, client, data) => dbApi.Client.updateClient(client, data));
+
 }
 
 // This method will be called when Electron has finished
