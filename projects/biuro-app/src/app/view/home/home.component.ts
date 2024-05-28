@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   animations: [
     trigger('detailExpand', [
       state('collapsed,void', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*', minHeigth: '48px' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),],
 })
@@ -27,6 +28,7 @@ export class HomeComponent {
   clients: IClient[] = [];
   templates: IMarchTemplate[] = [];
   expandedElement: IClient | null = null;
+  selection = new SelectionModel<IClient>(true);
 
   constructor(private clientDataService: ClientDataService,
     private marchDataService: MarchDataService
@@ -44,6 +46,4 @@ export class HomeComponent {
       });
     }
   }
-
-
 }

@@ -1,4 +1,4 @@
-<mat-table [dataSource]="clients" multiTemplateDataRows>
+<mat-table [dataSource]="clients" multiTemplateDataRows class="client-table">
 
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef> Nazwa </mat-header-cell>
@@ -25,7 +25,7 @@
         <mat-form-field>
           <mat-label>March</mat-label>
           <mat-select matNativeControl required (selectionChange)="onMarchTemplateSelected($event.value)"
-          [(value)]="element.marchName">
+            [(value)]="element.marchName">
             @for(template of templates; track template.name) {
             <mat-option [value]="template.name">{{template.name}}</mat-option>
             }
@@ -35,10 +35,9 @@
     </mat-cell>
   </ng-container>
 
-  <mat-header-row *matHeaderRowDef="['name']"></mat-header-row>
-  <mat-row *matRowDef="let element; columns: ['name', 'expand'];" class=""
-    [class.expanded-row]="expandedElement === element"
-    (click)="expandedElement = expandedElement === element ? null : element">
+  <mat-header-row *matHeaderRowDef="['name']; sticky: true"></mat-header-row>
+  <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: ['name', 'expand'];"
+    [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
   </mat-row>
   <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
 </mat-table>

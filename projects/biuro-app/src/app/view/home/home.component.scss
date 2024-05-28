@@ -1,4 +1,12 @@
-.detail-row {
-    flex-basis: 0;
-    min-height: initial;
+.client-table {
+    .detail-row {
+        flex-basis: 0;
+        min-height: initial;
+    }
+
+    .selected {
+        background-color: burlywood;
+    }
 }
+
+
