@@ -1,13 +1,13 @@
-<table mat-table [dataSource]="clients" multiTemplateDataRows>
+<mat-table [dataSource]="clients" multiTemplateDataRows>
 
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Nazwa </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <mat-header-cell *matHeaderCellDef> Nazwa </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="expand">
-    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
-    <td mat-cell *matCellDef="let element">
+    <mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</mat-header-cell>
+    <mat-cell *matCellDef="let element">
       <button mat-icon-button aria-label="expand row"
         (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
         @if (expandedElement === element) {
@@ -16,11 +16,11 @@
         <mat-icon>keyboard_arrow_down</mat-icon>
         }
       </button>
-    </td>
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let element" [attr.colspan]="2">
+    <mat-cell *matCellDef="let element" [attr.colspan]="2">
       <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
         <mat-form-field>
           <mat-label>March</mat-label>
@@ -32,13 +32,13 @@
           </mat-select>
         </mat-form-field>
       </div>
-    </td>
+    </mat-cell>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="['name']"></tr>
-  <tr mat-row *matRowDef="let element; columns: ['name', 'expand'];" class=""
+  <mat-header-row *matHeaderRowDef="['name']"></mat-header-row>
+  <mat-row *matRowDef="let element; columns: ['name', 'expand'];" class=""
     [class.expanded-row]="expandedElement === element"
     (click)="expandedElement = expandedElement === element ? null : element">
-  </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
-</table>
+  </mat-row>
+  <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
+</mat-table>

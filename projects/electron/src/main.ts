@@ -22,7 +22,7 @@ const createWindow = (): void => {
       preload: path.join(__dirname, 'preload.js')
     }
   });
-
+  mainWindow.webContents.openDevTools()
   const startURL = app.isPackaged ? `file://${path.join(__dirname, 'BiuroApp', 'index.html')}` : `http://localhost:4200`;
 
   mainWindow.loadURL(startURL);
