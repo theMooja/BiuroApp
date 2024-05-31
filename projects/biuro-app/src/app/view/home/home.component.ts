@@ -11,12 +11,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCalendar, MatDatepicker } from '@angular/material/datepicker';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule],
+  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -31,6 +33,7 @@ export class HomeComponent {
   templates: IMarchTemplate[] = [];
   expandedElement: IClient | null = null;
   selection = new SelectionModel<IClient>(true);
+  date: Date = new Date();
 
   constructor(private clientDataService: ClientDataService,
     private marchDataService: MarchDataService
