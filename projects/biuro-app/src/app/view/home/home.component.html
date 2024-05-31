@@ -1,43 +1,52 @@
-<mat-table [dataSource]="clients" multiTemplateDataRows class="client-table">
+<ng-container>
+  
+  <mat-toolbar class="toolbar">
+    <span>TOOL</span>
+    <span class="spacer"></span>
+    <span>DATE</span>
+  </mat-toolbar>
 
-  <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef> Nazwa </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-  </ng-container>
+  <mat-table [dataSource]="clients" multiTemplateDataRows class="client-table">
 
-  <ng-container matColumnDef="expand">
-    <mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</mat-header-cell>
-    <mat-cell *matCellDef="let element">
-      <button mat-icon-button aria-label="expand row"
-        (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-        @if (expandedElement === element) {
-        <mat-icon>keyboard_arrow_up</mat-icon>
-        } @else {
-        <mat-icon>keyboard_arrow_down</mat-icon>
-        }
-      </button>
-    </mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Nazwa </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="expandedDetail">
-    <mat-cell *matCellDef="let element" [attr.colspan]="2">
-      <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-        <mat-form-field>
-          <mat-label>March</mat-label>
-          <mat-select matNativeControl required (selectionChange)="onMarchTemplateSelected($event.value)"
-            [(value)]="element.marchName">
-            @for(template of templates; track template.name) {
-            <mat-option [value]="template.name">{{template.name}}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="expand">
+      <mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-icon-button aria-label="expand row"
+          (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+          @if (expandedElement === element) {
+          <mat-icon>keyboard_arrow_up</mat-icon>
+          } @else {
+          <mat-icon>keyboard_arrow_down</mat-icon>
+          }
+        </button>
+      </mat-cell>
+    </ng-container>
 
-  <mat-header-row *matHeaderRowDef="['name']; sticky: true"></mat-header-row>
-  <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: ['name', 'expand'];"
-    [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
-  </mat-row>
-  <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
-</mat-table>
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let element" [attr.colspan]="2">
+        <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <mat-form-field>
+            <mat-label>March</mat-label>
+            <mat-select matNativeControl required (selectionChange)="onMarchTemplateSelected($event.value)"
+              [(value)]="element.marchName">
+              @for(template of templates; track template.name) {
+              <mat-option [value]="template.name">{{template.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="['name']; sticky: true"></mat-header-row>
+    <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: ['name', 'expand'];"
+      [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
+    </mat-row>
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
+  </mat-table>
+</ng-container>
