@@ -4,13 +4,21 @@
     <span>TOOL</span>
     <span class="spacer"></span>
     <ng-container>
-      <button mat-icon-button [matMenuTriggerFor]="appMenu">
-        <mat-icon>calendar_today</mat-icon>
+
+      <button mat-icon-button [matMenuTriggerFor]="appMenu" #calTrigger="matMenuTrigger" >
+        <mat-icon>calendar_today</mat-icon>{{currentDate}}
       </button>
       <mat-menu #appMenu="matMenu">
-        <mat-calendar style="width:15rem" #calendar>
-        </mat-calendar>
+        <div (click)="$event.stopPropagation();">
+          <mat-calendar startView="year" style="width:15rem" #calendar panelClass="month-picker"
+            [selected]="currentDate" (monthSelected)="onCurrentDateSelected($event, calTrigger)"
+             (viewChanged)="viewChangedHandler($event)">
+          </mat-calendar>
+
+        </div>
       </mat-menu>
+
+
     </ng-container>
   </mat-toolbar>
 

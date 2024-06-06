@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { MarchDataService } from './../../service/march-data.service';
 import { IClient, IMarchTemplate } from '../../../../../electron/src/interfaces';
@@ -11,14 +11,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCalendar, MatDatepicker } from '@angular/material/datepicker';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatCalendar, MatDatepicker, MatDatepickerToggle } from '@angular/material/datepicker';
+import { MatMenu, MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import moment, { Moment } from 'moment';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule],
+  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -33,10 +34,12 @@ export class HomeComponent {
   templates: IMarchTemplate[] = [];
   expandedElement: IClient | null = null;
   selection = new SelectionModel<IClient>(true);
-  date: Date = new Date();
+  currentDate: Moment = moment();
+  @ViewChild(MatCalendar) calendar!: MatCalendar<Moment>;
 
   constructor(private clientDataService: ClientDataService,
-    private marchDataService: MarchDataService
+    private marchDataService: MarchDataService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   async ngOnInit() {
@@ -50,5 +53,16 @@ export class HomeComponent {
         marchName: value
       });
     }
+  }
+
+  onCurrentDateSelected(normalizedMonthAndYear: Moment, trigger: MatMenuTrigger) {
+    this.currentDate = normalizedMonthAndYear;
+    this.cdr.detach();
+    trigger.closeMenu();
+  }
+
+  viewChangedHandler(event: any) {
+    this.calendar.currentView = 'year';
+    this.cdr.reattach();
   }
 }

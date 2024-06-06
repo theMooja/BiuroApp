@@ -2,3 +2,12 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-calendar-period-button {
+    pointer-events: none;
+    display: none;
+}
+
+.mat-calendar-arrow.mat-calendar-invert {
+    display: none;
+}
