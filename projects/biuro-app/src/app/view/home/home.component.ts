@@ -13,13 +13,12 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCalendar, MatDatepicker, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MatMenu, MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import moment, { Moment } from 'moment';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
+  imports: [CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -34,8 +33,8 @@ export class HomeComponent {
   templates: IMarchTemplate[] = [];
   expandedElement: IClient | null = null;
   selection = new SelectionModel<IClient>(true);
-  currentDate: Moment = moment();
-  @ViewChild(MatCalendar) calendar!: MatCalendar<Moment>;
+  currentDate: Date = new Date();
+  @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
 
   constructor(private clientDataService: ClientDataService,
     private marchDataService: MarchDataService,
@@ -55,7 +54,7 @@ export class HomeComponent {
     }
   }
 
-  onCurrentDateSelected(normalizedMonthAndYear: Moment, trigger: MatMenuTrigger) {
+  onCurrentDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
     this.currentDate = normalizedMonthAndYear;
     this.cdr.detach();
     trigger.closeMenu();

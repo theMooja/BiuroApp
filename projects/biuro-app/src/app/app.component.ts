@@ -3,6 +3,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
+import { pl } from 'date-fns/locale';
+import { setDefaultOptions } from 'date-fns';
+import { DateAdapter } from '@angular/material/core';
+
 
 @Component({
   selector: 'app-root',
@@ -13,4 +17,9 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AppComponent {
   title = 'BiuroApp';
+
+  constructor(private readonly dateAdapter: DateAdapter<any>) {
+    setDefaultOptions({ locale: pl });
+    dateAdapter.setLocale(pl);
+  }
 }

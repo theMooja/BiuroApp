@@ -5,14 +5,14 @@
     <span class="spacer"></span>
     <ng-container>
 
-      <button mat-icon-button [matMenuTriggerFor]="appMenu" #calTrigger="matMenuTrigger" >
-        <mat-icon>calendar_today</mat-icon>{{currentDate}}
+      <button mat-icon-button [matMenuTriggerFor]="appMenu" #calTrigger="matMenuTrigger">
+        <mat-icon>calendar_today</mat-icon>{{currentDate | date: 'MMM': undefined : 'pl-PL'}}
       </button>
       <mat-menu #appMenu="matMenu">
         <div (click)="$event.stopPropagation();">
           <mat-calendar startView="year" style="width:15rem" #calendar panelClass="month-picker"
             [selected]="currentDate" (monthSelected)="onCurrentDateSelected($event, calTrigger)"
-             (viewChanged)="viewChangedHandler($event)">
+            (viewChanged)="viewChangedHandler($event)">
           </mat-calendar>
 
         </div>
