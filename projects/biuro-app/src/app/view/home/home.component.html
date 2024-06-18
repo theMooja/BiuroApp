@@ -29,6 +29,19 @@
       <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="march">
+      <mat-header-cell *matHeaderCellDef> Marsz </mat-header-cell>
+      <mat-cell *matCellDef="let element" [cdkContextMenuTriggerFor]="march_menu">
+        {{element.marchName}}
+        <ng-template #march_menu>
+          <div class="" cdkMenu>
+            @for(step of getSteps(element); track step.title) {
+            <button class="" cdkMenuItem>{{step.title}}</button>}
+          </div>
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="expand">
       <mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</mat-header-cell>
       <mat-cell *matCellDef="let element">
@@ -60,7 +73,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="['name']; sticky: true"></mat-header-row>
-    <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: ['name', 'expand'];"
+    <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: ['name', 'expand', 'march'];"
       [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
     </mat-row>
     <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>

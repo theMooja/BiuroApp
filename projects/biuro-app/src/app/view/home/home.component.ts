@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { MarchDataService } from './../../service/march-data.service';
-import { IClient, IMarchTemplate } from '../../../../../electron/src/interfaces';
+import { IClient, IMarchStepTemplate, IMarchTemplate } from '../../../../../electron/src/interfaces';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -12,13 +12,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCalendar, MatDatepicker, MatDatepickerToggle } from '@angular/material/datepicker';
-import { MatMenu, MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
+import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
+  imports: [CdkContextMenuTrigger, CdkMenuItem, CdkMenu, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -63,5 +65,11 @@ export class HomeComponent {
   viewChangedHandler(event: any) {
     this.calendar.currentView = 'year';
     this.cdr.reattach();
+  }
+
+  getSteps(templateName: string): [IMarchStepTemplate] {
+    let steps = this.templates.find(x => x.name === templateName)?.steps;
+    if (!steps) throw (`nooo steps for ${templateName}`);
+    return steps;
   }
 }
