@@ -32,11 +32,13 @@
     <ng-container matColumnDef="march">
       <mat-header-cell *matHeaderCellDef> Marsz </mat-header-cell>
       <mat-cell *matCellDef="let element" [cdkContextMenuTriggerFor]="march_menu">
-        {{element.marchName}}
+        {{element.currentMarch}}
         <ng-template #march_menu>
-          <div class="" cdkMenu>
-            @for(step of getSteps(element); track step.title) {
-            <button class="" cdkMenuItem>{{step.title}}</button>}
+          <div class="march-menu-container" cdkMenu (click)="$event.stopPropagation()">
+            @for(step of getSteps(element.marchName); track step.title; let idx = $index) {
+            <div cdkMenuItem (click)="onMarchClick(element, step, $event)" class="march-menu-item"
+              [ngClass]="{'march-green': element.monthly.marchValues[idx] === 1, 'march-yellow': element.monthly.marchValues[idx]===2}">
+              {{step.title}}</div>}
           </div>
         </ng-template>
       </mat-cell>

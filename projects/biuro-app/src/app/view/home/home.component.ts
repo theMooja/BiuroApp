@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { MarchDataService } from './../../service/march-data.service';
-import { IClient, IMarchStepTemplate, IMarchTemplate } from '../../../../../electron/src/interfaces';
+import { IClient, IClientMonthly, IMarchStepTemplate, IMarchTemplate, StepType } from '../../../../../electron/src/interfaces';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -15,12 +15,13 @@ import { MatCalendar, MatDatepicker, MatDatepickerToggle } from '@angular/materi
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
-
+import { MatButton } from '@angular/material/button';
+import { MatRippleModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CdkContextMenuTrigger, CdkMenuItem, CdkMenu, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
+  imports: [MatRippleModule, MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenu, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -45,6 +46,7 @@ export class HomeComponent {
 
   async ngOnInit() {
     this.clients = await this.clientDataService.getClientsMonthly(2024, 1);
+    this.clients.forEach(c => this.updateCurrentMarch(c as IClientHome));
     this.templates = await this.marchDataService.findTemplates();
   }
 
@@ -69,7 +71,31 @@ export class HomeComponent {
 
   getSteps(templateName: string): [IMarchStepTemplate] {
     let steps = this.templates.find(x => x.name === templateName)?.steps;
-    if (!steps) throw (`nooo steps for ${templateName}`);
+    if (!steps) throw (`no steps for ${templateName}`);
+
     return steps;
   }
+
+  onMarchClick(client: IClientHome, step: IMarchStepTemplate, event: Event) {
+    let stepIdx = this.getSteps(client.marchName).indexOf(step);
+    let value = client.monthly.marchValues[stepIdx] || 0;
+    value = (value + 1) % (step.type === StepType.Double ? 2 : 3);
+    client.monthly.marchValues[stepIdx] = value;
+    this.clientDataService.updateMarchValue(client.monthly, stepIdx, value);
+    this.updateCurrentMarch(client);
+  }
+
+  updateCurrentMarch(client: IClientHome) {
+    let idx = client.monthly.marchValues.findIndex(x => x === 0);
+    if (idx === -1) idx = client.monthly.marchValues.length - 1;
+
+    client.currentMarch = this.templates.find(x => x.name === client.marchName)?.steps[idx].title;
+  }
+
 }
+
+interface IClientHome extends IClient {
+  monthly: IClientMonthly,
+  currentMarch?: string
+}
+

@@ -27,19 +27,19 @@ export default {
                 $lookup:
                 {
                     from: "clientmonthlies",
-                    as: "clientmonthlies",
+                    as: "monthly",
                     localField: "name",
                     foreignField: "clientName",
 
                 }
             },
             {
-                $unwind: "$clientmonthlies"
+                $unwind: "$monthly"
             },
             {
                 $match: {
-                    "clientmonthlies.month": month,
-                    "clientmonthlies.year": year
+                    "monthly.month": month,
+                    "monthly.year": year
                 }
             }
         ]);
@@ -52,5 +52,18 @@ export default {
             update
         );
         operation ?? operation.save();
+    },
+
+    async updateMarchValue(current: IClientMonthly, idx: number, value: number) {
+        let monthly = await ClientMonthlyModel.findOne(
+            {
+                clientName: current.clientName,
+                year: current.year,
+                month: current.month
+            }
+        ).exec();
+
+        monthly.marchValues[idx] = value;
+        await monthly.save();
     }
 }

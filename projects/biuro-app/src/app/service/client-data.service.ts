@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IClient } from "./../../../../electron/src/interfaces";
+import { IClient, IClientMonthly } from "./../../../../electron/src/interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +14,9 @@ export class ClientDataService {
 
   async updateClient(client: string, data: any) {
     return await window.electron.updateClient(client, data);
+  }
+
+  async updateMarchValue(client: IClientMonthly, idx: number, value: number){
+    return await window.electron.updateMarchValue(client, idx, value);
   }
 }
