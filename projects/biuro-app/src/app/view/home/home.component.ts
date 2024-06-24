@@ -61,6 +61,12 @@ export class HomeComponent {
   onCurrentDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
     this.currentDate = normalizedMonthAndYear;
     this.cdr.detach();
+    this.clients = [];
+    this.clientDataService.getClientsMonthly(this.currentDate.getFullYear(), this.currentDate.getMonth()).then((res) => {
+      res.forEach(c => this.updateCurrentMarch(c as IClientHome));
+      this.clients = res;
+    });
+
     trigger.closeMenu();
   }
 
