@@ -1,17 +1,24 @@
 import { Schema, model } from 'mongoose';
-import { IClient, IClientMonthly } from '../../interfaces';
+import { IClient, IClientMonthly, IMarchStepTemplate } from '../../interfaces';
+import March from './March';
 
 const clientSchema = new Schema<IClient>({
     name: { type: String },
     marchName: { type: String }
 });
 
+const monthlyStepSchema = new Schema<IMarchStepTemplate>({
+    title: { type: String },
+    sequence: { type: Number },
+    type: { type: String }
+})
+
 const clientMonthlySchema = new Schema<IClientMonthly>({
     clientName: { type: String },
     month: { type: Number },
     year: { type: Number },
     marchName: { type: String },
-    marchValues: { type: [Number] },
+    steps: [March.MarchStepTemplateModel.schema]
 })
 
 const ClientModel = model<IClient>('Client', clientSchema);
@@ -57,14 +64,16 @@ export default {
             clients = res.map(doc => doc.toObject ? doc.toObject() : doc);
         });
 
-
+        let templates = await March.findTemplates();
         clients.forEach(c => {
+            let template = templates.find(t => t.name === c.marchName);
             if (!c.monthly) {
                 let m = new ClientMonthlyModel({
                     clientName: c.name,
                     marchName: c.marchName,
                     month: month,
-                    year: year
+                    year: year,
+                    steps: template.steps
                 });
                 m.save();
                 c.monthly = m.toObject();
@@ -89,8 +98,8 @@ export default {
                 month: current.month
             }
         ).exec();
-
-        monthly.marchValues[idx] = value;
+        
+        monthly.steps[idx].value = value;
         await monthly.save();
     }
 }

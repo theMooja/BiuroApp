@@ -47,7 +47,7 @@ export class HomeComponent {
   async ngOnInit() {
     this.templates = await this.marchDataService.findTemplates();
     this.clients = await this.clientDataService.getClientsMonthly(2024, 1);
-    this.clients.forEach(c => this.updateCurrentMarch(c as IClientHome));    
+    this.clients.forEach(c => this.updateCurrentMarch(c as IClientHome));
   }
 
   onMarchTemplateSelected(value: any) {
@@ -78,16 +78,16 @@ export class HomeComponent {
 
   onMarchClick(client: IClientHome, step: IMarchStepTemplate, event: Event) {
     let stepIdx = this.getSteps(client.marchName).indexOf(step);
-    let value = client.monthly.marchValues[stepIdx] || 0;
+    let value = client.monthly.steps[stepIdx].value || 0;
     value = (value + 1) % (step.type === StepType.Double ? 2 : 3);
-    client.monthly.marchValues[stepIdx] = value;
+    client.monthly.steps[stepIdx].value = value;
     this.clientDataService.updateMarchValue(client.monthly, stepIdx, value);
     this.updateCurrentMarch(client);
   }
 
   updateCurrentMarch(client: IClientHome) {
-    let idx = client.monthly.marchValues.findIndex(x => x === 0);
-    if (idx === -1) idx = client.monthly.marchValues.length - 1;
+    let idx = client.monthly.steps.findIndex(x => !x.value || x.value === 0);
+    if (idx === -1) idx = client.monthly.steps.length - 1;
 
     client.currentMarch = this.templates.find(x => x.name === client.marchName)?.steps[idx].title;
   }

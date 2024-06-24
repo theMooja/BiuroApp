@@ -4,8 +4,10 @@ import { IMarchStepTemplate, IMarchTemplate, StepType } from '../../interfaces'
 const stepTemplateSchema = new Schema<IMarchStepTemplate>({
     title: { type: String },
     sequence: { type: Number },
-    type: { type: String }
+    type: { type: String },
+    value: { type: Number }
 });
+
 const marchTemplateSchema = new Schema<IMarchTemplate>({
     name: { type: String },
     steps: [stepTemplateSchema]

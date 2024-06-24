@@ -37,7 +37,7 @@
           <div class="march-menu-container" cdkMenu (click)="$event.stopPropagation()">
             @for(step of getSteps(element.marchName); track step.title; let idx = $index) {
             <div cdkMenuItem (click)="onMarchClick(element, step, $event)" class="march-menu-item"
-              [ngClass]="{'march-green': element.monthly.marchValues[idx] === 1, 'march-yellow': element.monthly.marchValues[idx]===2}">
+              [ngClass]="{'march-green': element.monthly.steps[idx].value === 1, 'march-yellow': element.monthly.steps[idx].value === 2}">
               {{step.title}}</div>}
           </div>
         </ng-template>

@@ -6,15 +6,11 @@ export enum StepType {
 export interface IMarchStepTemplate {
     title: string,
     sequence: Number,
-    type: StepType
+    type: StepType,
+    value?: number
 }
 
 export interface IMarchTemplate {
-    name: string,
-    steps: [IMarchStepTemplate]
-}
-
-export interface IMarchFilters {
     name: string,
     steps: [IMarchStepTemplate]
 }
@@ -29,5 +25,5 @@ export interface IClientMonthly {
     month: number,
     year: number,
     marchName: string,
-    marchValues: [number]
+    steps: [IMarchStepTemplate]
 }
