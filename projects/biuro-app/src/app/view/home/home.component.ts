@@ -45,9 +45,9 @@ export class HomeComponent {
   ) { }
 
   async ngOnInit() {
-    this.clients = await this.clientDataService.getClientsMonthly(2024, 1);
-    this.clients.forEach(c => this.updateCurrentMarch(c as IClientHome));
     this.templates = await this.marchDataService.findTemplates();
+    this.clients = await this.clientDataService.getClientsMonthly(2024, 1);
+    this.clients.forEach(c => this.updateCurrentMarch(c as IClientHome));    
   }
 
   onMarchTemplateSelected(value: any) {

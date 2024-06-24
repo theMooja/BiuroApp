@@ -22,27 +22,54 @@ export default {
     ClientMonthlyModel: ClientMonthlyModel,
 
     async getClientsMonthly(year: number, month: number) {
-        const clients = await ClientModel.aggregate([
+        let clients: any[] = [];
+
+        await ClientModel.aggregate([
             {
                 $lookup:
                 {
                     from: "clientmonthlies",
-                    as: "monthly",
                     localField: "name",
                     foreignField: "clientName",
+                    as: "monthly",
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$year", year] },
+                                        { $eq: ["$month", month] }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
 
                 }
             },
             {
-                $unwind: "$monthly"
-            },
-            {
-                $match: {
-                    "monthly.month": month,
-                    "monthly.year": year
+                $unwind: {
+                    path: "$monthly",
+                    preserveNullAndEmptyArrays: true
                 }
             }
-        ]);
+        ]).exec().then(res => {
+            clients = res.map(doc => doc.toObject ? doc.toObject() : doc);
+        });
+
+
+        clients.forEach(c => {
+            if (!c.monthly) {
+                let m = new ClientMonthlyModel({
+                    clientName: c.name,
+                    marchName: c.marchName,
+                    month: month,
+                    year: year
+                });
+                m.save();
+                c.monthly = m.toObject();
+            }
+        });
         return clients;
     },
 
