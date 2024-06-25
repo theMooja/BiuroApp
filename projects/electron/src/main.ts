@@ -16,31 +16,30 @@ let mainWindow: BrowserWindow | null;
 const createWindow = (): void => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 800,
+    width: 1200,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   });
-  
-  //mainWindow.webContents.openDevTools();
 
   const startURL = app.isPackaged ? `file://${path.join(__dirname, 'BiuroApp', 'index.html')}` : `http://localhost:4200`;
-
+  
   mainWindow.loadURL(startURL);
+  mainWindow.webContents.openDevTools();
 };
 
 const setupDatabase = (): void => {
   mongoose.connect('mongodb://localhost:27017/biuro');
   testdata.populate();
+}
 
-  ipcMain.handle('db:testData', (e, data) => dbApi.User.testData(data));
+const setIPCHandlers = () => {
   ipcMain.handle('db:March:saveTemplate', (e, data) => dbApi.March.saveTemplate(data));
   ipcMain.handle('db:March:findTemplates', (e, data) => dbApi.March.findTemplates(data));
   ipcMain.handle('db:Client:updateMarchValue', (e, data, idx, val) => dbApi.Client.updateMarchValue(data, idx, val));
   ipcMain.handle('db:Client:getClientsMonthly', (e, year, month) => dbApi.Client.getClientsMonthly(year, month));
   ipcMain.handle('db:Client:updateClient', (e, client, data) => dbApi.Client.updateClient(client, data));
-
 }
 
 // This method will be called when Electron has finished
@@ -49,6 +48,7 @@ const setupDatabase = (): void => {
 app.on("ready", () => {
   createWindow();
   setupDatabase();
+  setIPCHandlers();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
