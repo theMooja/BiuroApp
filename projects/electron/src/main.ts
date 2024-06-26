@@ -23,8 +23,10 @@ const createWindow = (): void => {
     }
   });
 
-  const startURL = app.isPackaged ? `file://${path.join(__dirname, 'BiuroApp', 'index.html')}` : `http://localhost:4200`;
-  
+  const startURL = app.isPackaged ?
+    `file://${path.join(__dirname, 'biuro-app', 'browser', 'index.html')}`
+    : `http://localhost:4200`;
+
   mainWindow.loadURL(startURL);
   mainWindow.webContents.openDevTools();
 };

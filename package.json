@@ -10,7 +10,10 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "wait-for-app": "wait-on http://localhost:4200",
-    "serve-app": "ng serve BiuroApp"
+    "serve-app": "ng serve BiuroApp",
+    "package": "npm run build-electron && npm run build-app && electron-forge package",
+    "make": "npm build-electron && npm build-app && electron-forge make",
+    "publish-app": "npm build-electron && npm build-app && electron-forge publish"
   },
   "private": true,
   "dependencies": {
@@ -28,7 +31,8 @@
     "electron-squirrel-startup": "^1.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.3"
+    "zone.js": "~0.14.3",
+    "mongoose": "^8.3.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.2",
@@ -49,7 +53,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "mongoose": "^8.3.2",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.4.2",
