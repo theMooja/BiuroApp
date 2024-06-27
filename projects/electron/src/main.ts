@@ -3,6 +3,7 @@ import path from 'path';
 import mongoose from 'mongoose';
 import dbApi from './api/db';
 import testdata from './testdata';
+import * as settings from 'electron-settings';
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -12,6 +13,12 @@ if (require("electron-squirrel-startup")) {
 
 
 let mainWindow: BrowserWindow | null;
+settings.configure({
+  fileName: 'app-settings.json',
+  dir: app.getPath('exe'),
+
+});
+
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -31,9 +38,13 @@ const createWindow = (): void => {
   mainWindow.webContents.openDevTools();
 };
 
-const setupDatabase = (): void => {
-  mongoose.connect('mongodb://localhost:27017/biuro');
-  testdata.populate();
+const setupDatabase = async () => {
+  const cs = app.isPackaged ?
+    settings.getSync('database.connectionString').toString()
+    : 'mongodb://localhost:27017/biuro';
+
+  await mongoose.connect(cs);
+  await testdata.populate();
 }
 
 const setIPCHandlers = () => {
