@@ -15,8 +15,7 @@ if (require("electron-squirrel-startup")) {
 let mainWindow: BrowserWindow | null;
 settings.configure({
   fileName: 'app-settings.json',
-  dir: app.getPath('exe'),
-
+  //dir: app.getPath('exe'),
 });
 
 
