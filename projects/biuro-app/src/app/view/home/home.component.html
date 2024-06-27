@@ -22,10 +22,10 @@
     </ng-container>
   </mat-toolbar>
 
-  <mat-table [dataSource]="clients" multiTemplateDataRows class="client-table">
+  <mat-table [dataSource]="clients" multiTemplateDataRows class="client-table" matSort>
 
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Nazwa </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
     </ng-container>
 
@@ -75,7 +75,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="['name']; sticky: true"></mat-header-row>
-    <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: ['name', 'expand', 'march'];"
+    <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: columns"
       [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
     </mat-row>
     <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>

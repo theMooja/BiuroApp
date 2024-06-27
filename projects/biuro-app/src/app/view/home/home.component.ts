@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { MarchDataService } from './../../service/march-data.service';
 import { IClient, IClientMonthly, IMarchStepTemplate, IMarchTemplate, StepType } from '../../../../../electron/src/interfaces';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormsModule } from '@angular/forms';
@@ -17,11 +17,12 @@ import { CommonModule } from '@angular/common';
 import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
 import { MatButton } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatRippleModule, MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenu, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
+  imports: [MatSort, MatSortModule, MatRippleModule, MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenu, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -32,22 +33,31 @@ import { MatRippleModule } from '@angular/material/core';
     ]),],
 })
 export class HomeComponent {
-  clients: IClient[] = [];
+  clients: MatTableDataSource<IClient>;
   templates: IMarchTemplate[] = [];
   expandedElement: IClient | null = null;
   selection = new SelectionModel<IClient>(true);
   currentDate: Date = new Date();
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
+  columns : string[] = ['name', 'expand', 'march'];
 
   constructor(private clientDataService: ClientDataService,
     private marchDataService: MarchDataService,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {
+    this.clients = new MatTableDataSource();
+  }
 
   async ngOnInit() {
     this.templates = await this.marchDataService.findTemplates();
-    this.clients = await this.clientDataService.getClientsMonthly(2024, 1);
-    this.clients.forEach(c => this.updateCurrentMarch(c as IClientHome));
+    let clients = await this.clientDataService.getClientsMonthly(2024, 1);
+    clients.forEach(c => this.updateCurrentMarch(c as IClientHome));
+    this.clients.data = clients;
+    
+    this.sort.active = this.columns[0];
+    this.sort.direction = 'asc';
+    this.clients.sort = this.sort;
   }
 
   onMarchTemplateSelected(value: any) {
@@ -61,10 +71,10 @@ export class HomeComponent {
   onCurrentDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
     this.currentDate = normalizedMonthAndYear;
     this.cdr.detach();
-    this.clients = [];
+    this.clients.data = [];
     this.clientDataService.getClientsMonthly(this.currentDate.getFullYear(), this.currentDate.getMonth()).then((res) => {
       res.forEach(c => this.updateCurrentMarch(c as IClientHome));
-      this.clients = res;
+      this.clients.data = res;
     });
 
     trigger.closeMenu();
