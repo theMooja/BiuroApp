@@ -1,6 +1,0 @@
-{
-    "database": {
-        "connectionString": "cs",
-        "devConnectionString": "mongodb://localhost:27017/biuro"
-    }
-}

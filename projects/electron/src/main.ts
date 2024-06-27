@@ -15,7 +15,7 @@ if (require("electron-squirrel-startup")) {
 let mainWindow: BrowserWindow | null;
 settings.configure({
   fileName: 'app-settings.json',
-  //dir: app.getPath('exe'),
+  dir: process.resourcesPath
 });
 
 
@@ -41,7 +41,7 @@ const setupDatabase = async () => {
   const cs = app.isPackaged ?
     settings.getSync('database.connectionString').toString()
     : 'mongodb://localhost:27017/biuro';
-
+  
   await mongoose.connect(cs);
   await testdata.populate();
 }

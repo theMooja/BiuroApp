@@ -6,16 +6,17 @@ import { MakerRpm } from '@electron-forge/maker-rpm';
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 
 const config: ForgeConfig = {
- packagerConfig: {
-   asar: true
- },
- rebuildConfig: {},
- makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
- plugins: [
-   new AutoUnpackNativesPlugin({}),
- ],
- publishers: [
- ]
+  packagerConfig: {
+    asar: true,
+    extraResource: ['app-settings.json']
+  },
+  rebuildConfig: {},
+  makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+  plugins: [
+    new AutoUnpackNativesPlugin({}),
+  ],
+  publishers: [
+  ]
 };
 
 export default config;
