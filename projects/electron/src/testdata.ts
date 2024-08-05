@@ -1,6 +1,7 @@
 import { IMarchTemplate, StepType } from './interfaces';
 import March from './api/Model/March';
 import Client from './api/Model/Client';
+import Stopper from './api/Model/Stopper';
 
 const clearDB = async function () {
     await March.MarchTemplateModel.collection.drop();
@@ -94,6 +95,15 @@ const createClients = function (data: any) {
         steps: [data.step1, data.step2, data.step3, data.step4]
     });
     cm3.save();
+
+    let s1 = new Stopper.StopperModel({
+        user: 'qq',
+        from: new Date(),
+        to: new Date(),
+        time: 5,
+        monthly: cm1._id
+    });
+    s1.save();
 }
 
 export default {

@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose"
+
 export enum StepType {
     Double = 'Double',
     Triple = 'Triple'
@@ -26,4 +28,12 @@ export interface IClientMonthly {
     year: number,
     marchName: string,
     steps: [IMarchStepTemplate]
+}
+
+export interface IStopperTemplate {
+    user: string,
+    from: Date,
+    to: Date,
+    time: number,
+    monthly: ObjectId
 }

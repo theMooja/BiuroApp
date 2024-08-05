@@ -18,7 +18,7 @@ const clientMonthlySchema = new Schema<IClientMonthly>({
     month: { type: Number },
     year: { type: Number },
     marchName: { type: String },
-    steps: [March.MarchStepTemplateModel.schema]
+    steps: [March.MarchStepTemplateModel.schema],
 })
 
 const ClientModel = model<IClient>('Client', clientSchema);
