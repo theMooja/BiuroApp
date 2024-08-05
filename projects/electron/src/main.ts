@@ -40,7 +40,7 @@ const createWindow = (): void => {
 const setupDatabase = async () => {
   const cs = app.isPackaged ?
     settings.getSync('database.connectionString').toString()
-    : 'mongodb://localhost:27017/biuro';
+    : 'mongodb://localhost:27017/biuro?replicaSet=rs0';
   
   await mongoose.connect(cs);
   await testdata.populate();
