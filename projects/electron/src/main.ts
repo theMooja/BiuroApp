@@ -52,6 +52,7 @@ const setIPCHandlers = () => {
   ipcMain.handle('db:Client:updateMarchValue', (e, data, idx, val) => dbApi.Client.updateMarchValue(data, idx, val));
   ipcMain.handle('db:Client:getClientsMonthly', (e, year, month) => dbApi.Client.getClientsMonthly(year, month));
   ipcMain.handle('db:Client:updateClient', (e, client, data) => dbApi.Client.updateClient(client, data));
+  ipcMain.handle('db:Stopper:addTime', (e, data) => dbApi.Stopper.addTime(data));
 }
 
 // This method will be called when Electron has finished

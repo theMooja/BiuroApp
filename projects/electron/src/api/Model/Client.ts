@@ -66,8 +66,9 @@ export default {
 
         let templates = await March.findTemplates();
         clients.forEach(c => {
-            let template = templates.find(t => t.name === c.marchName);
+            c.monthly.id = c.monthly._id.toString();
             if (!c.monthly) {
+                let template = templates.find(t => t.name === c.marchName);
                 let m = new ClientMonthlyModel({
                     clientName: c.name,
                     marchName: c.marchName,
@@ -98,7 +99,7 @@ export default {
                 month: current.month
             }
         ).exec();
-        
+
         monthly.steps[idx].value = value;
         await monthly.save();
     }

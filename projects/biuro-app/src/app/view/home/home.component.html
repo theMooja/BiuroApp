@@ -44,6 +44,21 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="stopper">
+      <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{element.currentMarch}}
+        <button mat-icon-button aria-label="start"
+          (click)="onStopper(element); $event.stopPropagation()">
+          @if (runningElement === element) {
+          <mat-icon>stop_circle</mat-icon>
+          } @else {
+          <mat-icon>play_circle</mat-icon>
+          }
+        </button>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="expand">
       <mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</mat-header-cell>
       <mat-cell *matCellDef="let element">

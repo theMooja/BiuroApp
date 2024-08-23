@@ -1,7 +1,8 @@
-import { Schema, model } from 'mongoose';
-import { IStopperTemplate } from '../../interfaces'
+import { Schema, model, Types } from 'mongoose';
+import { IStopper } from '../../interfaces';
 
-const schema = new Schema<IStopperTemplate>({
+
+const schema = new Schema<IStopper>({
     user: { type: String },
     from: { type: Date },
     to: { type: Date },
@@ -13,8 +14,14 @@ const schema = new Schema<IStopperTemplate>({
     }
 });
 
-const StopperModel = model<IStopperTemplate>('Stopper', schema);
+const StopperModel = model<IStopper>('Stopper', schema);
 
 export default {
-    StopperModel: StopperModel
+    StopperModel: StopperModel,
+
+    async addTime(data: IStopper) {
+        data.monthly = new Types.ObjectId(data.idString);
+        let model = new StopperModel(data);
+        await model.save();
+    }
 }

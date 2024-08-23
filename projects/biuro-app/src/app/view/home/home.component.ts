@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { MarchDataService } from './../../service/march-data.service';
-import { IClient, IClientMonthly, IMarchStepTemplate, IMarchTemplate, StepType } from '../../../../../electron/src/interfaces';
+import { IClient, IClientMonthly, IMarchStepTemplate, IMarchTemplate, StepType, IStopper } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -18,6 +18,8 @@ import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
 import { MatButton } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { differenceInSeconds } from 'date-fns';
+import { StopperDataService } from '../../service/stopper-data.service';
 
 @Component({
   selector: 'app-home',
@@ -36,14 +38,17 @@ export class HomeComponent {
   clients: MatTableDataSource<IClient>;
   templates: IMarchTemplate[] = [];
   expandedElement: IClient | null = null;
+  runningElement: IClientHome | null = null;
   selection = new SelectionModel<IClient>(true);
   currentDate: Date = new Date();
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
-  @ViewChild(MatSort, {static: true}) sort!: MatSort;
-  columns : string[] = ['name', 'expand', 'march'];
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  columns: string[] = ['name', 'expand', 'stopper', 'march'];
+  startTime: Date = new Date();
 
   constructor(private clientDataService: ClientDataService,
     private marchDataService: MarchDataService,
+    private stopperDataService: StopperDataService,
     private cdr: ChangeDetectorRef
   ) {
     this.clients = new MatTableDataSource();
@@ -54,7 +59,6 @@ export class HomeComponent {
     let clients = await this.clientDataService.getClientsMonthly(2024, 1);
     clients.forEach(c => this.updateCurrentMarch(c as IClientHome));
     this.clients.data = clients;
-    
     this.sort.active = this.columns[0];
     this.sort.direction = 'asc';
     this.clients.sort = this.sort;
@@ -108,10 +112,37 @@ export class HomeComponent {
     client.currentMarch = this.templates.find(x => x.name === client.marchName)?.steps[idx].title;
   }
 
+  onStopper(element: IClientHome) {
+    if (this.runningElement === null) {
+      this.runningElement = element;
+      this.startTime = new Date();
+
+    } else if (element === this.runningElement) {
+      this.stopStopper(element);
+
+    } else {
+      this.stopStopper(this.runningElement);
+      this.runningElement = element;
+      this.startTime = new Date();
+    }
+  }
+
+  stopStopper(element: IClientHome) {
+    this.runningElement = null;
+    let endTime = new Date();
+    let data: IStopper = {
+      from: this.startTime,
+      to: endTime,
+      time: differenceInSeconds(endTime, this.startTime),
+      monthly: element.monthly._id,
+      user: 'qq',
+      idString: element.monthly.id
+    };
+    this.stopperDataService.addTime(data);
+  }
 }
 
 interface IClientHome extends IClient {
   monthly: IClientMonthly,
   currentMarch?: string
 }
-

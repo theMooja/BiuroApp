@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose"
+import { Types } from "mongoose"
 
 export enum StepType {
     Double = 'Double',
@@ -27,13 +27,16 @@ export interface IClientMonthly {
     month: number,
     year: number,
     marchName: string,
-    steps: [IMarchStepTemplate]
+    steps: [IMarchStepTemplate],
+    id: string,
+    _id: Types.ObjectId
 }
 
-export interface IStopperTemplate {
+export interface IStopper {
     user: string,
     from: Date,
     to: Date,
     time: number,
-    monthly: ObjectId
+    monthly: Types.ObjectId,
+    idString: string,
 }
