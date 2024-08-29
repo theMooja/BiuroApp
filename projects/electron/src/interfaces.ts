@@ -1,5 +1,10 @@
 import { Types } from "mongoose"
 
+export interface IUser {
+    name: string,
+    password: string
+}
+
 export enum StepType {
     Double = 'Double',
     Triple = 'Triple'

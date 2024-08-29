@@ -1,22 +1,37 @@
 import { Schema, model } from 'mongoose';
+import { IUser } from './../../interfaces';
 
-interface IUser {
-    name: string;
-}
 
 const schema = new Schema<IUser>({
-    name: { type: String, required: true }
+    name: { type: String, required: true },
+    password: { type: String, required: true }
 });
 
-const User = model<IUser>('User', schema);
+const UserModel = model<IUser>('User', schema);
 
 export default {
-    testData(name: string): string {
-        const user = new User({
-            name: name
-        });
-        user.save();
+    UserModel: UserModel,
+    async saveUser(data: IUser) {
+        let update = await UserModel.findOneAndUpdate(
+            { name: data.name },
+            { password: data.password },
+            { upsert: true, new: true }
+        );
+        update ?? update.save();
+    },
 
-        return 'dbTestData';
+    async getUser(name: string, password: string): Promise<IUser | null> {
+        let user = await UserModel.findOne({ name: name, password: password }).lean().exec();
+
+        if (user) {
+            return user as IUser;
+        }
+        return null;
+    },
+
+    async getUsers(): Promise<IUser[]> {
+        let users = await UserModel.find().lean().exec();
+
+        return users;
     }
 }

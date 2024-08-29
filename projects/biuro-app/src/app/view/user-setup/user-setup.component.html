@@ -1,0 +1,31 @@
+<div class="user-list-container">
+    <form id="userForm" [formGroup]="userForm">
+        <div formArrayName="users">
+            <div *ngFor="let user of users.controls; let i = index" [formGroupName]="i" class="user-form-group">
+                <mat-form-field appearance="fill" class="user-field">
+                    <mat-label>Nazwa</mat-label>
+                    <input matInput formControlName="name" placeholder="Enter name" />
+                    <mat-error *ngIf="user.get('name')?.hasError('required')">
+                        Pole wymagane
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="user-field">
+                    <mat-label>Hasło</mat-label>
+                    <input matInput formControlName="password" placeholder="Enter password" type="text" />
+                    <mat-error *ngIf="user.get('password')?.hasError('required')">
+                        Pole wymagane
+                    </mat-error>
+                </mat-form-field>
+
+                <button mat-icon-button color="warn" (click)="saveUser(i)">
+                    <mat-icon>save</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <button mat-icon-button color="primary" (click)="addNewUser()" type="button">
+            <mat-icon>add</mat-icon>
+        </button>
+    </form>
+</div>

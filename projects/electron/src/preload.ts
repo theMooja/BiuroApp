@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { IClientMonthly, IMarchTemplate, IStopper } from "./interfaces";
+import { IClientMonthly, IMarchTemplate, IStopper, IUser } from "./interfaces";
 
 
 const contextBridgeApi = {
@@ -9,6 +9,9 @@ const contextBridgeApi = {
   getClientsMonthly: (year: number, month: number) => ipcRenderer.invoke('db:Client:getClientsMonthly', year, month),
   updateClient: (client: string, data: any) => ipcRenderer.invoke('db:Client:updateClient', client, data),
   addTime: (data: IStopper) => ipcRenderer.invoke('db:Stopper:addTime', data),
+  saveUser: (data: IUser) => ipcRenderer.invoke('db:User:saveUser', data),
+  getUser: (name: string, password: string) => ipcRenderer.invoke('db:User:getUser', name, password),
+  getUsers: () => ipcRenderer.invoke('db:User:getUsers'),
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);

@@ -40,8 +40,8 @@ const createWindow = (): void => {
 const setupDatabase = async () => {
   const cs = app.isPackaged ?
     settings.getSync('database.connectionString').toString()
-    : 'mongodb://localhost:27017/biuro?replicaSet=rs0';
-  
+    : 'mongodb://localhost:27017/biuro';//?replicaSet=rs0';
+
   await mongoose.connect(cs);
   await testdata.populate();
 }
@@ -53,6 +53,9 @@ const setIPCHandlers = () => {
   ipcMain.handle('db:Client:getClientsMonthly', (e, year, month) => dbApi.Client.getClientsMonthly(year, month));
   ipcMain.handle('db:Client:updateClient', (e, client, data) => dbApi.Client.updateClient(client, data));
   ipcMain.handle('db:Stopper:addTime', (e, data) => dbApi.Stopper.addTime(data));
+  ipcMain.handle('db:User:saveUser', (e, data) => dbApi.User.saveUser(data));
+  ipcMain.handle('db:User:getUser', (e, name, password) => dbApi.User.getUser(name, password));
+  ipcMain.handle('db:User:getUsers', (e) => dbApi.User.getUsers());
 }
 
 // This method will be called when Electron has finished

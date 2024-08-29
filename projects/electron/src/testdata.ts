@@ -2,11 +2,30 @@ import { IMarchTemplate, StepType } from './interfaces';
 import March from './api/Model/March';
 import Client from './api/Model/Client';
 import Stopper from './api/Model/Stopper';
+import User from './api/Model/User';
 
 const clearDB = async function () {
     await March.MarchTemplateModel.collection.drop();
     await Client.ClientModel.collection.drop();
     await Client.ClientMonthlyModel.collection.drop();
+    await User.UserModel.collection.drop();
+}
+
+const createUsers = function (data: any) {
+    data.user1 = new User.UserModel(
+        {
+            name: 'U1',
+            password: 'p1'
+        }
+    );
+    data.user1.save();
+    data.user2 = new User.UserModel(
+        {
+            name: 'U2',
+            password: 'p2'
+        }
+    );
+    data.user2.save();
 }
 
 const createMarchTemplates = function (data: any) {
@@ -110,6 +129,7 @@ export default {
     async populate() {
         let data = {};
         await clearDB();
+        createUsers(data);
         createMarchTemplates(data);
         createClients(data);
     }

@@ -10,8 +10,6 @@ import { IMarchStepTemplate, IMarchTemplate, StepType } from './../../../../../e
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 
-
-
 @Component({
   selector: 'app-march-setup',
   standalone: true,
@@ -98,7 +96,6 @@ export class MarchSetupComponent {
 
   onSubmit() {
     this.updateSequenceNumbers();
-    console.log(this.marchForm.value);
     this.dataService.createTemplate(this.marchForm.value);
   }
 }
