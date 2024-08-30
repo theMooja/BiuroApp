@@ -5,6 +5,8 @@ import { IUser } from '../../../../electron/src/interfaces';
   providedIn: 'root'
 })
 export class UserDataService {
+  user?: IUser;
+
 
   constructor() { }
 
@@ -14,5 +16,9 @@ export class UserDataService {
 
   async saveUser(user: IUser) {
     return await window.electron.saveUser(user);
+  }
+
+  setLoggedUser(user: IUser) {
+    this.user = user;
   }
 }

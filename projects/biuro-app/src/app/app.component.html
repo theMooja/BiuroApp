@@ -1,4 +1,5 @@
 <div class="view">
+    @if(!isLogin) {
     <div class="menu-bar">
         <div class="button-container">
             <button mat-fab aria-label="home" routerLink="/home">
@@ -11,6 +12,7 @@
             </button>
         </div>
     </div>
+    }
     <div class="outlet">
         <router-outlet></router-outlet>
     </div>

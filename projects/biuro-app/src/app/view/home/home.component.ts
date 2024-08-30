@@ -20,6 +20,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { differenceInSeconds } from 'date-fns';
 import { StopperDataService } from '../../service/stopper-data.service';
+import { UserDataService } from '../../service/user-data.service';
 
 @Component({
   selector: 'app-home',
@@ -49,7 +50,8 @@ export class HomeComponent {
   constructor(private clientDataService: ClientDataService,
     private marchDataService: MarchDataService,
     private stopperDataService: StopperDataService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private userService: UserDataService
   ) {
     this.clients = new MatTableDataSource();
   }
@@ -130,12 +132,13 @@ export class HomeComponent {
   stopStopper(element: IClientHome) {
     this.runningElement = null;
     let endTime = new Date();
+    let userName = this.userService.user?.name || '';
     let data: IStopper = {
       from: this.startTime,
       to: endTime,
       time: differenceInSeconds(endTime, this.startTime),
       monthly: element.monthly._id,
-      user: 'qq',
+      user: userName,
       idString: element.monthly.id
     };
     this.stopperDataService.addTime(data);

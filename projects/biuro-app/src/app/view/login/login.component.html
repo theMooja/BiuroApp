@@ -1,0 +1,5 @@
+<div class="view">
+    <div *ngFor="let user of users" class="user-button">
+        <button mat-raised-button (click)="onLogin(user)">{{ user.name }}</button>
+    </div>
+</div>

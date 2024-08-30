@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { pl } from 'date-fns/locale';
 import { setDefaultOptions } from 'date-fns';
 import { DateAdapter } from '@angular/material/core';
+import { filter } from 'rxjs/internal/operators/filter';
 
 
 @Component({
@@ -17,9 +18,18 @@ import { DateAdapter } from '@angular/material/core';
 })
 export class AppComponent {
   title = 'BiuroApp';
+  isLogin: boolean = true;
 
-  constructor(private readonly dateAdapter: DateAdapter<any>) {
+  constructor(private readonly dateAdapter: DateAdapter<any>,
+    private router: Router
+  ) {
     setDefaultOptions({ locale: pl });
     dateAdapter.setLocale(pl);
+
+    router.events.forEach((event) => {
+      if (event instanceof NavigationStart) {
+        this.isLogin = event.url === '/login';
+      }
+    });
   }
 }
