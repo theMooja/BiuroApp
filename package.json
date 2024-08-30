@@ -14,7 +14,7 @@
     "copy-files": "copyfiles app-settings.json dist/",
     "package": "npm run build-electron && npm run build-app && electron-forge package",
     "make": "npm build-electron && npm build-app && electron-forge make",
-    "publish-app": "npm build-electron && npm build-app && electron-forge publish"
+    "publish-app": "npm run build-electron && npm run build-app && electron-forge publish"
   },
   "private": true,
   "dependencies": {

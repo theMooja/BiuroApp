@@ -43,7 +43,7 @@ const setupDatabase = async () => {
     : 'mongodb://localhost:27017/biuro';//?replicaSet=rs0';
 
   await mongoose.connect(cs);
-  await testdata.populate();
+  //await testdata.populate();
 }
 
 const setIPCHandlers = () => {

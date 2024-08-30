@@ -1,17 +1,21 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IUser } from '../../../../electron/src/interfaces';
+import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserDataService {
   user?: IUser;
+  data: IUser[] = [];
 
 
   constructor() { }
 
-  async getUsers(): Promise<IUser[]> {
-    return await window.electron.getUsers();
+  async getUsers(refresh: boolean = false): Promise<IUser[]> {
+    if (this.data.length === 0 || refresh)
+      this.data = await window.electron.getUsers();
+    return this.data;
   }
 
   async saveUser(user: IUser) {
@@ -22,3 +26,10 @@ export class UserDataService {
     this.user = user;
   }
 }
+
+export const userResolver: ResolveFn<IUser[]> = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
+  return inject(UserDataService).getUsers();
+};
