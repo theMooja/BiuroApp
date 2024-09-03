@@ -3,6 +3,7 @@ import { IClientMonthly, IMarchTemplate, IStopper, IUser } from "./interfaces";
 
 
 const contextBridgeApi = {
+  minimize: () => ipcRenderer.invoke('app:minimize'),
   saveMarchTemplate: (value: IMarchTemplate) => ipcRenderer.invoke('db:March:saveTemplate', value),
   findMarchTemplates: (value?: string) => ipcRenderer.invoke('db:March:findTemplates', value),
   updateMarchValue: (data: IClientMonthly, idx: number, val: number) => ipcRenderer.invoke('db:Client:updateMarchValue', data, idx, val),

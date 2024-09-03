@@ -47,6 +47,8 @@ const setupDatabase = async () => {
 }
 
 const setIPCHandlers = () => {
+  ipcMain.handle('app:minimize', ()=> minimize());
+
   ipcMain.handle('db:March:saveTemplate', (e, data) => dbApi.March.saveTemplate(data));
   ipcMain.handle('db:March:findTemplates', (e, data) => dbApi.March.findTemplates(data));
   ipcMain.handle('db:Client:updateMarchValue', (e, data, idx, val) => dbApi.Client.updateMarchValue(data, idx, val));
@@ -84,5 +86,10 @@ app.on('activate', () => {
   }
 });
 
+
+function minimize(): any {
+  mainWindow.setAlwaysOnTop(true);
+  mainWindow.setSize(100,100, true);
+}
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

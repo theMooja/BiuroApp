@@ -30,4 +30,8 @@ export class AppComponent {
       }
     });
   }
+
+  onMinimize() {
+    window.electron.minimize();
+  }
 }
