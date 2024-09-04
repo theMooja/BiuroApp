@@ -17,6 +17,7 @@ import { DateAdapter } from '@angular/material/core';
 export class AppComponent {
   title = 'BiuroApp';
   isLogin: boolean = true;
+  isMinimized: boolean = true;
 
   constructor(private readonly dateAdapter: DateAdapter<any>,
     private router: Router
@@ -27,11 +28,16 @@ export class AppComponent {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
         this.isLogin = event.urlAfterRedirects === '/login';
+        this.isMinimized = event.urlAfterRedirects ==='/minimal';
       }
     });
   }
 
   onMinimize() {
     window.electron.minimize();
+  }
+
+  onClose() {
+    window.electron.close();
   }
 }

@@ -7,9 +7,15 @@
 
     .menu-bar {
         background-color: aqua;
+        display: flex;
+        flex-direction: column;
         
         .button-container {
             margin: 6px;
+        }
+
+        .spacer {
+            flex: 1;
         }
     }
 

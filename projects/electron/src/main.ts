@@ -24,6 +24,10 @@ const createWindow = (): void => {
   mainWindow = new BrowserWindow({
     height: 800,
     width: 1200,
+    x: 0,
+    y: 0,
+    frame: false,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -47,7 +51,9 @@ const setupDatabase = async () => {
 }
 
 const setIPCHandlers = () => {
-  ipcMain.handle('app:minimize', ()=> minimize());
+  ipcMain.handle('app:minimize', () => minimize());
+  ipcMain.handle('app:maximize', () => maximize());
+  ipcMain.handle('app:close', () => close());
 
   ipcMain.handle('db:March:saveTemplate', (e, data) => dbApi.March.saveTemplate(data));
   ipcMain.handle('db:March:findTemplates', (e, data) => dbApi.March.findTemplates(data));
@@ -89,7 +95,16 @@ app.on('activate', () => {
 
 function minimize(): any {
   mainWindow.setAlwaysOnTop(true);
-  mainWindow.setSize(100,100, true);
+  mainWindow.setSize(400, 100, true);
+  mainWindow.setResizable(false);
 }
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+
+function maximize(): any {
+  mainWindow.setAlwaysOnTop(false);
+  mainWindow.setSize(1200, 800, true);
+  mainWindow.setResizable(true);
+}
+
+function close() {
+  mainWindow.close();
+}

@@ -4,6 +4,7 @@ import { SettingsComponent } from './view/settings/settings.component';
 import { MarchSetupComponent } from './view/march-setup/march-setup.component';
 import { UserSetupComponent } from './view/user-setup/user-setup.component';
 import { LoginComponent } from './view/login/login.component';
+import { MinimalComponent } from './view/minimal/minimal.component';
 import { userResolver } from './service/user-data.service';
 
 export const routes: Routes = [
@@ -13,5 +14,5 @@ export const routes: Routes = [
     { path: 'userSetup', component: UserSetupComponent },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, resolve: { users: userResolver } },
-
+    { path: 'minimal', component: MinimalComponent }
 ];
