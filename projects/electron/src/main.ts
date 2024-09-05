@@ -22,15 +22,12 @@ settings.configure({
 const createWindow = (): void => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 800,
-    width: 1200,
-    x: 0,
-    y: 0,
     frame: false,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
-    }
+    },
+    show: false
   });
 
   const startURL = app.isPackaged ?
@@ -38,6 +35,9 @@ const createWindow = (): void => {
     : `http://localhost:4200`;
 
   mainWindow.loadURL(startURL);
+  
+
+  mainWindow.maximize();
   mainWindow.webContents.openDevTools();
 };
 
@@ -101,7 +101,7 @@ function minimize(): any {
 
 function maximize(): any {
   mainWindow.setAlwaysOnTop(false);
-  mainWindow.setSize(1200, 800, true);
+  mainWindow.maximize();
   mainWindow.setResizable(true);
 }
 
