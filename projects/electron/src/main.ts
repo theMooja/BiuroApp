@@ -35,7 +35,7 @@ const createWindow = (): void => {
     : `http://localhost:4200`;
 
   mainWindow.loadURL(startURL);
-  
+
 
   mainWindow.maximize();
   mainWindow.webContents.openDevTools();
@@ -47,7 +47,7 @@ const setupDatabase = async () => {
     : 'mongodb://localhost:27017/biuro';//?replicaSet=rs0';
 
   await mongoose.connect(cs);
-  //await testdata.populate();
+  await testdata.populate();
 }
 
 const setIPCHandlers = () => {
@@ -55,11 +55,6 @@ const setIPCHandlers = () => {
   ipcMain.handle('app:maximize', () => maximize());
   ipcMain.handle('app:close', () => close());
 
-  ipcMain.handle('db:March:saveTemplate', (e, data) => dbApi.March.saveTemplate(data));
-  ipcMain.handle('db:March:findTemplates', (e, data) => dbApi.March.findTemplates(data));
-  ipcMain.handle('db:Client:updateMarchValue', (e, data, idx, val) => dbApi.Client.updateMarchValue(data, idx, val));
-  ipcMain.handle('db:Client:getClientsMonthly', (e, year, month) => dbApi.Client.getClientsMonthly(year, month));
-  ipcMain.handle('db:Client:updateClient', (e, client, data) => dbApi.Client.updateClient(client, data));
   ipcMain.handle('db:Stopper:addTime', (e, data) => dbApi.Stopper.addTime(data));
   ipcMain.handle('db:User:saveUser', (e, data) => dbApi.User.saveUser(data));
   ipcMain.handle('db:User:getUser', (e, name, password) => dbApi.User.getUser(name, password));

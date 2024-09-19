@@ -34,7 +34,7 @@ export class MarchSetupComponent {
   }
 
   async ngOnInit() {
-    this.templates = await this.dataService.findTemplates("");
+    //this.templates = await this.dataService.findTemplates("");
   }
 
   onEdit(template: IMarchTemplate) {
@@ -96,6 +96,6 @@ export class MarchSetupComponent {
 
   onSubmit() {
     this.updateSequenceNumbers();
-    this.dataService.createTemplate(this.marchForm.value);
+    //this.dataService.createTemplate(this.marchForm.value);
   }
 }

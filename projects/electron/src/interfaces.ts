@@ -44,7 +44,13 @@ export interface IClientMonthly {
     month: number,
     year: number,
     info: IClientInfo,
-    marchValues: [IMarchValue]
+    marchValues: [IMarchValue],
+    client: Types.ObjectId
+}
+
+export interface IClientHome {
+    monthly: IClientMonthly,
+    client: IClient
 }
 
 export interface IStopper {

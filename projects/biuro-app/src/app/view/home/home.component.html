@@ -29,7 +29,7 @@
       <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="march">
+    <!-- <ng-container matColumnDef="march">
       <mat-header-cell *matHeaderCellDef> Marsz </mat-header-cell>
       <mat-cell *matCellDef="let element" [cdkContextMenuTriggerFor]="march_menu">
         {{element.currentMarch}}
@@ -42,9 +42,9 @@
           </div>
         </ng-template>
       </mat-cell>
-    </ng-container>
+    </ng-container> -->
 
-    <ng-container matColumnDef="stopper">
+    <!-- <ng-container matColumnDef="stopper">
       <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
       <mat-cell *matCellDef="let element">
         {{element.currentMarch}}
@@ -57,9 +57,9 @@
           }
         </button>
       </mat-cell>
-    </ng-container>
+    </ng-container> -->
 
-    <ng-container matColumnDef="expand">
+    <!-- <ng-container matColumnDef="expand">
       <mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <button mat-icon-button aria-label="expand row"
@@ -71,9 +71,9 @@
           }
         </button>
       </mat-cell>
-    </ng-container>
+    </ng-container> -->
 
-    <ng-container matColumnDef="expandedDetail">
+    <!-- <ng-container matColumnDef="expandedDetail">
       <mat-cell *matCellDef="let element" [attr.colspan]="2">
         <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
           <mat-form-field>
@@ -87,7 +87,7 @@
           </mat-form-field>
         </div>
       </mat-cell>
-    </ng-container>
+    </ng-container> -->
 
     <mat-header-row *matHeaderRowDef="['name']; sticky: true"></mat-header-row>
     <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: columns"

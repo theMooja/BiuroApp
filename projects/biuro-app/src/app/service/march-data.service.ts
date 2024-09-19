@@ -8,12 +8,12 @@ export class MarchDataService {
 
   constructor() { }
 
-  async createTemplate(value: any) {
-    window.electron.saveMarchTemplate(value)
-  }
+  // async createTemplate(value: any) {
+  //   window.electron.saveMarchTemplate(value)
+  // }
 
-  async findTemplates(filter?: string): Promise<IMarchTemplate[]> { 
-    return await window.electron.findMarchTemplates(filter);
-  }
+  // async findTemplates(filter?: string): Promise<IMarchTemplate[]> { 
+  //   return await window.electron.findMarchTemplates(filter);
+  // }
 
 }
