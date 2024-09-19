@@ -14,7 +14,7 @@ export interface IMarchStepTemplate {
     title: string,
     sequence: Number,
     type: StepType,
-    value?: number
+    weight: number
 }
 
 export interface IMarchTemplate {
@@ -22,19 +22,29 @@ export interface IMarchTemplate {
     steps: [IMarchStepTemplate]
 }
 
+export interface IMarchValue {
+    sequence: Number,
+    type: StepType,
+    weight: number,
+    value: number,
+    title: string,
+    stoppers: [IStopper]
+}
+
 export interface IClient {
     name: string,
-    marchName: string
+    marchName: string,
+}
+
+export interface IClientInfo {
+    email: string
 }
 
 export interface IClientMonthly {
-    clientName: string,
     month: number,
     year: number,
-    marchName: string,
-    steps: [IMarchStepTemplate],
-    id: string,
-    _id: Types.ObjectId
+    info: IClientInfo,
+    marchValues: [IMarchValue]
 }
 
 export interface IStopper {
