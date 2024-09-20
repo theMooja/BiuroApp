@@ -56,9 +56,13 @@ const setIPCHandlers = () => {
   ipcMain.handle('app:close', () => close());
 
   ipcMain.handle('db:Stopper:addTime', (e, data) => dbApi.Stopper.addTime(data));
+
   ipcMain.handle('db:User:saveUser', (e, data) => dbApi.User.saveUser(data));
   ipcMain.handle('db:User:getUser', (e, name, password) => dbApi.User.getUser(name, password));
   ipcMain.handle('db:User:getUsers', (e) => dbApi.User.getUsers());
+
+  ipcMain.handle('db:March:getTemplates', (e) => dbApi.March.getTemplates());
+  ipcMain.handle('db:March:saveTemplate', (e, template) => dbApi.March.saveTemplate(template));
 }
 
 // This method will be called when Electron has finished

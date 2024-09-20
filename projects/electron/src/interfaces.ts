@@ -19,7 +19,7 @@ export interface IMarchStepTemplate {
 
 export interface IMarchTemplate {
     name: string,
-    steps: [IMarchStepTemplate]
+    steps: IMarchStepTemplate[]
 }
 
 export interface IMarchValue {

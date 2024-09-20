@@ -120,8 +120,9 @@ const createClients = async function (data: any) {
                 value: 1
             }
         ]
-    });
+    });    
     await data.monthly1.save();
+    
     data.monthly2 = new Client.ClientMonthlyModel({
         client: data.client1._id,
         month: 2,

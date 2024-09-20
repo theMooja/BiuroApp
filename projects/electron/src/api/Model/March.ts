@@ -20,5 +20,21 @@ const MarchTemplateModel = model<IMarchTemplate>('MarchTemplate', marchTemplateS
 export default {
     MarchTemplateModel: MarchTemplateModel,
 
+    async getTemplates(): Promise<IMarchTemplate[]> {
+        let templates = await MarchTemplateModel.find().orFail().lean().exec();
 
+        return templates;
+    },
+
+    async saveTemplate(template: IMarchTemplate) {
+        console.log(template, template.steps);
+        let update = await MarchTemplateModel.findOneAndUpdate(
+            { name: template.name },
+            { template },
+            { upsert: true, new: true }
+        ).orFail();
+
+        update.steps = [...template.steps];
+        update.save();
+    }
 }

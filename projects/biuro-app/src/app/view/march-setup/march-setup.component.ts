@@ -34,7 +34,7 @@ export class MarchSetupComponent {
   }
 
   async ngOnInit() {
-    //this.templates = await this.dataService.findTemplates("");
+    this.templates = await this.dataService.getTemplates();
   }
 
   onEdit(template: IMarchTemplate) {
@@ -53,12 +53,15 @@ export class MarchSetupComponent {
   createStepGroup(step?: IMarchStepTemplate): FormGroup {
     let group = this.formBuilder.group({
       title: this.formBuilder.control(''),
-      type: StepType.Double
+      type: StepType.Double,
+      weight: this.formBuilder.control(1),
+
     });
 
     if(step){
       group.controls.title.setValue(step.title);
       group.controls.type.setValue(step.type);
+      group.controls.weight.setValue(step.weight);
     }
 
     return group;
@@ -96,6 +99,6 @@ export class MarchSetupComponent {
 
   onSubmit() {
     this.updateSequenceNumbers();
-    //this.dataService.createTemplate(this.marchForm.value);
+    this.dataService.saveTemplate(this.marchForm.value);
   }
 }
