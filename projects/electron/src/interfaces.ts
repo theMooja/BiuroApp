@@ -1,4 +1,4 @@
-import { Types } from "mongoose"
+import mongoose, { PopulatedDoc, Types } from "mongoose"
 
 export interface IUser {
     name: string,
@@ -28,7 +28,7 @@ export interface IMarchValue {
     weight: number,
     value: number,
     title: string,
-    stoppers: [IStopper]
+    stoppers: IStopper[]
 }
 
 export interface IClient {
@@ -40,18 +40,17 @@ export interface IClientInfo {
     email: string
 }
 
-export interface IClientMonthly {
+export interface IClientMonthly extends Omit<ClientMonthly, 'client'> {
+    client: IClient
+}
+
+export type ClientMonthly = {
     month: number,
     year: number,
     info: IClientInfo,
     marchValues: [IMarchValue],
-    client: Types.ObjectId
-}
-
-export interface IClientHome {
-    monthly: IClientMonthly,
-    client: IClient
-}
+    client: PopulatedDoc<IClient>,
+} & mongoose.Document;
 
 export interface IStopper {
     user: string,

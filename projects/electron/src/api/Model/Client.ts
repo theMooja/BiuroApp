@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IClient, IClientMonthly, IClientInfo, IMarchValue, IClientHome } from '../../interfaces';
+import { IClient, IClientMonthly, IClientInfo, IMarchValue, ClientMonthly } from '../../interfaces';
 
 const marchValueSchema = new Schema<IMarchValue>({
     title: { type: String },
@@ -19,7 +19,7 @@ const clientSchema = new Schema<IClient>({
     marchName: { type: String, required: true },
 });
 
-const clientMonthlySchema = new Schema<IClientMonthly>({
+const clientMonthlySchema = new Schema<ClientMonthly>({
     month: { type: Number },
     year: { type: Number },
     info: clientInfoSchema,
@@ -28,13 +28,16 @@ const clientMonthlySchema = new Schema<IClientMonthly>({
 });
 
 const ClientModel = model<IClient>('Client', clientSchema);
-const ClientMonthlyModel = model<IClientMonthly>('ClientMonthly', clientMonthlySchema);
+const ClientMonthlyModel = model<ClientMonthly>('ClientMonthly', clientMonthlySchema);
 
 export default {
     ClientModel: ClientModel,
     ClientMonthlyModel: ClientMonthlyModel,
 
-    // async getMonthlies(): Promise<IClientHome> {
+    async getMonthlies(): Promise<ClientMonthly[]> {
+        let monthlies = await ClientMonthlyModel.find()
+            .populate('client').lean().exec();
 
-    // }
+        return monthlies;
+    }
 }

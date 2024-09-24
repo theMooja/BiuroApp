@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { MarchDataService } from './../../service/march-data.service';
-import { IClient, IClientMonthly, IMarchStepTemplate, IMarchTemplate, StepType, IStopper, IClientHome } from '../../../../../electron/src/interfaces';
+import { IClient, IClientMonthly, IMarchStepTemplate, IMarchTemplate, StepType, IStopper, ClientMonthly } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -36,10 +36,10 @@ import { UserDataService } from '../../service/user-data.service';
     ]),],
 })
 export class HomeComponent {
-  clients: MatTableDataSource<IClientHome>;
+  clients: MatTableDataSource<ClientMonthly>;
   templates: IMarchTemplate[] = [];
   expandedElement: IClient | null = null;
-  runningElement: IClientHome | null = null;
+  runningElement: ClientMonthly | null = null;
   selection = new SelectionModel<IClient>(true);
   currentDate: Date = new Date();
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
@@ -57,6 +57,7 @@ export class HomeComponent {
   }
 
   async ngOnInit() {
+    let monthlies = await this.clientDataService.getMonthlies();
     this.sort.active = this.columns[0];
     this.sort.direction = 'asc';
     this.clients.sort = this.sort;

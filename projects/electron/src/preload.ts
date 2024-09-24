@@ -15,6 +15,8 @@ const contextBridgeApi = {
 
   getMarchTemplates: () => ipcRenderer.invoke('db:March:getTemplates'),
   saveMarchTemplate: (template: IMarchTemplate) => ipcRenderer.invoke('db:March:saveTemplate', template),
+
+  getClientsMonthlies: () => ipcRenderer.invoke('db:Client:getMonthlies'),
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);
