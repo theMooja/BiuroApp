@@ -29,13 +29,33 @@ import { UserDataService } from '../../service/user-data.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
-    trigger('detailExpand', [
-      state('collapsed,void', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),],
+    // trigger('detailExpand', [
+    //   state('collapsed,void', style({ height: '0px', minHeight: '0' })),
+    //   state('expanded', style({ height: '*' })),
+    //   transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    // ]),
+  ],
 })
 export class HomeComponent {
+  tableData: MatTableDataSource<ClientMonthly>;
+  expandedElement: ClientMonthly | null = null;
+  selection = new SelectionModel<ClientMonthly>(true);
+  staticColumns = ['name'];
+  infoColumns = ['email'];
+
+  constructor(private clientDataService: ClientDataService) {
+    this.tableData = new MatTableDataSource<ClientMonthly>();
+  }
+
+  async ngOnInit() {
+    this.tableData.data = await this.clientDataService.getMonthlies(2024, 1);
+  }
+
+  get columns (){
+    return this.staticColumns.concat(this.infoColumns);
+  }
+
+  /*
   clients: MatTableDataSource<ClientMonthly>;
   templates: IMarchTemplate[] = [];
   expandedElement: IClient | null = null;
@@ -44,7 +64,7 @@ export class HomeComponent {
   currentDate: Date = new Date();
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
-  columns: string[] = ['name', 'expand', 'stopper', 'march'];
+  columns: string[] = ['name', 'expand', 'march'];
   startTime: Date = new Date();
 
   constructor(private clientDataService: ClientDataService,
@@ -57,7 +77,7 @@ export class HomeComponent {
   }
 
   async ngOnInit() {
-    let monthlies = await this.clientDataService.getMonthlies();
+    let monthlies = await this.clientDataService.getMonthlies(2024, 1);
     this.sort.active = this.columns[0];
     this.sort.direction = 'asc';
     this.clients.sort = this.sort;
@@ -140,4 +160,5 @@ export class HomeComponent {
   //   };
   //   this.stopperDataService.addTime(data);
   // }
+  */
 }

@@ -34,8 +34,11 @@ export default {
     ClientModel: ClientModel,
     ClientMonthlyModel: ClientMonthlyModel,
 
-    async getMonthlies(): Promise<ClientMonthly[]> {
-        let monthlies = await ClientMonthlyModel.find()
+    async getMonthlies(year: number, month: number): Promise<ClientMonthly[]> {
+        let monthlies = await ClientMonthlyModel.find({
+            year: year,
+            month: month
+        })
             .populate('client').lean().exec();
 
         return monthlies;

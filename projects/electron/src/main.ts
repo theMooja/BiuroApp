@@ -64,7 +64,7 @@ const setIPCHandlers = () => {
   ipcMain.handle('db:March:getTemplates', (e) => dbApi.March.getTemplates());
   ipcMain.handle('db:March:saveTemplate', (e, template) => dbApi.March.saveTemplate(template));
 
-  ipcMain.handle('db:Client:getMonthlies', (e) => dbApi.Client.getMonthlies());
+  ipcMain.handle('db:Client:getMonthlies', (e, year, month) => dbApi.Client.getMonthlies(year, month));
 }
 
 // This method will be called when Electron has finished

@@ -5,10 +5,10 @@
     <span class="spacer"></span>
     <ng-container>
 
-      <button mat-icon-button [matMenuTriggerFor]="appMenu" #calTrigger="matMenuTrigger">
+      <!-- <button mat-icon-button [matMenuTriggerFor]="appMenu" #calTrigger="matMenuTrigger">
         <mat-icon>calendar_today</mat-icon>{{currentDate | date: 'MMM': undefined : 'pl-PL'}}
-      </button>
-      <mat-menu #appMenu="matMenu">
+      </button> -->
+      <!-- <mat-menu #appMenu="matMenu">
         <div (click)="$event.stopPropagation();">
           <mat-calendar startView="year" style="width:15rem" #calendar panelClass="month-picker"
             [selected]="currentDate" (monthSelected)="onCurrentDateSelected($event, calTrigger)"
@@ -16,17 +16,22 @@
           </mat-calendar>
 
         </div>
-      </mat-menu>
+      </mat-menu> -->
 
 
     </ng-container>
   </mat-toolbar>
 
-  <mat-table [dataSource]="clients" multiTemplateDataRows class="client-table" matSort>
+  <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
 
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.client.name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
     </ng-container>
 
     <!-- <ng-container matColumnDef="march">
@@ -93,6 +98,7 @@
     <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: columns"
       [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
     </mat-row>
-    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
+
+    <!-- <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row> -->
   </mat-table>
 </ng-container>
