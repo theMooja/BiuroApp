@@ -42,17 +42,52 @@ export class HomeComponent {
   selection = new SelectionModel<ClientMonthly>(true);
   staticColumns = ['name'];
   infoColumns = ['email'];
+  currentDate: Date = new Date();
+  @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
 
-  constructor(private clientDataService: ClientDataService) {
+  constructor(private clientDataService: ClientDataService,
+    private cdr: ChangeDetectorRef,
+  ) {
     this.tableData = new MatTableDataSource<ClientMonthly>();
+
   }
 
   async ngOnInit() {
-    this.tableData.data = await this.clientDataService.getMonthlies(2024, 1);
+    this.tableData.data = await this.clientDataService
+      .getMonthlies(this.currentMonthly.year, this.currentMonthly.month);
   }
 
-  get columns (){
+  get columns() {
     return this.staticColumns.concat(this.infoColumns);
+  }
+
+  onRecreateMonthlies() {
+    
+    this.clientDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, []);
+  }
+
+  get currentMonthly(): { year: number, month: number } {
+    return {
+      year: this.currentDate.getFullYear(),
+      month: this.currentDate.getMonth() + 1
+    }
+  }
+
+  onDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
+    this.currentDate = normalizedMonthAndYear;
+    this.cdr.detach();
+    this.tableData.data = [];
+    this.clientDataService.getMonthlies(this.currentMonthly.year, this.currentMonthly.month)
+      .then((res) => {
+        this.tableData.data = res;
+      });
+
+    trigger.closeMenu();
+  }
+
+  viewChangedHandler(event: any) {
+    this.calendar.currentView = 'year';
+    this.cdr.reattach();
   }
 
   /*

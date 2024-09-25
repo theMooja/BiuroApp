@@ -1,22 +1,24 @@
 <ng-container>
 
   <mat-toolbar class="toolbar">
-    <span>TOOL</span>
+    <button mat-raised-button (click)="onRecreateMonthlies()">
+      RECREATE
+    </button>
     <span class="spacer"></span>
     <ng-container>
 
-      <!-- <button mat-icon-button [matMenuTriggerFor]="appMenu" #calTrigger="matMenuTrigger">
+      <button mat-icon-button [matMenuTriggerFor]="myMenu" #calTrigger="matMenuTrigger">
         <mat-icon>calendar_today</mat-icon>{{currentDate | date: 'MMM': undefined : 'pl-PL'}}
-      </button> -->
-      <!-- <mat-menu #appMenu="matMenu">
+      </button>
+      <mat-menu #myMenu="matMenu">
         <div (click)="$event.stopPropagation();">
           <mat-calendar startView="year" style="width:15rem" #calendar panelClass="month-picker"
-            [selected]="currentDate" (monthSelected)="onCurrentDateSelected($event, calTrigger)"
+            [selected]="currentDate" (monthSelected)="onDateSelected($event, calTrigger)"
             (viewChanged)="viewChangedHandler($event)">
           </mat-calendar>
 
         </div>
-      </mat-menu> -->
+      </mat-menu>
 
 
     </ng-container>

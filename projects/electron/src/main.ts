@@ -47,7 +47,7 @@ const setupDatabase = async () => {
     : 'mongodb://localhost:27017/biuro';//?replicaSet=rs0';
 
   await mongoose.connect(cs);
-  await testdata.populate();
+  //await testdata.populate();
 }
 
 const setIPCHandlers = () => {
@@ -65,6 +65,7 @@ const setIPCHandlers = () => {
   ipcMain.handle('db:March:saveTemplate', (e, template) => dbApi.March.saveTemplate(template));
 
   ipcMain.handle('db:Client:getMonthlies', (e, year, month) => dbApi.Client.getMonthlies(year, month));
+  ipcMain.handle('db:Client:recreateMonthlies', (e, year, month, monthlies) => dbApi.Client.recreateMonthlies(year, month, monthlies));
 }
 
 // This method will be called when Electron has finished

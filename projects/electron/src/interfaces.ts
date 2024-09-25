@@ -36,6 +36,8 @@ export interface IClient {
     marchName: string,
 }
 
+export type Client = IClient & mongoose.Document;
+
 export interface IClientInfo {
     email: string
 }
@@ -48,7 +50,7 @@ export type ClientMonthly = {
     month: number,
     year: number,
     info: IClientInfo,
-    marchValues: [IMarchValue],
+    marchValues: IMarchValue[],
     client: PopulatedDoc<IClient>,
 } & mongoose.Document;
 

@@ -13,4 +13,8 @@ export class ClientDataService {
 
     return monthlies;
   }
+
+  async recreateMonthlies(year: number, month: number, monthlies: ClientMonthly[]) {
+    await window.electron.recreateMonthlies(year, month, monthlies);
+  }
 }
