@@ -21,11 +21,12 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { differenceInSeconds } from 'date-fns';
 import { StopperDataService } from '../../service/stopper-data.service';
 import { UserDataService } from '../../service/user-data.service';
+import { MarchColumnComponent } from '../../components/march-column/march-column.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatSort, MatSortModule, MatRippleModule, MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenu, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
+  imports: [MarchColumnComponent, MatSort, MatSortModule, MatRippleModule, MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenu, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -40,10 +41,11 @@ export class HomeComponent {
   tableData: MatTableDataSource<ClientMonthly>;
   expandedElement: ClientMonthly | null = null;
   selection = new SelectionModel<ClientMonthly>(true);
-  staticColumns = ['name'];
+  staticColumns = ['name', 'marchValues'];
   infoColumns = ['email'];
   currentDate: Date = new Date();
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
   constructor(private clientDataService: ClientDataService,
     private cdr: ChangeDetectorRef,
@@ -53,17 +55,30 @@ export class HomeComponent {
   }
 
   async ngOnInit() {
-    this.tableData.data = await this.clientDataService
-      .getMonthlies(this.currentMonthly.year, this.currentMonthly.month);
+    this.refreshData();
+
+    this.tableData.sortingDataAccessor = (item: any, property) => {
+      switch (property) {
+        case 'name': return (item.client as IClient)?.name;
+        default: return item[property];
+      }
+    }
+    this.tableData.sort = this.sort;
   }
 
   get columns() {
     return this.staticColumns.concat(this.infoColumns);
   }
 
-  onRecreateMonthlies() {
-    
-    this.clientDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, []);
+  async onRecreateMonthlies() {
+    await this.clientDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, []);
+    await this.refreshData();
+  }
+
+  async refreshData() {
+    this.tableData.data = await this.clientDataService
+      .getMonthlies(this.currentMonthly.year, this.currentMonthly.month);
+
   }
 
   get currentMonthly(): { year: number, month: number } {

@@ -23,14 +23,14 @@ export class LoginComponent {
   }
 
   ngOnInit() {
-    
     this.activatedRoute.data.subscribe((data) => {
       this.users = data['users'];
     });
   }
 
-    onLogin(user: IUser) {
-      this.userService.setLoggedUser(user);
-      this.router.navigateByUrl('/home');
-    }
+
+  onLogin(user: IUser) {
+    this.userService.setLoggedUser(user);
+    this.router.navigateByUrl('/home');
   }
+}

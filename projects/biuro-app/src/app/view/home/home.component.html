@@ -32,9 +32,17 @@
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> eMail </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
     </ng-container>
+
+    <ng-container matColumnDef="marchValues">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> March </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <march-column [element]="element"> </march-column>
+      </mat-cell>
+    </ng-container>
+
 
     <!-- <ng-container matColumnDef="march">
       <mat-header-cell *matHeaderCellDef> Marsz </mat-header-cell>
@@ -96,7 +104,7 @@
       </mat-cell>
     </ng-container> -->
 
-    <mat-header-row *matHeaderRowDef="['name']; sticky: true"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
     <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: columns"
       [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
     </mat-row>

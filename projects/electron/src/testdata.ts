@@ -78,6 +78,8 @@ const createMarchTemplates = async function (data: any) {
         ]
     });
     await data.march2.save();
+
+
 }
 
 const createClients = async function (data: any) {
@@ -106,7 +108,7 @@ const createClients = async function (data: any) {
         info: {
             email: 'c1@email.com'
         },
-        marchValues:[
+        marchValues: [
             {
                 ...data.march1.steps[0],
                 value: 1
@@ -120,9 +122,9 @@ const createClients = async function (data: any) {
                 value: 1
             }
         ]
-    });    
+    });
     await data.monthly1.save();
-    
+
     data.monthly2 = new Client.ClientMonthlyModel({
         client: data.client1._id,
         month: 2,
@@ -130,7 +132,7 @@ const createClients = async function (data: any) {
         info: {
             email: 'c1@email.com'
         },
-        marchValues:[
+        marchValues: [
             {
                 ...data.march1.steps[0],
                 value: 1
@@ -154,18 +156,18 @@ const createClients = async function (data: any) {
         info: {
             email: 'c2@email.com'
         },
-        marchValues:[
+        marchValues: [
             {
                 ...data.march2.steps[0],
                 value: 1
             },
             {
                 ...data.march2.steps[1],
-                value: 1
+                value: 0
             },
             {
                 ...data.march2.steps[2],
-                value: 1
+                value: 0
             }
         ]
     });

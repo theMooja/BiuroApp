@@ -13,12 +13,21 @@ const marchTemplateSchema = new Schema<IMarchTemplate>({
     steps: [stepTemplateSchema]
 });
 
-
+const marchValueSchema = new Schema<IMarchValue>({
+    title: { type: String },
+    sequence: { type: Number },
+    type: { type: String },
+    weight: { type: Number },
+    value: { type: Number },
+    stoppers: [{ type: Schema.Types.ObjectId, ref: 'Stopper' }]
+});
 
 const MarchTemplateModel = model<IMarchTemplate>('MarchTemplate', marchTemplateSchema);
+const MarchValuesModel = model<IMarchValue>('MarchValue', marchValueSchema);
 
 export default {
     MarchTemplateModel: MarchTemplateModel,
+    MarchValueModel: MarchValuesModel,
 
     async getTemplates(): Promise<IMarchTemplate[]> {
         let templates = await MarchTemplateModel.find().orFail().lean().exec();
@@ -37,4 +46,6 @@ export default {
         update.steps = [...template.steps];
         update.save();
     }
+
+    
 }

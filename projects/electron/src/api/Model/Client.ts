@@ -1,14 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { IClient, IClientMonthly, IClientInfo, IMarchValue, ClientMonthly, Client } from '../../interfaces';
-
-const marchValueSchema = new Schema<IMarchValue>({
-    title: { type: String },
-    sequence: { type: Number },
-    type: { type: String },
-    weight: { type: Number },
-    value: { type: Number },
-    stoppers: [{ type: Schema.Types.ObjectId, ref: 'Stopper' }]
-});
+import { IClient, IClientInfo, ClientMonthly, Client } from '../../interfaces';
+import March from './March';
 
 const clientInfoSchema = new Schema<IClientInfo>({
     email: { type: String, default: '' }
@@ -23,7 +15,7 @@ const clientMonthlySchema = new Schema<ClientMonthly>({
     month: { type: Number },
     year: { type: Number },
     info: clientInfoSchema,
-    marchValues: [marchValueSchema],
+    marchValues: [March.MarchValueModel.schema],
     client: { type: Schema.Types.ObjectId, ref: 'Client' }
 });
 
@@ -85,9 +77,9 @@ export default {
                     marchValues: []
                 });
             }///needs work
-             else if (latest.month === month && latest.year === year) {
+            else if (latest.month === month && latest.year === year) {
                 latest.marchValues = [];
-            } 
+            }
             else {
                 let previous = latest;
                 latest = new ClientMonthlyModel({
