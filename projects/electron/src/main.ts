@@ -66,6 +66,7 @@ const setIPCHandlers = () => {
 
   ipcMain.handle('db:Client:getMonthlies', (e, year, month) => dbApi.Client.getMonthlies(year, month));
   ipcMain.handle('db:Client:recreateMonthlies', (e, year, month, monthlies) => dbApi.Client.recreateMonthlies(year, month, monthlies));
+  ipcMain.handle('db:Client:updateMonthly', (e, client)=> dbApi.Client.updateMonthly(client));
 }
 
 // This method will be called when Electron has finished

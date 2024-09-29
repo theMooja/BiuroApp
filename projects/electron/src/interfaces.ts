@@ -31,6 +31,8 @@ export interface IMarchValue {
     stoppers: IStopper[]
 }
 
+export type MarchValue = IMarchValue & mongoose.Document
+
 export interface IClient {
     name: string,
     marchName: string,

@@ -18,6 +18,8 @@ const contextBridgeApi = {
 
   getClientsMonthlies: (year: number, month: number) => ipcRenderer.invoke('db:Client:getMonthlies', year, month),
   recreateMonthlies: (year: number, month: number, monthlies: ClientMonthly[]) => ipcRenderer.invoke('db:Client:recreateMonthlies', year, month, monthlies),
+  updateMonthly: (client: ClientMonthly) => ipcRenderer.invoke('db:Client:updateMonthly', client),
+
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);

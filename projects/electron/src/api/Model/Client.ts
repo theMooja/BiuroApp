@@ -46,6 +46,11 @@ export default {
     ClientModel: ClientModel,
     ClientMonthlyModel: ClientMonthlyModel,
 
+    async updateMonthly(monthly: ClientMonthly) {
+        console.log(monthly);
+        await ClientMonthlyModel.findByIdAndUpdate(monthly.id, monthly, {});
+    },
+
     async getMonthlies(year: number, month: number): Promise<ClientMonthly[]> {
         let monthlies = await ClientMonthlyModel.find({
             year: year,
