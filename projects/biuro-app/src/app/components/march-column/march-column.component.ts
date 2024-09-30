@@ -32,7 +32,6 @@ export class MarchColumnComponent {
 
   onStepValueSelected(val: any) {
     this.currentStep.value = val;
-    
     this.clientDataService.updateMonthly(this.element);
     this.leftMenuTrigger.closeMenu();
   }

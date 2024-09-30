@@ -22,7 +22,7 @@ export interface IMarchTemplate {
     steps: IMarchStepTemplate[]
 }
 
-export interface IMarchValue {
+export interface IMarchValue extends mongoose.Document {
     sequence: Number,
     type: StepType,
     weight: number,
@@ -31,7 +31,7 @@ export interface IMarchValue {
     stoppers: IStopper[]
 }
 
-export type MarchValue = IMarchValue & mongoose.Document
+//export type MarchValue = IMarchValue & mongoose.Document
 
 export interface IClient {
     name: string,

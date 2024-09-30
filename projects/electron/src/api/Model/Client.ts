@@ -1,6 +1,10 @@
 import { Schema, model } from 'mongoose';
 import { IClient, IClientInfo, ClientMonthly, Client } from '../../interfaces';
 import March from './March';
+import { mongooseLeanVirtuals } from 'mongoose-lean-virtuals';
+import Utils from '../../utils';
+
+
 
 const clientInfoSchema = new Schema<IClientInfo>({
     email: { type: String, default: '' }
@@ -18,6 +22,11 @@ const clientMonthlySchema = new Schema<ClientMonthly>({
     marchValues: [March.MarchValueModel.schema],
     client: { type: Schema.Types.ObjectId, ref: 'Client' }
 });
+
+//clientMonthlySchema.virtual('idHex').get((me: ClientMonthly) => me.id.toHexString());
+clientMonthlySchema.plugin(mongooseLeanVirtuals);
+// clientMonthlySchema.set('toJSON', { virtuals: true });
+// clientMonthlySchema.set('toObject', { virtuals: true });
 
 const ClientModel = model<Client>('Client', clientSchema);
 const ClientMonthlyModel = model<ClientMonthly>('ClientMonthly', clientMonthlySchema);
@@ -47,8 +56,11 @@ export default {
     ClientMonthlyModel: ClientMonthlyModel,
 
     async updateMonthly(monthly: ClientMonthly) {
-        console.log(monthly);
-        await ClientMonthlyModel.findByIdAndUpdate(monthly.id, monthly, {});
+        console.log('uuuuuuuuuuu', monthly.id);
+        let client = await ClientMonthlyModel.findById(monthly.id);
+        Utils.restoreIds(monthly.marchValues);
+        client.marchValues = monthly.marchValues;
+        await client.save();
     },
 
     async getMonthlies(year: number, month: number): Promise<ClientMonthly[]> {
@@ -56,7 +68,7 @@ export default {
             year: year,
             month: month
         })
-            .populate('client').lean().exec();
+            .populate('client').lean({ virtuals: true }).exec();
 
         return monthlies;
     },
