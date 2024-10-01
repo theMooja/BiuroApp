@@ -22,8 +22,9 @@ export class UserDataService {
     return await window.electron.saveUser(user);
   }
 
-  setLoggedUser(user: IUser) {
+  async setLoggedUser(user: IUser) {
     this.user = user;
+    await window.electron.setUser(user);
   }
 }
 

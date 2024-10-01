@@ -1,6 +1,6 @@
-import mongoose, { mongo, PopulatedDoc, Types } from "mongoose"
+import mongoose, { ObjectId, PopulatedDoc } from "mongoose"
 
-export interface IUser {
+export interface IUser extends mongoose.Document {
     name: string,
     password: string
 }
@@ -59,9 +59,12 @@ export type ClientMonthly = {
     client: PopulatedDoc<IClient>,
 } & mongoose.Document;
 
-export interface IStopper extends mongoose.Document {
-    user: string,
+export type Stopper = {
+    user: PopulatedDoc<IUser>,
     from: Date,
-    to: Date,
     time: number,
+}
+
+export interface IStopper extends Omit<Stopper, 'user'> {
+    user: IUser
 }

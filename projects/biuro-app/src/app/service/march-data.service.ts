@@ -21,4 +21,8 @@ export class MarchDataService {
   async updateMarchValue(marchValue: MarchValue) {
     window.electron.updateMarchValue(marchValue);
   }
+
+  async addStopper(mv: MarchValue, seconds: number, from: Date) {
+    window.electron.addStopper(mv, seconds, from);
+  }
 }

@@ -18,7 +18,7 @@ import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
 import { MatButton } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { differenceInSeconds } from 'date-fns';
+
 import { StopperDataService } from '../../service/stopper-data.service';
 import { UserDataService } from '../../service/user-data.service';
 import { MarchColumnComponent } from '../../components/march-column/march-column.component';
@@ -43,7 +43,7 @@ export class HomeComponent {
   selection = new SelectionModel<ClientMonthly>(true);
   staticColumns = ['name', 'marchValues'];
   infoColumns = ['email'];
-  currentDate: Date = new Date();
+  currentDate: Date = new Date('1-1-2024');
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 

@@ -3,9 +3,9 @@ import { ClientMonthly, IMarchValue, StepType } from '../../../../../electron/sr
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { ClientDataService } from '../../service/client-data.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MarchDataService } from '../../service/march-data.service';
+import { differenceInSeconds } from 'date-fns';
 
 @Component({
   selector: 'march-column',
@@ -20,6 +20,7 @@ export class MarchColumnComponent {
   @ViewChild('leftMenuTrigger') leftMenuTrigger!: MatMenuTrigger;
   @ViewChild('rightMenuTrigger') rightMenuTrigger!: MatMenuTrigger;
   isRunning!: boolean;
+  startTime!: Date;
 
   constructor(private marchDataService: MarchDataService) { }
 
@@ -28,11 +29,31 @@ export class MarchColumnComponent {
   }
 
   onStopper() {
-
+    if (this.isRunning) {
+      this.stopStopper();
+    } else {
+      this.startStopper();
+    }
   }
 
-  onStopperAdd(minutes: number) {
+  startStopper() {
+    this.startTime = new Date();
+    this.isRunning = true;
+  }
 
+  stopStopper() {
+    this.isRunning = false;
+    let seconds = differenceInSeconds(new Date(), this.startTime);
+    this.marchDataService.addStopper(this.currentStep, seconds, this.startTime);
+  }
+
+  onFifteen(e: MouseEvent) {
+    if (e.button === 0) {
+      this.marchDataService.addStopper(this.currentStep, 15 * 60, new Date())
+    }
+    if (e.button === 2) {
+      this.marchDataService.addStopper(this.currentStep, -15 * 60, new Date())
+    }
   }
 
   findLastStep(): IMarchValue {

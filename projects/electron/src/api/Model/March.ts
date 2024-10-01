@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { IMarchStepTemplate, IMarchTemplate, IMarchValue, IStopper, MarchValue, StepType } from '../../interfaces'
+import { IMarchStepTemplate, IMarchTemplate, IMarchValue, IStopper, MarchValue, StepType, Stopper } from '../../interfaces'
 import Client from './Client';
+import User from './User';
 
 const stepTemplateSchema = new Schema<IMarchStepTemplate>({
     title: { type: String },
@@ -14,10 +15,9 @@ const marchTemplateSchema = new Schema<IMarchTemplate>({
     steps: [stepTemplateSchema]
 });
 
-const stopperSchema = new Schema<IStopper>({
-    user: { type: String },
+const stopperSchema = new Schema<Stopper>({
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     from: { type: Date },
-    to: { type: Date },
     time: { type: Number }
 });
 
@@ -37,6 +37,18 @@ const MarchValueModel = model<MarchValue>('MarchValue', marchValueSchema);
 export default {
     MarchTemplateModel: MarchTemplateModel,
     MarchValueModel: MarchValueModel,
+
+    async addStopper(mv: MarchValue, seconds: number, from: Date) {
+        let marchValue = await MarchValueModel.findById(mv.id).exec();
+
+        marchValue.stoppers.push({
+            time: seconds,
+            from: from,
+            user: User.loggedUser._id
+        });
+
+        await marchValue.save();
+    },
 
     async getTemplates(): Promise<IMarchTemplate[]> {
         let templates = await MarchTemplateModel.find().orFail().lean().exec();

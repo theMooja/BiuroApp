@@ -8,9 +8,13 @@ const schema = new Schema<IUser>({
 });
 
 const UserModel = model<IUser>('User', schema);
+let loggedUser: IUser;
 
 export default {
     UserModel: UserModel,
+    get loggedUser() {
+        return loggedUser;
+    },
     async saveUser(data: IUser) {
         let update = await UserModel.findOneAndUpdate(
             { name: data.name },
@@ -33,5 +37,11 @@ export default {
         let users = await UserModel.find().lean().exec();
 
         return users;
+    },
+
+    async setUser(user: IUser) {
+        UserModel.find({ name: user.name }).then((res) => {
+            loggedUser = res[0];
+        });
     }
 }
