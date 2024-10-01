@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { IMarchStepTemplate, IMarchTemplate, IMarchValue, StepType } from '../../interfaces'
+import { IMarchStepTemplate, IMarchTemplate, IMarchValue, IStopper, MarchValue, StepType } from '../../interfaces'
+import Client from './Client';
 
 const stepTemplateSchema = new Schema<IMarchStepTemplate>({
     title: { type: String },
@@ -13,21 +14,29 @@ const marchTemplateSchema = new Schema<IMarchTemplate>({
     steps: [stepTemplateSchema]
 });
 
-const marchValueSchema = new Schema<IMarchValue>({
+const stopperSchema = new Schema<IStopper>({
+    user: { type: String },
+    from: { type: Date },
+    to: { type: Date },
+    time: { type: Number }
+});
+
+const marchValueSchema = new Schema<MarchValue>({
     title: { type: String },
     sequence: { type: Number },
     type: { type: String },
     weight: { type: Number },
     value: { type: Number },
-    stoppers: [{ type: Schema.Types.ObjectId, ref: 'Stopper' }]
+    stoppers: [stopperSchema],
+    monthly: { type: Schema.Types.ObjectId, ref: 'ClientMonthly' }
 });
 
 const MarchTemplateModel = model<IMarchTemplate>('MarchTemplate', marchTemplateSchema);
-const MarchValuesModel = model<IMarchValue>('MarchValue', marchValueSchema);
+const MarchValueModel = model<MarchValue>('MarchValue', marchValueSchema);
 
 export default {
     MarchTemplateModel: MarchTemplateModel,
-    MarchValueModel: MarchValuesModel,
+    MarchValueModel: MarchValueModel,
 
     async getTemplates(): Promise<IMarchTemplate[]> {
         let templates = await MarchTemplateModel.find().orFail().lean().exec();
@@ -45,7 +54,11 @@ export default {
 
         update.steps = [...template.steps];
         update.save();
-    }
+    },
 
-    
+    async updateMarchValue(marchValue: MarchValue) {
+        await MarchValueModel.findByIdAndUpdate(marchValue.id, {
+            value: marchValue.value
+        }).orFail();
+    }
 }

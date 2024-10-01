@@ -47,7 +47,7 @@ const setupDatabase = async () => {
     : 'mongodb://localhost:27017/biuro';//?replicaSet=rs0';
 
   await mongoose.connect(cs);
-  //await testdata.populate();
+  await testdata.populate();
 }
 
 const setIPCHandlers = () => {
@@ -55,7 +55,7 @@ const setIPCHandlers = () => {
   ipcMain.handle('app:maximize', () => maximize());
   ipcMain.handle('app:close', () => close());
 
-  ipcMain.handle('db:Stopper:addTime', (e, data) => dbApi.Stopper.addTime(data));
+  //ipcMain.handle('db:Stopper:addTime', (e, data) => dbApi.Stopper.addTime(data));
 
   ipcMain.handle('db:User:saveUser', (e, data) => dbApi.User.saveUser(data));
   ipcMain.handle('db:User:getUser', (e, name, password) => dbApi.User.getUser(name, password));
@@ -63,6 +63,7 @@ const setIPCHandlers = () => {
 
   ipcMain.handle('db:March:getTemplates', (e) => dbApi.March.getTemplates());
   ipcMain.handle('db:March:saveTemplate', (e, template) => dbApi.March.saveTemplate(template));
+  ipcMain.handle('db:March:updateMarchValue', (e, marchValue) => dbApi.March.updateMarchValue(marchValue));
 
   ipcMain.handle('db:Client:getMonthlies', (e, year, month) => dbApi.Client.getMonthlies(year, month));
   ipcMain.handle('db:Client:recreateMonthlies', (e, year, month, monthlies) => dbApi.Client.recreateMonthlies(year, month, monthlies));
@@ -72,9 +73,9 @@ const setIPCHandlers = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", () => {
+app.on("ready", async () => {
+  await setupDatabase();
   createWindow();
-  setupDatabase();
   setIPCHandlers();
 });
 

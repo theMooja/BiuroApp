@@ -1,6 +1,15 @@
 <ng-container>
-    <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger" (click)="$event.stopPropagation()">
+    <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
+        (click)="$event.stopPropagation()">
         {{currentStep.title}}
+    </button>
+
+    <button mat-icon-button aria-label="start" (click)="onStopper(); $event.stopPropagation()">
+        @if (isRunning) {
+        <mat-icon>stop_circle</mat-icon>
+        } @else {
+        <mat-icon>play_circle</mat-icon>
+        }
     </button>
 
     <mat-menu #leftMenu="matMenu">

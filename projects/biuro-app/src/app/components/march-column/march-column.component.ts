@@ -4,11 +4,13 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { ClientDataService } from '../../service/client-data.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MarchDataService } from '../../service/march-data.service';
 
 @Component({
   selector: 'march-column',
   standalone: true,
-  imports: [MatMenuModule, MatButtonModule],
+  imports: [MatMenuModule, MatButtonModule, MatIconModule],
   templateUrl: './march-column.component.html',
   styleUrl: './march-column.component.scss'
 })
@@ -17,11 +19,20 @@ export class MarchColumnComponent {
   currentStep!: IMarchValue;
   @ViewChild('leftMenuTrigger') leftMenuTrigger!: MatMenuTrigger;
   @ViewChild('rightMenuTrigger') rightMenuTrigger!: MatMenuTrigger;
+  isRunning!: boolean;
 
-  constructor(private clientDataService: ClientDataService) { }
+  constructor(private marchDataService: MarchDataService) { }
 
   ngOnInit() {
     this.currentStep = this.findLastStep();
+  }
+
+  onStopper() {
+
+  }
+
+  onStopperAdd(minutes: number) {
+
   }
 
   findLastStep(): IMarchValue {
@@ -32,8 +43,9 @@ export class MarchColumnComponent {
 
   onStepValueSelected(val: any) {
     this.currentStep.value = val;
-    this.clientDataService.updateMonthly(this.element);
+    this.marchDataService.updateMarchValue(this.currentStep);
     this.leftMenuTrigger.closeMenu();
+    this.currentStep = this.findLastStep();
   }
 
   get stepValues() {

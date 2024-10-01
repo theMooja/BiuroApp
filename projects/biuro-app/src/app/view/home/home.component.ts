@@ -71,14 +71,14 @@ export class HomeComponent {
   }
 
   async onRecreateMonthlies() {
-    await this.clientDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, []);
-    await this.refreshData();
+    //await this.clientDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, []);
+    console.log('tableData', this.tableData.data);
+    //await this.refreshData();
   }
 
   async refreshData() {
     this.tableData.data = await this.clientDataService
       .getMonthlies(this.currentMonthly.year, this.currentMonthly.month);
-
   }
 
   get currentMonthly(): { year: number, month: number } {

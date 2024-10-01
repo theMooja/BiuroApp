@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IMarchTemplate } from "./../../../../electron/src/interfaces";
+import { IMarchTemplate, MarchValue } from "./../../../../electron/src/interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -16,5 +16,9 @@ export class MarchDataService {
 
   async saveTemplate(template: IMarchTemplate) {
     window.electron.saveMarchTemplate(template);
+  }
+
+  async updateMarchValue(marchValue: MarchValue) {
+    window.electron.updateMarchValue(marchValue);
   }
 }

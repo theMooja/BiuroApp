@@ -19,14 +19,11 @@ const clientMonthlySchema = new Schema<ClientMonthly>({
     month: { type: Number },
     year: { type: Number },
     info: clientInfoSchema,
-    marchValues: [March.MarchValueModel.schema],
+    marchValues: [{ type: Schema.Types.ObjectId, ref: 'MarchValue' }],
     client: { type: Schema.Types.ObjectId, ref: 'Client' }
 });
 
-//clientMonthlySchema.virtual('idHex').get((me: ClientMonthly) => me.id.toHexString());
 clientMonthlySchema.plugin(mongooseLeanVirtuals);
-// clientMonthlySchema.set('toJSON', { virtuals: true });
-// clientMonthlySchema.set('toObject', { virtuals: true });
 
 const ClientModel = model<Client>('Client', clientSchema);
 const ClientMonthlyModel = model<ClientMonthly>('ClientMonthly', clientMonthlySchema);
@@ -35,6 +32,13 @@ async function getLatestMonthly(client: Client): Promise<ClientMonthly> {
     let result = await ClientMonthlyModel.aggregate([
         {
             $match: { client: { $eq: client._id } }
+        }, {
+            $lookup: {
+                from: 'MarchValue', // The collection name of the referenced documents
+                localField: 'marchValues', // The field in the Post document that holds the ObjectId(s)
+                foreignField: '_id', // The field in the Comment document that matches the ObjectId(s)
+                as: 'marchValues' // The name of the field where the matched documents will be stored
+            }
         }, {
             $sort: { year: -1, month: -1 }
         }, {
@@ -56,19 +60,59 @@ export default {
     ClientMonthlyModel: ClientMonthlyModel,
 
     async updateMonthly(monthly: ClientMonthly) {
-        console.log('uuuuuuuuuuu', monthly.id);
         let client = await ClientMonthlyModel.findById(monthly.id);
         Utils.restoreIds(monthly.marchValues);
-        client.marchValues = monthly.marchValues;
+
         await client.save();
     },
 
     async getMonthlies(year: number, month: number): Promise<ClientMonthly[]> {
-        let monthlies = await ClientMonthlyModel.find({
-            year: year,
-            month: month
-        })
-            .populate('client').lean({ virtuals: true }).exec();
+        let monthlies = await ClientMonthlyModel.aggregate([
+            {
+                $match: { month: month, year: year }
+            },
+            {
+                $lookup: {
+                    from: 'marchvalues',
+                    let: { id: '$marchValues' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $in: ["$_id", "$$id"]
+                                }
+                            }
+                        },
+                        {
+                            $addFields: {
+                                id: { $toString: "$_id" }
+                            }
+                        }
+                    ],
+                    as: 'marchValues'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'clients',
+                    localField: 'client',
+                    foreignField: '_id',
+                    as: 'client'
+                }
+            },
+            {
+                $set: {
+                    client: {
+                        $first: "$client"
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    id: { $toString: "$_id" }
+                }
+            }
+        ]).exec();
 
         return monthlies;
     },

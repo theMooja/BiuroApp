@@ -6,6 +6,7 @@ import User from './api/Model/User';
 
 const clearDB = async function () {
     await March.MarchTemplateModel.collection.drop();
+    await March.MarchValueModel.collection.drop();
     await Client.ClientModel.collection.drop();
     await Client.ClientMonthlyModel.collection.drop();
     await User.UserModel.collection.drop();
@@ -108,22 +109,39 @@ const createClients = async function (data: any) {
         info: {
             email: 'c1@email.com'
         },
-        marchValues: [
-            {
-                ...data.march1.steps[0],
-                value: 1
-            },
-            {
-                ...data.march1.steps[1],
-                value: 1
-            },
-            {
-                ...data.march1.steps[2],
-                value: 1
-            }
-        ]
+        marchValues: []
     });
     await data.monthly1.save();
+    data.monthly1values1 = new March.MarchValueModel({
+        title: 's1',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 1,
+        monthly: data.monthly1._id
+    });
+    await data.monthly1values1.save();
+    data.monthly1values2 = new March.MarchValueModel({
+        title: 's2',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 1,
+        monthly: data.monthly1._id
+    });
+    await data.monthly1values2.save();
+    data.monthly1values3 = new March.MarchValueModel({
+        title: 's3',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 1,
+        monthly: data.monthly1._id
+    });
+    await data.monthly1values3.save();
+    data.monthly1.marchValues = [data.monthly1values1._id, data.monthly1values2._id, data.monthly1values3._id]
+    await data.monthly1.save();
+
 
     data.monthly2 = new Client.ClientMonthlyModel({
         client: data.client1._id,
@@ -132,21 +150,37 @@ const createClients = async function (data: any) {
         info: {
             email: 'c1@email.com'
         },
-        marchValues: [
-            {
-                ...data.march1.steps[0],
-                value: 1
-            },
-            {
-                ...data.march1.steps[1],
-                value: 0
-            },
-            {
-                ...data.march1.steps[2],
-                value: 0
-            }
-        ]
+        marchValues: []
     });
+    await data.monthly2.save();
+    data.monthly2values1 = new March.MarchValueModel({
+        title: 's1',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 1,
+        monthly: data.monthly2._id
+    });
+    await data.monthly2values1.save();
+    data.monthly2values2 = new March.MarchValueModel({
+        title: 's2',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 1,
+        monthly: data.monthly2._id
+    });
+    await data.monthly2values2.save();
+    data.monthly2values3 = new March.MarchValueModel({
+        title: 's2',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 1,
+        monthly: data.monthly2._id
+    });
+    await data.monthly2values3.save();
+    data.monthly2.marchValues = [data.monthly2values1._id, data.monthly2values2._id, data.monthly2values3._id]
     await data.monthly2.save();
 
     data.monthly3 = new Client.ClientMonthlyModel({
@@ -156,21 +190,37 @@ const createClients = async function (data: any) {
         info: {
             email: 'c2@email.com'
         },
-        marchValues: [
-            {
-                ...data.march2.steps[0],
-                value: 1
-            },
-            {
-                ...data.march2.steps[1],
-                value: 0
-            },
-            {
-                ...data.march2.steps[2],
-                value: 0
-            }
-        ]
+        marchValues: []
     });
+    await data.monthly3.save();
+    data.monthly3values1 = new March.MarchValueModel({
+        title: 's1',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 1,
+        monthly: data.monthly3._id
+    });
+    await data.monthly3values1.save();
+    data.monthly3values2 = new March.MarchValueModel({
+        title: 's2',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 0,
+        monthly: data.monthly3._id
+    });
+    await data.monthly3values2.save();
+    data.monthly3values3 = new March.MarchValueModel({
+        title: 's3',
+        sequence: 1,
+        type: StepType.Double,
+        weight: 1,
+        value: 0,
+        monthly: data.monthly3._id
+    });
+    await data.monthly3values3.save();
+    data.monthly3.marchValues = [data.monthly3values1._id, data.monthly3values2._id, data.monthly3values3._id]
     await data.monthly3.save();
 }
 
