@@ -7,7 +7,10 @@ import Utils from '../../utils';
 
 
 const clientInfoSchema = new Schema<IClientInfo>({
-    email: { type: String, default: '' }
+    email: { type: String, default: '' },
+    biuro: { type: String, default: '' },
+    program: { type: String, default: '' },
+    forma: { type: String, default: ''}
 });
 
 const clientSchema = new Schema<IClient>({

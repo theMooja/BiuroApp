@@ -107,7 +107,10 @@ const createClients = async function (data: any) {
         month: 1,
         year: 2024,
         info: {
-            email: 'c1@email.com'
+            email: 'c1@email.com',
+            biuro:'finka',
+            forma: 'vat',
+            program: 'nexo'
         },
         marchValues: []
     });
@@ -148,7 +151,10 @@ const createClients = async function (data: any) {
         month: 2,
         year: 2024,
         info: {
-            email: 'c1@email.com'
+            email: 'c1@email.com',
+            biuro:'finka',
+            forma: 'vat',
+            program: 'nexo'
         },
         marchValues: []
     });
@@ -188,7 +194,10 @@ const createClients = async function (data: any) {
         month: 1,
         year: 2024,
         info: {
-            email: 'c2@email.com'
+            email: 'c2@email.com',
+            biuro:'fintax',
+            forma: 'ryczałt',
+            program: 'gt'
         },
         marchValues: []
     });

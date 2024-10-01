@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
-import { MarchDataService } from './../../service/march-data.service';
-import { IClient, IClientMonthly, IMarchStepTemplate, IMarchTemplate, StepType, IStopper, ClientMonthly } from '../../../../../electron/src/interfaces';
+import { IClient, ClientMonthly } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -14,19 +13,17 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCalendar, MatDatepicker, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
-import { CdkContextMenuTrigger, CdkMenuItem, CdkMenu } from '@angular/cdk/menu';
+import { CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule } from '@angular/cdk/menu';
 import { MatButton } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-
-import { StopperDataService } from '../../service/stopper-data.service';
-import { UserDataService } from '../../service/user-data.service';
 import { MarchColumnComponent } from '../../components/march-column/march-column.component';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MarchColumnComponent, MatSort, MatSortModule, MatRippleModule, MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenu, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
+  imports: [MarchColumnComponent, MatSort, MatSortModule, MatRippleModule, MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -41,11 +38,12 @@ export class HomeComponent {
   tableData: MatTableDataSource<ClientMonthly>;
   expandedElement: ClientMonthly | null = null;
   selection = new SelectionModel<ClientMonthly>(true);
-  staticColumns = ['name', 'marchValues'];
-  infoColumns = ['email'];
+  infoColumns = ['email', 'biuro', 'program'];
+  allInfoColumns = ['email', 'biuro', 'program', 'forma']
   currentDate: Date = new Date('1-1-2024');
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  lastColumn!: string;
 
   constructor(private clientDataService: ClientDataService,
     private cdr: ChangeDetectorRef,
@@ -67,7 +65,16 @@ export class HomeComponent {
   }
 
   get columns() {
-    return this.staticColumns.concat(this.infoColumns);
+    return ['name', ...this.infoColumns, 'marchValues']
+  }
+
+  onColumnChange(column: string) {
+    let idx = this.infoColumns.indexOf(this.lastColumn);
+    this.infoColumns[idx] = column;
+  }
+
+  onInfoColumnRightClick(column: string) {
+    this.lastColumn = column;
   }
 
   async onRecreateMonthlies() {

@@ -30,12 +30,31 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.client.name}} </mat-cell>
     </ng-container>
-
+    <!-- info columns -->
     <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> eMail </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+        (contextmenu)="onInfoColumnRightClick('email')"> eMail </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="biuro">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+        (contextmenu)="onInfoColumnRightClick('biuro')"> biuro </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.biuro}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="program">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+        (contextmenu)="onInfoColumnRightClick('program')"> program </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.program}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="forma">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+        (contextmenu)="onInfoColumnRightClick('forma')"> forma </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.forma}} </mat-cell>
+    </ng-container>
+    <!--  -->
     <ng-container matColumnDef="marchValues">
       <mat-header-cell *matHeaderCellDef mat-sort-header> March </mat-header-cell>
       <mat-cell *matCellDef="let element">
@@ -111,4 +130,15 @@
 
     <!-- <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row> -->
   </mat-table>
+
+  <ng-template #outer>
+    <div class="column-menu" cdkMenu>
+      @for(c of allInfoColumns; track c; let idx = $index) {
+      <button mat-button class="column-menu-item" cdkMenuItem (click)="onColumnChange(c)"
+        [disabled]="infoColumns.includes(c)">{{c}}</button>
+      }
+
+    </div>
+  </ng-template>
+
 </ng-container>

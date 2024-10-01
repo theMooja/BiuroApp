@@ -44,7 +44,10 @@ export interface IClient {
 export type Client = IClient & mongoose.Document;
 
 export interface IClientInfo {
-    email: string
+    email: string,
+    biuro: string,
+    program: string,
+    forma: string
 }
 
 export interface IClientMonthly extends Omit<ClientMonthly, 'client'> {
