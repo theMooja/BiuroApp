@@ -1,8 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { IClient, IClientInfo, ClientMonthly, Client } from '../../interfaces';
-import March from './March';
 import { mongooseLeanVirtuals } from 'mongoose-lean-virtuals';
-import Utils from '../../utils';
 
 
 
@@ -10,7 +8,7 @@ const clientInfoSchema = new Schema<IClientInfo>({
     email: { type: String, default: '' },
     biuro: { type: String, default: '' },
     program: { type: String, default: '' },
-    forma: { type: String, default: ''}
+    forma: { type: String, default: '' }
 });
 
 const clientSchema = new Schema<IClient>({
@@ -22,6 +20,7 @@ const clientMonthlySchema = new Schema<ClientMonthly>({
     month: { type: Number },
     year: { type: Number },
     info: clientInfoSchema,
+    notes: { type: String },
     marchValues: [{ type: Schema.Types.ObjectId, ref: 'MarchValue' }],
     client: { type: Schema.Types.ObjectId, ref: 'Client' }
 });
@@ -37,10 +36,10 @@ async function getLatestMonthly(client: Client): Promise<ClientMonthly> {
             $match: { client: { $eq: client._id } }
         }, {
             $lookup: {
-                from: 'MarchValue', // The collection name of the referenced documents
-                localField: 'marchValues', // The field in the Post document that holds the ObjectId(s)
-                foreignField: '_id', // The field in the Comment document that matches the ObjectId(s)
-                as: 'marchValues' // The name of the field where the matched documents will be stored
+                from: 'MarchValue',
+                localField: 'marchValues',
+                foreignField: '_id',
+                as: 'marchValues'
             }
         }, {
             $sort: { year: -1, month: -1 }
@@ -50,7 +49,7 @@ async function getLatestMonthly(client: Client): Promise<ClientMonthly> {
                 latestEntry: { $first: "$$ROOT" }
             }
         }, {
-            $replaceRoot: { newRoot: "$latestEntry" }  // Replace root with the latest entry document
+            $replaceRoot: { newRoot: "$latestEntry" }
         }
     ]).exec();
 
@@ -62,11 +61,11 @@ export default {
     ClientModel: ClientModel,
     ClientMonthlyModel: ClientMonthlyModel,
 
-    async updateMonthly(monthly: ClientMonthly) {
-        let client = await ClientMonthlyModel.findById(monthly.id);
-        Utils.restoreIds(monthly.marchValues);
+    async updateMonthlyNotes(id: string, notes: string) {
+        let monthly = await ClientMonthlyModel.findById(id);
+        monthly.notes = notes;
 
-        await client.save();
+        await monthly.save();
     },
 
     async getMonthlies(year: number, month: number): Promise<ClientMonthly[]> {
@@ -138,7 +137,8 @@ export default {
                     month: month,
                     client: client.id,
                     info: {},
-                    marchValues: []
+                    marchValues: [],
+                    notes: ''
                 });
             }///needs work
             else if (latest.month === month && latest.year === year) {
@@ -150,6 +150,7 @@ export default {
                     year: year,
                     month: month,
                     client: client.id,
+                    notes: previous.notes,
                     info: { ...previous.info },
                     marchValues: []
                 })

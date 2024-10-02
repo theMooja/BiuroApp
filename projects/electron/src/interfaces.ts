@@ -58,6 +58,7 @@ export type ClientMonthly = {
     month: number,
     year: number,
     info: IClientInfo,
+    notes: string,
     marchValues: PopulatedDoc<MarchValue>[],
     client: PopulatedDoc<IClient>,
 } & mongoose.Document;

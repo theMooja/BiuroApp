@@ -18,12 +18,16 @@ import { MatButton } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MarchColumnComponent } from '../../components/march-column/march-column.component';
+import { NotesComponent } from '../../components/notes/notes.component';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MarchColumnComponent, MatSort, MatSortModule, MatRippleModule, MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule, MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
+  imports: [NotesComponent, MarchColumnComponent, MatSort, MatSortModule, MatRippleModule,
+    MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule,
+    MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule,
+    MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -49,7 +53,6 @@ export class HomeComponent {
     private cdr: ChangeDetectorRef,
   ) {
     this.tableData = new MatTableDataSource<ClientMonthly>();
-
   }
 
   async ngOnInit() {
@@ -65,7 +68,7 @@ export class HomeComponent {
   }
 
   get columns() {
-    return ['name', ...this.infoColumns, 'marchValues']
+    return ['name', ...this.infoColumns, 'notes', 'marchValues']
   }
 
   onColumnChange(column: string) {

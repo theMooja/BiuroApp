@@ -1,0 +1,10 @@
+<button mat-button (mouseenter)="showTooltip(tooltipTemplate, $event)" (mouseleave)="hideTooltip()"
+    (click)="onEdit(); $event.stopPropagation()">N</button>
+
+<ng-template #tooltipTemplate>
+    <div>
+        <textarea matInput [(ngModel)]="notes" placeholder="Notatki" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="20"></textarea>
+        <button mat-button (click)="onSave()">Zapisz</button>
+    </div>
+</ng-template>

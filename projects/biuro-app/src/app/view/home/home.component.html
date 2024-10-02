@@ -54,7 +54,16 @@
         (contextmenu)="onInfoColumnRightClick('forma')"> forma </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.forma}} </mat-cell>
     </ng-container>
+
     <!--  -->
+
+    <ng-container matColumnDef="notes">
+      <mat-header-cell *matHeaderCellDef> Notki </mat-header-cell>
+      <mat-cell *matCellDef="let element"> 
+        <app-notes [monthly]="element"></app-notes>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="marchValues">
       <mat-header-cell *matHeaderCellDef mat-sort-header> March </mat-header-cell>
       <mat-cell *matCellDef="let element">

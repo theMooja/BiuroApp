@@ -18,7 +18,7 @@ export class ClientDataService {
     await window.electron.recreateMonthlies(year, month, monthlies);
   }
 
-  async updateMonthly(client: ClientMonthly) {
-    await window.electron.updateMonthly(client);
+  async updateMonthlyNotes(monthlyId: string, notes: string) {
+    await window.electron.updateMonthlyNotes(monthlyId, notes);
   }
 }
