@@ -20,7 +20,6 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MarchColumnComponent } from '../../components/march-column/march-column.component';
 import { NotesComponent } from '../../components/notes/notes.component';
 
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -31,11 +30,11 @@ import { NotesComponent } from '../../components/notes/notes.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
-    // trigger('detailExpand', [
-    //   state('collapsed,void', style({ height: '0px', minHeight: '0' })),
-    //   state('expanded', style({ height: '*' })),
-    //   transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    // ]),
+    trigger('detailExpand', [
+      state('collapsed,void', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
   ],
 })
 export class HomeComponent {

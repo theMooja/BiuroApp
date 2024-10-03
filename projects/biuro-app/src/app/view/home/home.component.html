@@ -28,7 +28,8 @@
 
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.client.name}} </mat-cell>
+      <mat-cell *matCellDef="let element"
+      (dblclick)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()"> {{element.client.name}} </mat-cell>
     </ng-container>
     <!-- info columns -->
     <ng-container matColumnDef="email">
@@ -71,55 +72,11 @@
       </mat-cell>
     </ng-container>
 
-
-    <!-- <ng-container matColumnDef="march">
-      <mat-header-cell *matHeaderCellDef> Marsz </mat-header-cell>
-      <mat-cell *matCellDef="let element" [cdkContextMenuTriggerFor]="march_menu">
-        {{element.currentMarch}}
-        <ng-template #march_menu>
-          <div class="march-menu-container" cdkMenu (click)="$event.stopPropagation()">
-            @for(step of getSteps(element.marchName); track step.title; let idx = $index) {
-            <div cdkMenuItem (click)="onMarchClick(element, step, $event)" class="march-menu-item"
-              [ngClass]="{'march-green': element.monthly.steps[idx].value === 1, 'march-yellow': element.monthly.steps[idx].value === 2}">
-              {{step.title}}</div>}
-          </div>
-        </ng-template>
-      </mat-cell>
-    </ng-container> -->
-
-    <!-- <ng-container matColumnDef="stopper">
-      <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        {{element.currentMarch}}
-        <button mat-icon-button aria-label="start"
-          (click)="onStopper(element); $event.stopPropagation()">
-          @if (runningElement === element) {
-          <mat-icon>stop_circle</mat-icon>
-          } @else {
-          <mat-icon>play_circle</mat-icon>
-          }
-        </button>
-      </mat-cell>
-    </ng-container> -->
-
-    <!-- <ng-container matColumnDef="expand">
-      <mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <button mat-icon-button aria-label="expand row"
-          (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-          @if (expandedElement === element) {
-          <mat-icon>keyboard_arrow_up</mat-icon>
-          } @else {
-          <mat-icon>keyboard_arrow_down</mat-icon>
-          }
-        </button>
-      </mat-cell>
-    </ng-container> -->
-
-    <!-- <ng-container matColumnDef="expandedDetail">
+    <ng-container matColumnDef="expandedDetail">
       <mat-cell *matCellDef="let element" [attr.colspan]="2">
         <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          <mat-form-field>
+          afafafaaf
+          <!-- <mat-form-field>
             <mat-label>March</mat-label>
             <mat-select matNativeControl required (selectionChange)="onMarchTemplateSelected($event.value)"
               [(value)]="element.marchName">
@@ -127,17 +84,17 @@
               <mat-option [value]="template.name">{{template.name}}</mat-option>
               }
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
         </div>
       </mat-cell>
-    </ng-container> -->
+    </ng-container>
 
     <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
     <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: columns"
       [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
     </mat-row>
 
-    <!-- <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row> -->
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
   </mat-table>
 
   <ng-template #outer>
