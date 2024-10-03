@@ -23,9 +23,10 @@ export class MarchSetupComponent {
   marchForm: FormGroup;
   stepTypes = Object.values(StepType);
   templates: IMarchTemplate[] = [];
+  monthlyId!: string;
 
   constructor(private formBuilder: FormBuilder,
-    private dataService: MarchDataService
+    private dataService: MarchDataService,
   ) {
     this.marchForm = this.formBuilder.group({
       name: this.formBuilder.control(''),
@@ -35,6 +36,7 @@ export class MarchSetupComponent {
 
   async ngOnInit() {
     this.templates = await this.dataService.getTemplates();
+    this.monthlyId = history.state.monthlyId;
   }
 
   onEdit(template: IMarchTemplate) {
@@ -58,7 +60,7 @@ export class MarchSetupComponent {
 
     });
 
-    if(step){
+    if (step) {
       group.controls.title.setValue(step.title);
       group.controls.type.setValue(step.type);
       group.controls.weight.setValue(step.weight);

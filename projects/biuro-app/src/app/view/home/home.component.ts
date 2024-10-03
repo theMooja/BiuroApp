@@ -19,6 +19,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MarchColumnComponent } from '../../components/march-column/march-column.component';
 import { NotesComponent } from '../../components/notes/notes.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -50,6 +51,7 @@ export class HomeComponent {
 
   constructor(private clientDataService: ClientDataService,
     private cdr: ChangeDetectorRef,
+    private router: Router
   ) {
     this.tableData = new MatTableDataSource<ClientMonthly>();
   }
@@ -63,11 +65,17 @@ export class HomeComponent {
         default: return item[property];
       }
     }
+    this.sort.active = this.columns[0];
+    this.sort.direction = 'asc';
     this.tableData.sort = this.sort;
   }
 
   get columns() {
     return ['name', ...this.infoColumns, 'notes', 'marchValues']
+  }
+
+  onSetMarch(element: ClientMonthly) {
+    this.router.navigate(['/marchSetup'], { state: { monthlyId: element.id } });
   }
 
   onColumnChange(column: string) {
@@ -113,111 +121,4 @@ export class HomeComponent {
     this.calendar.currentView = 'year';
     this.cdr.reattach();
   }
-
-  /*
-  clients: MatTableDataSource<ClientMonthly>;
-  templates: IMarchTemplate[] = [];
-  expandedElement: IClient | null = null;
-  runningElement: ClientMonthly | null = null;
-  selection = new SelectionModel<IClient>(true);
-  currentDate: Date = new Date();
-  @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
-  columns: string[] = ['name', 'expand', 'march'];
-  startTime: Date = new Date();
-
-  constructor(private clientDataService: ClientDataService,
-    private marchDataService: MarchDataService,
-    private stopperDataService: StopperDataService,
-    private cdr: ChangeDetectorRef,
-    private userService: UserDataService
-  ) {
-    this.clients = new MatTableDataSource();
-  }
-
-  async ngOnInit() {
-    let monthlies = await this.clientDataService.getMonthlies(2024, 1);
-    this.sort.active = this.columns[0];
-    this.sort.direction = 'asc';
-    this.clients.sort = this.sort;
-  }
-
-  onMarchTemplateSelected(value: any) {
-    // if (this.expandedElement) {
-    //   this.clientDataService.updateClient(this.expandedElement.name, {
-    //     marchName: value
-    //   });
-    // }
-  }
-
-  onCurrentDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
-    this.currentDate = normalizedMonthAndYear;
-    this.cdr.detach();
-    this.clients.data = [];
-    // this.clientDataService.getClientsMonthly(this.currentDate.getFullYear(), this.currentDate.getMonth()).then((res) => {
-    //   res.forEach(c => this.updateCurrentMarch(c as IClientHome));
-    //   this.clients.data = res;
-    // });
-
-    trigger.closeMenu();
-  }
-
-  viewChangedHandler(event: any) {
-    this.calendar.currentView = 'year';
-    this.cdr.reattach();
-  }
-
-  // getSteps(templateName: string): [IMarchStepTemplate] {
-  //   let steps = this.templates.find(x => x.name === templateName)?.steps;
-  //   if (!steps) throw (`no steps for ${templateName}`);
-
-  //   return steps;
-  // }
-
-  // onMarchClick(client: IClientHome, step: IMarchStepTemplate, event: Event) {
-  //   let stepIdx = this.getSteps(client.marchName).indexOf(step);
-  //   let value = client.monthly.steps[stepIdx].value || 0;
-  //   value = (value + 1) % (step.type === StepType.Double ? 2 : 3);
-  //   client.monthly.steps[stepIdx].value = value;
-  //   this.clientDataService.updateMarchValue(client.monthly, stepIdx, value);
-  //   this.updateCurrentMarch(client);
-  // }
-
-  // updateCurrentMarch(client: IClientHome) {
-  //   let idx = client.monthly.steps.findIndex(x => !x.value || x.value === 0);
-  //   if (idx === -1) idx = client.monthly.steps.length - 1;
-
-  //   client.currentMarch = this.templates.find(x => x.name === client.marchName)?.steps[idx].title;
-  // }
-
-  // onStopper(element: IClientHome) {
-  //   if (this.runningElement === null) {
-  //     this.runningElement = element;
-  //     this.startTime = new Date();
-
-  //   } else if (element === this.runningElement) {
-  //     this.stopStopper(element);
-
-  //   } else {
-  //     this.stopStopper(this.runningElement);
-  //     this.runningElement = element;
-  //     this.startTime = new Date();
-  //   }
-  // }
-
-  // stopStopper(element: IClientHome) {
-  //   this.runningElement = null;
-  //   let endTime = new Date();
-  //   let userName = this.userService.user?.name || '';
-  //   let data: IStopper = {
-  //     from: this.startTime,
-  //     to: endTime,
-  //     time: differenceInSeconds(endTime, this.startTime),
-  //     monthly: element.monthly._id,
-  //     user: userName,
-  //     idString: element.monthly.id
-  //   };
-  //   this.stopperDataService.addTime(data);
-  // }
-  */
 }

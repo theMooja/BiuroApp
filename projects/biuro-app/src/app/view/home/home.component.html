@@ -75,7 +75,7 @@
     <ng-container matColumnDef="expandedDetail">
       <mat-cell *matCellDef="let element" [attr.colspan]="2">
         <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          afafafaaf
+          <button mat-raised-button (click)="onSetMarch(element)">Ustaw Marsz</button>
           <!-- <mat-form-field>
             <mat-label>March</mat-label>
             <mat-select matNativeControl required (selectionChange)="onMarchTemplateSelected($event.value)"
