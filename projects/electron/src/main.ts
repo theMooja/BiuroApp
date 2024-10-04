@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import dbApi from './api/db';
 import testdata from './testdata';
 import * as settings from 'electron-settings';
+import "reflect-metadata";
+import { AppDataSource } from './datasource';
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -48,6 +50,10 @@ const setupDatabase = async () => {
 
   await mongoose.connect(cs);
   await testdata.populate();
+
+  AppDataSource.initialize().then(() => {
+    console.log('Connected to Postgres');
+  });
 }
 
 const setIPCHandlers = () => {
@@ -67,7 +73,7 @@ const setIPCHandlers = () => {
 
   ipcMain.handle('db:Client:getMonthlies', (e, year, month) => dbApi.Client.getMonthlies(year, month));
   ipcMain.handle('db:Client:recreateMonthlies', (e, year, month, monthlies) => dbApi.Client.recreateMonthlies(year, month, monthlies));
-  ipcMain.handle('db:Client:updateMonthlyNotes', (e, monthlyId, notes)=> dbApi.Client.updateMonthlyNotes(monthlyId, notes));
+  ipcMain.handle('db:Client:updateMonthlyNotes', (e, monthlyId, notes) => dbApi.Client.updateMonthlyNotes(monthlyId, notes));
 }
 
 // This method will be called when Electron has finished
@@ -85,6 +91,7 @@ app.on("ready", async () => {
 app.on("window-all-closed", () => {
   if (process.platform !== 'darwin') {
     app.quit();
+
   }
 });
 

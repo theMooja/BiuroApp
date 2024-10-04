@@ -34,8 +34,11 @@
     "electron-squirrel-startup": "^1.0.0",
     "mongoose": "^8.3.2",
     "mongoose-lean-virtuals": "^1.0.0",
+    "pg": "^8.13.0",
+    "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "typeorm": "^0.3.20",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
@@ -49,6 +52,8 @@
     "@electron-forge/maker-zip": "^7.3.1",
     "@electron-forge/plugin-auto-unpack-natives": "^7.3.1",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "^22.7.4",
+    "@types/pg": "^8.11.10",
     "concurrently": "^8.2.2",
     "copyfiles": "^2.4.1",
     "electron": "^29.1.5",

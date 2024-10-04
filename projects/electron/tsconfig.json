@@ -11,6 +11,9 @@
         "outDir": "../../dist",
         "moduleResolution": "node",
         "resolveJsonModule": true,
+        "strictPropertyInitialization": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "paths": {
             "*": [
                 "node_modules/*"
