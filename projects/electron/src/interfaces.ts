@@ -1,8 +1,8 @@
 import mongoose, { ObjectId, PopulatedDoc } from "mongoose"
 
-export interface IUser extends mongoose.Document {
-    name: string,
-    password: string
+export interface IUser {
+    name: string;
+    password: string;
 }
 
 export enum StepType {

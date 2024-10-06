@@ -3,30 +3,31 @@ import March from './api/Model/March';
 import Client from './api/Model/Client';
 import Stopper from './api/Model/Stopper';
 import User from './api/Model/User';
+import { DataSource } from 'typeorm';
+import { UserEntity } from './entity/User';
+import { AppDataSource } from './datasource';
 
 const clearDB = async function () {
     await March.MarchTemplateModel.collection.drop();
     await March.MarchValueModel.collection.drop();
     await Client.ClientModel.collection.drop();
     await Client.ClientMonthlyModel.collection.drop();
-    await User.UserModel.collection.drop();
+    await UserEntity.delete({});
 }
 
 const createUsers = async function (data: any) {
-    data.user1 = new User.UserModel(
-        {
-            name: 'U1',
-            password: 'p1'
-        }
-    );
-    await data.user1.save();
-    data.user2 = new User.UserModel(
-        {
-            name: 'U2',
-            password: 'p2'
-        }
-    );
-    await data.user2.save();
+
+    data.user1 = {
+        name: 'U1',
+        password: 'p1'
+    }
+
+    data.user2 = {
+        name: 'U2',
+        password: 'p2'
+    }
+
+    await AppDataSource.getRepository(UserEntity).insert([data.user1, data.user2]);
 }
 
 const createMarchTemplates = async function (data: any) {
@@ -108,7 +109,7 @@ const createClients = async function (data: any) {
         year: 2024,
         info: {
             email: 'c1@email.com',
-            biuro:'finka',
+            biuro: 'finka',
             forma: 'vat',
             program: 'nexo'
         },
@@ -152,7 +153,7 @@ const createClients = async function (data: any) {
         year: 2024,
         info: {
             email: 'c1@email.com',
-            biuro:'finka',
+            biuro: 'finka',
             forma: 'vat',
             program: 'nexo'
         },
@@ -195,7 +196,7 @@ const createClients = async function (data: any) {
         year: 2024,
         info: {
             email: 'c2@email.com',
-            biuro:'fintax',
+            biuro: 'fintax',
             forma: 'ryczałt',
             program: 'gt'
         },
@@ -236,6 +237,7 @@ const createClients = async function (data: any) {
 export default {
     async populate() {
         let data = {};
+
         await clearDB();
         await createUsers(data);
         await createMarchTemplates(data);

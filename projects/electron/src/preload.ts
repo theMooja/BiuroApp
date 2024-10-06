@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { ClientMonthly, IMarchTemplate, IStopper, IUser, MarchValue } from "./interfaces";
+import { ClientMonthly, IMarchTemplate, IStopper, MarchValue,  IUser } from "./interfaces";
 
 
 const contextBridgeApi = {

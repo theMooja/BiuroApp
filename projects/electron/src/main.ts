@@ -6,6 +6,7 @@ import testdata from './testdata';
 import * as settings from 'electron-settings';
 import "reflect-metadata";
 import { AppDataSource } from './datasource';
+import { UserController } from "./entity/User";
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -49,11 +50,13 @@ const setupDatabase = async () => {
     : 'mongodb://localhost:27017/biuro';//?replicaSet=rs0';
 
   await mongoose.connect(cs);
-  await testdata.populate();
 
-  AppDataSource.initialize().then(() => {
+
+  await AppDataSource.initialize().then(() => {
     console.log('Connected to Postgres');
   });
+
+  await testdata.populate();
 }
 
 const setIPCHandlers = () => {
@@ -61,10 +64,11 @@ const setIPCHandlers = () => {
   ipcMain.handle('app:maximize', () => maximize());
   ipcMain.handle('app:close', () => close());
 
-  ipcMain.handle('db:User:saveUser', (e, data) => dbApi.User.saveUser(data));
-  ipcMain.handle('db:User:getUser', (e, name, password) => dbApi.User.getUser(name, password));
-  ipcMain.handle('db:User:getUsers', (e) => dbApi.User.getUsers());
-  ipcMain.handle('db:User:setUser', (e, user) => dbApi.User.setUser(user));
+
+  ipcMain.handle('db:User:saveUser', (e, data) => UserController.saveUser(data));
+  // ipcMain.handle('db:User:getUser', (e, name, password) => dbApi.User.getUser(name, password));
+  ipcMain.handle('db:User:getUsers', (e) => UserController.getUsers());
+  ipcMain.handle('db:User:setUser', (e, user) => UserController.loggedUser = user);
 
   ipcMain.handle('db:March:getTemplates', (e) => dbApi.March.getTemplates());
   ipcMain.handle('db:March:saveTemplate', (e, template) => dbApi.March.saveTemplate(template));
