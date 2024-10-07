@@ -1,12 +1,11 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from 'path';
 import mongoose from 'mongoose';
-import dbApi from './api/db';
 import testdata from './testdata';
 import * as settings from 'electron-settings';
 import "reflect-metadata";
 import { AppDataSource } from './datasource';
-import { UserController } from "./entity/User";
+import { setIPCHandlers } from "./handlers";
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -59,25 +58,10 @@ const setupDatabase = async () => {
   await testdata.populate();
 }
 
-const setIPCHandlers = () => {
+const setAppHandlers = () => {
   ipcMain.handle('app:minimize', () => minimize());
   ipcMain.handle('app:maximize', () => maximize());
   ipcMain.handle('app:close', () => close());
-
-
-  ipcMain.handle('db:User:saveUser', (e, data) => UserController.saveUser(data));
-  // ipcMain.handle('db:User:getUser', (e, name, password) => dbApi.User.getUser(name, password));
-  ipcMain.handle('db:User:getUsers', (e) => UserController.getUsers());
-  ipcMain.handle('db:User:setUser', (e, user) => UserController.loggedUser = user);
-
-  ipcMain.handle('db:March:getTemplates', (e) => dbApi.March.getTemplates());
-  ipcMain.handle('db:March:saveTemplate', (e, template) => dbApi.March.saveTemplate(template));
-  ipcMain.handle('db:March:updateMarchValue', (e, marchValue) => dbApi.March.updateMarchValue(marchValue));
-  ipcMain.handle('db:March:addStopper', (e, marchValue, seconds, from) => dbApi.March.addStopper(marchValue, seconds, from));
-
-  ipcMain.handle('db:Client:getMonthlies', (e, year, month) => dbApi.Client.getMonthlies(year, month));
-  ipcMain.handle('db:Client:recreateMonthlies', (e, year, month, monthlies) => dbApi.Client.recreateMonthlies(year, month, monthlies));
-  ipcMain.handle('db:Client:updateMonthlyNotes', (e, monthlyId, notes) => dbApi.Client.updateMonthlyNotes(monthlyId, notes));
 }
 
 // This method will be called when Electron has finished
@@ -86,6 +70,7 @@ const setIPCHandlers = () => {
 app.on("ready", async () => {
   await setupDatabase();
   createWindow();
+  setAppHandlers();
   setIPCHandlers();
 });
 

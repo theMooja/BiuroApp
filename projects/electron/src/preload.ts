@@ -10,7 +10,6 @@ const contextBridgeApi = {
   addTime: (data: IStopper) => ipcRenderer.invoke('db:Stopper:addTime', data),
 
   saveUser: (data: IUser) => ipcRenderer.invoke('db:User:saveUser', data),
-  getUser: (name: string, password: string) => ipcRenderer.invoke('db:User:getUser', name, password),
   getUsers: () => ipcRenderer.invoke('db:User:getUsers'),
   setUser: (user: IUser) => ipcRenderer.invoke('db:User:setUser', user),
 
