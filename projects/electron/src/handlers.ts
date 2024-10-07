@@ -1,5 +1,6 @@
 import { ipcMain } from "electron";
 import { UserController } from "./entity/User";
+import { MonthlyController } from "./entity/Monthly";
 
 
 export const setIPCHandlers = () => {
@@ -13,7 +14,7 @@ export const setIPCHandlers = () => {
     // ipcMain.handle('db:March:updateMarchValue', (e, marchValue) => dbApi.March.updateMarchValue(marchValue));
     // ipcMain.handle('db:March:addStopper', (e, marchValue, seconds, from) => dbApi.March.addStopper(marchValue, seconds, from));
   
-    // ipcMain.handle('db:Client:getMonthlies', (e, year, month) => dbApi.Client.getMonthlies(year, month));
+     ipcMain.handle('db:Client:getMonthlies', (e, year, month) => MonthlyController.getMonthlies(year, month));
     // ipcMain.handle('db:Client:recreateMonthlies', (e, year, month, monthlies) => dbApi.Client.recreateMonthlies(year, month, monthlies));
     // ipcMain.handle('db:Client:updateMonthlyNotes', (e, monthlyId, notes) => dbApi.Client.updateMonthlyNotes(monthlyId, notes));
   }

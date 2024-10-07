@@ -9,7 +9,7 @@ export class ClientDataService {
   constructor() { }
 
   async getMonthlies(year: number, month: number): Promise<ClientMonthly[]> {
-    let monthlies = await window.electron.getClientsMonthlies(year, month);
+    let monthlies = await window.electron.getMonthlies(year, month);
 
     return monthlies;
   }

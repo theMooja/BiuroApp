@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ClientEntity } from "./Client";
 import { MarchEntity } from "./March";
+import { AppDataSource } from "./../datasource";
 
 @Entity({ name: 'monthlies' })
 export class MonthlyEntity extends BaseEntity {
@@ -32,4 +33,16 @@ export class MonthlyEntity extends BaseEntity {
 
     @OneToMany(() => MarchEntity, march => march.monthly)
     marches: MarchEntity[];
+}
+
+export const MonthlyController = {
+    async getMonthlies(year: number, month: number): Promise<MonthlyEntity[]> {
+        return await AppDataSource
+            .getRepository(MonthlyEntity)
+            .createQueryBuilder('m')
+            .innerJoinAndSelect('m.marches', 'mar')
+            .innerJoinAndSelect('mar.stoppers', 'stop')
+            .where('m.month = :month AND m.year = :year', { month, year })
+            .getMany();
+    }
 }

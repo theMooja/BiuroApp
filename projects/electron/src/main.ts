@@ -55,7 +55,7 @@ const setupDatabase = async () => {
     console.log('Connected to Postgres');
   });
 
-  await testdata.populate();
+  //await testdata.populate();
 }
 
 const setAppHandlers = () => {
