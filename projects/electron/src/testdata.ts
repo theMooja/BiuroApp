@@ -1,110 +1,61 @@
-import { IMarchTemplate, StepType } from './interfaces';
-import March from './api/Model/March';
-import Client from './api/Model/Client';
-import Stopper from './api/Model/Stopper';
-import User from './api/Model/User';
-import { DataSource } from 'typeorm';
 import { UserEntity } from './entity/User';
 import { AppDataSource } from './datasource';
+import { ClientEntity } from './entity/Client';
+import { MonthlyEntity } from './entity/Monthly';
+import { MarchEntity } from './entity/March';
+import { StopperEntity } from './entity/Stopper';
+
 
 const clearDB = async function () {
-    await March.MarchTemplateModel.collection.drop();
-    await March.MarchValueModel.collection.drop();
-    await Client.ClientModel.collection.drop();
-    await Client.ClientMonthlyModel.collection.drop();
-    await UserEntity.delete({});
+    const entityManager = AppDataSource.manager;
+
+    await entityManager.query('DELETE FROM stoppers');
+    await entityManager.query('DELETE FROM marches');
+    await entityManager.query('DELETE FROM monthlies');
+    await entityManager.query('DELETE FROM clients');
+    await entityManager.query('DELETE FROM users');
+
+    // await entityManager.transaction(async (entityManager) => {
+    //     await entityManager.clear(StopperEntity);
+    //     await entityManager.clear(MarchEntity);
+    //     await entityManager.clear(MonthlyEntity);
+    //     await entityManager.clear(ClientEntity);
+    //     await entityManager.clear(UserEntity);
+        
+    // });
 }
 
 const createUsers = async function (data: any) {
+    let repo = AppDataSource.getRepository(UserEntity);
 
-    data.user1 = {
+    data.user1 = await repo.save({
         name: 'U1',
         password: 'p1'
-    }
-
-    data.user2 = {
+    });
+    data.user2 = await repo.save({
         name: 'U2',
         password: 'p2'
-    }
-
-    await AppDataSource.getRepository(UserEntity).insert([data.user1, data.user2]);
-}
-
-const createMarchTemplates = async function (data: any) {
-    data.march1 = new March.MarchTemplateModel({
-        name: 'm1',
-        steps: [
-            {
-                title: 's1',
-                sequence: 1,
-                type: StepType.Double,
-                weight: 1
-            },
-            {
-                title: 's2',
-                sequence: 2,
-                type: StepType.Double,
-                weight: 1
-            },
-            {
-                title: 's3',
-                sequence: 3,
-                type: StepType.Double,
-                weight: 1
-            }
-        ]
     });
-    await data.march1.save();
-
-    data.march2 = new March.MarchTemplateModel({
-        name: 'm2',
-        steps: [
-            {
-                title: 's1',
-                sequence: 1,
-                type: StepType.Double,
-                weight: 1
-            },
-            {
-                title: 's2',
-                sequence: 2,
-                type: StepType.Double,
-                weight: 1
-            },
-            {
-                title: 's3',
-                sequence: 3,
-                type: StepType.Double,
-                weight: 1
-            }
-        ]
-    });
-    await data.march2.save();
-
-
 }
 
 const createClients = async function (data: any) {
-    data.client1 = new Client.ClientModel({
+    let repo = AppDataSource.getRepository(ClientEntity);
+    data.client1 = await repo.save({
         name: 'c1',
-        marchName: 'm1'
     });
-    await data.client1.save();
-
-    data.client2 = new Client.ClientModel({
+    data.client2 = await repo.save({
         name: 'c2',
-        marchName: 'm2'
     });
-    await data.client2.save();
-
-    data.client3 = new Client.ClientModel({
+    data.client3 = await repo.save({
         name: 'c3',
-        marchName: 'm2'
     });
-    await data.client3.save();
+}
 
-    data.monthly1 = new Client.ClientMonthlyModel({
-        client: data.client1._id,
+const createMonthlies = async function (data: any) {
+    let repo = AppDataSource.getRepository(MonthlyEntity);
+
+    data.c1monthly1 = await repo.save({
+        client: data.client1,
         month: 1,
         year: 2024,
         info: {
@@ -112,126 +63,112 @@ const createClients = async function (data: any) {
             biuro: 'finka',
             forma: 'vat',
             program: 'nexo'
-        },
-        marchValues: []
+        }
     });
-    await data.monthly1.save();
-    data.monthly1values1 = new March.MarchValueModel({
-        title: 's1',
-        sequence: 1,
-        type: StepType.Double,
-        weight: 1,
-        value: 1,
-        monthly: data.monthly1._id
-    });
-    await data.monthly1values1.save();
-    data.monthly1values2 = new March.MarchValueModel({
-        title: 's2',
-        sequence: 1,
-        type: StepType.Double,
-        weight: 1,
-        value: 1,
-        monthly: data.monthly1._id
-    });
-    await data.monthly1values2.save();
-    data.monthly1values3 = new March.MarchValueModel({
-        title: 's3',
-        sequence: 1,
-        type: StepType.Double,
-        weight: 1,
-        value: 1,
-        monthly: data.monthly1._id
-    });
-    await data.monthly1values3.save();
-    data.monthly1.marchValues = [data.monthly1values1._id, data.monthly1values2._id, data.monthly1values3._id]
-    await data.monthly1.save();
 
+    // data.c1monthly2 = await repo.save({
+    //     client: data.client1,
+    //     month: 2,
+    //     year: 2024,
+    //     info: {
+    //         email: 'c1@email.com',
+    //         biuro: 'finka',
+    //         forma: 'vat',
+    //         program: 'nexo'
+    //     }
+    // });
 
-    data.monthly2 = new Client.ClientMonthlyModel({
-        client: data.client1._id,
-        month: 2,
-        year: 2024,
-        info: {
-            email: 'c1@email.com',
-            biuro: 'finka',
-            forma: 'vat',
-            program: 'nexo'
-        },
-        marchValues: []
-    });
-    await data.monthly2.save();
-    data.monthly2values1 = new March.MarchValueModel({
-        title: 's1',
-        sequence: 1,
-        type: StepType.Double,
-        weight: 1,
-        value: 1,
-        monthly: data.monthly2._id
-    });
-    await data.monthly2values1.save();
-    data.monthly2values2 = new March.MarchValueModel({
-        title: 's2',
-        sequence: 1,
-        type: StepType.Double,
-        weight: 1,
-        value: 1,
-        monthly: data.monthly2._id
-    });
-    await data.monthly2values2.save();
-    data.monthly2values3 = new March.MarchValueModel({
-        title: 's2',
-        sequence: 1,
-        type: StepType.Double,
-        weight: 1,
-        value: 1,
-        monthly: data.monthly2._id
-    });
-    await data.monthly2values3.save();
-    data.monthly2.marchValues = [data.monthly2values1._id, data.monthly2values2._id, data.monthly2values3._id]
-    await data.monthly2.save();
-
-    data.monthly3 = new Client.ClientMonthlyModel({
-        client: data.client2._id,
+    data.c2monthly1 = await repo.save({
+        client: data.client2,
         month: 1,
         year: 2024,
         info: {
             email: 'c2@email.com',
-            biuro: 'fintax',
-            forma: 'ryczałt',
-            program: 'gt'
-        },
-        marchValues: []
+            biuro: 'finka',
+            forma: 'vat',
+            program: 'nexo'
+        }
     });
-    await data.monthly3.save();
-    data.monthly3values1 = new March.MarchValueModel({
-        title: 's1',
+
+    data.c3monthly1 = await repo.save({
+        client: data.client3,
+        month: 1,
+        year: 2024,
+        info: {
+            email: 'c3@email.com',
+            biuro: 'finka',
+            forma: 'vat',
+            program: 'nexo'
+        }
+    });
+}
+
+const createMarches = async function (data: any) {
+    let repo = AppDataSource.getRepository(MarchEntity);
+
+    data.c1m1march1 = await repo.save({
+        monthly: data.c1monthly1,
+        name: 's1',
         sequence: 1,
-        type: StepType.Double,
         weight: 1,
-        value: 1,
-        monthly: data.monthly3._id
+        value: 0
     });
-    await data.monthly3values1.save();
-    data.monthly3values2 = new March.MarchValueModel({
-        title: 's2',
+
+    data.c1m1march2 = await repo.save({
+        monthly: data.c1monthly1,
+        name: 's2',
+        sequence: 2,
+        weight: 1,
+        value: 0
+    });
+
+    data.c1m1march3 = await repo.save({
+        monthly: data.c1monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    });
+
+    data.c2m1march1 = await repo.save({
+        monthly: data.c2monthly1,
+        name: 's1',
         sequence: 1,
-        type: StepType.Double,
         weight: 1,
-        value: 0,
-        monthly: data.monthly3._id
+        value: 0
     });
-    await data.monthly3values2.save();
-    data.monthly3values3 = new March.MarchValueModel({
-        title: 's3',
-        sequence: 1,
-        type: StepType.Double,
+
+    data.c2m1march2 = await repo.save({
+        monthly: data.c2monthly1,
+        name: 's2',
+        sequence: 2,
         weight: 1,
-        value: 0,
-        monthly: data.monthly3._id
+        value: 0
     });
-    await data.monthly3values3.save();
-    data.monthly3.marchValues = [data.monthly3values1._id, data.monthly3values2._id, data.monthly3values3._id]
-    await data.monthly3.save();
+
+    data.c2m1march3 = await repo.save({
+        monthly: data.c2monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    });
+}
+
+const createStoppers = async function (data: any) {
+    let repo = AppDataSource.getRepository(StopperEntity);
+
+    data.stopper1 = await repo.save({
+        user: data.user1,
+        march: data.c1m1march1,
+        seconds: 15 * 60
+    });
+
+    data.stopper2 = await repo.save({
+        user: data.user2,
+        march: data.c1m1march2,
+        seconds: 15 * 60
+    });
 }
 
 export default {
@@ -240,7 +177,9 @@ export default {
 
         await clearDB();
         await createUsers(data);
-        await createMarchTemplates(data);
         await createClients(data);
+        await createMonthlies(data);
+        await createMarches(data);
+        await createStoppers(data);
     }
 }

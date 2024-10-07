@@ -41,11 +41,11 @@ export default {
     async addStopper(mv: MarchValue, seconds: number, from: Date) {
         let marchValue = await MarchValueModel.findById(mv.id).exec();
 
-        marchValue.stoppers.push({
-            time: seconds,
-            from: from,
-            user: User.loggedUser._id
-        });
+        // marchValue.stoppers.push({
+        //     time: seconds,
+        //     from: from,
+        //     user: User.loggedUser._id
+        // });
 
         await marchValue.save();
     },

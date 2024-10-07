@@ -1,5 +1,6 @@
 import { IUser } from "./../interfaces";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, Repository } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Repository } from "typeorm";
+import { StopperEntity } from "./Stopper";
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
@@ -12,6 +13,9 @@ export class UserEntity extends BaseEntity {
 
     @Column()
     password: string;
+
+    @OneToMany(() => StopperEntity, (stopper) => stopper.user)
+    stoppers: StopperEntity[];
 }
 
 export const UserController = {

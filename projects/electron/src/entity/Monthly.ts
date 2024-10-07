@@ -1,14 +1,15 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Client } from "./Client";
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ClientEntity } from "./Client";
+import { MarchEntity } from "./March";
 
-@Entity()
-export class Monthly extends BaseEntity {
+@Entity({ name: 'monthlies' })
+export class MonthlyEntity extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Client, client => client.monthlies)
-    client: Client;
+    @ManyToOne(() => ClientEntity, client => client.monthlies)
+    client: ClientEntity;
 
     @Column({ nullable: false })
     year: number;
@@ -28,4 +29,7 @@ export class Monthly extends BaseEntity {
         program: string,
         forma: string
     }
+
+    @OneToMany(() => MarchEntity, march => march.monthly)
+    marches: MarchEntity[];
 }

@@ -1,8 +1,8 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Monthly } from "./Monthly";
+import { MonthlyEntity } from "./Monthly";
 
-@Entity()
-export class Client extends BaseEntity {
+@Entity({ name: 'clients' })
+export class ClientEntity extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,14 +10,14 @@ export class Client extends BaseEntity {
     @Column({ nullable: false })
     name: string;
 
-    @OneToMany(() => Monthly, monthly => monthly.client)
-    monthlies: Monthly[];
+    @OneToMany(() => MonthlyEntity, monthly => monthly.client)
+    monthlies: MonthlyEntity[];
 }
 
 export interface IClient {
     id: number;
     name: string;
-    monthlies: Monthly[];
+    monthlies: MonthlyEntity[];
 }
 
 
