@@ -11,4 +11,8 @@ export class MonthlyDataService {
     let monthlies = await window.electron.getMonthlies(year, month);
     return monthlies;
   }
+
+  async updateNotes(monthlyId: number, notes: string) {
+    await window.electron.updateNotes(monthlyId, notes);
+  }
 }

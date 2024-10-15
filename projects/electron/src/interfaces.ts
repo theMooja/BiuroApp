@@ -31,7 +31,7 @@ export interface IMonthlyEntity  {
         program: string,
         forma: string
     };
-    clientId: number;
+    client: IClientEntity,
     marches: IMarchEntity[];
 }
 

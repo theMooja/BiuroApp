@@ -14,6 +14,7 @@ const contextBridgeApi = {
   setUser: (user: IUserEntity) => ipcRenderer.invoke('db:User:setUser', user),
 
   getMonthlies: (year: number, month: number) => ipcRenderer.invoke('db:Client:getMonthlies', year, month),
+  updateNotes: (monthlyId: number, notes: string) => ipcRenderer.invoke('db:Client:updateNotes', monthlyId, notes),
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);

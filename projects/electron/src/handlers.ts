@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IUserEntity } from "./interfaces";
+import { IMonthlyEntity, IUserEntity } from "./interfaces";
 import { UserEntity } from "./entity/User";
 
 
@@ -18,11 +18,11 @@ export const setIPCHandlers = () => {
 
   ipcMain.handle('db:Client:getMonthlies', (e, year, month) => MonthlyController.getMonthlies(year, month));
   // ipcMain.handle('db:Client:recreateMonthlies', (e, year, month, monthlies) => dbApi.Client.recreateMonthlies(year, month, monthlies));
-  // ipcMain.handle('db:Client:updateMonthlyNotes', (e, monthlyId, notes) => dbApi.Client.updateMonthlyNotes(monthlyId, notes));
+  ipcMain.handle('db:Client:updateNotes', (e, monthlyId, notes) => MonthlyController.updateNotes(monthlyId, notes));
 }
 
 export const MonthlyController = {
-  async getMonthlies(year: number, month: number): Promise<MonthlyEntity[]> {
+  async getMonthlies(year: number, month: number): Promise<IMonthlyEntity[]> {
     return await AppDataSource
       .getRepository(MonthlyEntity)
       .createQueryBuilder('m')
@@ -30,6 +30,16 @@ export const MonthlyController = {
       .innerJoinAndSelect('mar.stoppers', 'stop')
       .where('m.month = :month AND m.year = :year', { month, year })
       .getMany();
+  },
+
+  async updateNotes(monthlyId: number, note: string) {
+    let monthly = await AppDataSource
+      .getRepository(MonthlyEntity)
+      .findOneBy({ id: monthlyId });
+    if (monthly) {
+      monthly.note = note;
+      await monthly.save();
+    }
   }
 }
 
@@ -43,7 +53,7 @@ export const UserController = {
     this._loggedUser = user;
   },
 
-  async getUsers(): Promise<UserEntity[]> {
+  async getUsers(): Promise<IUserEntity[]> {
     let users = await UserEntity.find();
 
     return users;

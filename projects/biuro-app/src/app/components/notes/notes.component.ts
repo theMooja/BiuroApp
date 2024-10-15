@@ -1,5 +1,4 @@
 import { afterNextRender, Component, inject, Injector, Input, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { ClientDataService } from '../../service/client-data.service';
 import { IMonthlyEntity } from '../../../../../electron/src/interfaces';
 import { MatButtonModule } from '@angular/material/button';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -8,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MonthlyDataService } from '../../service/monthly-data.service';
 
 @Component({
   selector: 'app-notes',
@@ -23,7 +23,7 @@ export class NotesComponent {
   private _injector = inject(Injector);
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
-  constructor(private dataService: ClientDataService, private overlay: Overlay, private vcr: ViewContainerRef) { }
+  constructor(private monthlyDataService: MonthlyDataService, private overlay: Overlay, private vcr: ViewContainerRef) { }
 
   get notes() {
     return this.monthly.note;
@@ -34,7 +34,7 @@ export class NotesComponent {
   }
 
   async onSave() {
-    //this.dataService.updateMonthlyNotes(this.monthly.id, this.notes);
+    this.dataService.updateNotes(this.monthly.id, this.notes);
     this.isEdit = false;
     this.hideTooltip();
   }
