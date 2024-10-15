@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MarchDataService } from '../../service/march-data.service';
-import { IMarchStepTemplate, IMarchTemplate, StepType } from './../../../../../electron/src/interfaces';
+import { IMarchEntity, StepType } from './../../../../../electron/src/interfaces';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -22,7 +22,7 @@ import { MatMenuModule } from '@angular/material/menu';
 export class MarchSetupComponent {
   marchForm: FormGroup;
   stepTypes = Object.values(StepType);
-  templates: IMarchTemplate[] = [];
+  templates: IMarchEntity[] = [];
   monthlyId!: string;
 
   constructor(private formBuilder: FormBuilder,
@@ -35,16 +35,16 @@ export class MarchSetupComponent {
   }
 
   async ngOnInit() {
-    this.templates = await this.dataService.getTemplates();
+    //this.templates = await this.dataService.getTemplates();
     this.monthlyId = history.state.monthlyId;
   }
 
-  onEdit(template: IMarchTemplate) {
+  onEdit(template: IMarchEntity) {
     this.steps.clear();
     this.marchForm.get('name')?.setValue(template.name);
-    template.steps.forEach(s => {
-      this.addStep(s);
-    });
+    // template.steps.forEach(s => {
+    //   this.addStep(s);
+    // });
   }
 
   onNew() {
@@ -52,19 +52,19 @@ export class MarchSetupComponent {
     this.steps.clear();
   }
 
-  createStepGroup(step?: IMarchStepTemplate): FormGroup {
+  createStepGroup(step?: IMarchEntity): FormGroup {
     let group = this.formBuilder.group({
       title: this.formBuilder.control(''),
-      type: StepType.Double,
+      //type: StepType.Double,
       weight: this.formBuilder.control(1),
 
     });
 
-    if (step) {
-      group.controls.title.setValue(step.title);
-      group.controls.type.setValue(step.type);
-      group.controls.weight.setValue(step.weight);
-    }
+    // if (step) {
+    //   group.controls.title.setValue(step.title);
+    //   group.controls.type.setValue(step.type);
+    //   group.controls.weight.setValue(step.weight);
+    // }
 
     return group;
   }
@@ -89,7 +89,7 @@ export class MarchSetupComponent {
     return this.marchForm.get('steps') as FormArray;
   }
 
-  addStep(step?: IMarchStepTemplate) {
+  addStep(step?: IMarchEntity) {
     this.steps.push(this.createStepGroup(step));
   }
 
@@ -101,6 +101,6 @@ export class MarchSetupComponent {
 
   onSubmit() {
     this.updateSequenceNumbers();
-    this.dataService.saveTemplate(this.marchForm.value);
+    //this.dataService.saveTemplate(this.marchForm.value);
   }
 }

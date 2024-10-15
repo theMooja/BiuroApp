@@ -1,6 +1,6 @@
 import { afterNextRender, Component, inject, Injector, Input, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
-import { ClientMonthly } from '../../../../../electron/src/interfaces';
+import { IMonthlyEntity } from '../../../../../electron/src/interfaces';
 import { MatButtonModule } from '@angular/material/button';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -17,7 +17,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './notes.component.scss'
 })
 export class NotesComponent {
-  @Input() monthly!: ClientMonthly;
+  @Input() monthly!: IMonthlyEntity;
   private overlayRef: OverlayRef | null = null;
   isEdit!: boolean;
   private _injector = inject(Injector);
@@ -26,15 +26,15 @@ export class NotesComponent {
   constructor(private dataService: ClientDataService, private overlay: Overlay, private vcr: ViewContainerRef) { }
 
   get notes() {
-    return this.monthly.notes;
+    return this.monthly.note;
   }
 
   set notes(val: string) {
-    this.monthly.notes = val;
+    this.monthly.note = val;
   }
 
   async onSave() {
-    this.dataService.updateMonthlyNotes(this.monthly.id, this.notes);
+    //this.dataService.updateMonthlyNotes(this.monthly.id, this.notes);
     this.isEdit = false;
     this.hideTooltip();
   }

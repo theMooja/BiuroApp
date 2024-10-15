@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserDataService } from '../../service/user-data.service';
-import { IUser } from '../../../../../electron/src/interfaces';
+import { IUserEntity } from '../../../../../electron/src/interfaces';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +15,7 @@ import { MonthlyDataService } from '../../service/monthly-data.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  users: IUser[] = [];
+  users: IUserEntity[] = [];
 
   constructor(private userService: UserDataService,
     private router: Router,
@@ -31,7 +31,7 @@ export class LoginComponent {
   }
 
 
-  onLogin(user: IUser) {
+  onLogin(user: IUserEntity) {
     this.userService.setLoggedUser(user);
     this.router.navigateByUrl('/home');
   }

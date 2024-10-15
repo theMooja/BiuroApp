@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserDataService } from '../../service/user-data.service';
-import { IUser } from '../../../../../electron/src/interfaces';
+import { IUserEntity } from '../../../../../electron/src/interfaces';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +33,7 @@ export class UserSetupComponent {
     this.setUsers(users);
   }
 
-  setUsers(users: IUser[]) {
+  setUsers(users: IUserEntity[]) {
     const userFormGroups = users.map(user => this.createUser(user));
     const userFormArray = this.fb.array(userFormGroups);
     this.userForm.setControl('users', userFormArray);
@@ -51,7 +51,7 @@ export class UserSetupComponent {
     this.users.push(userGroup);
   }
 
-  createUser(user: IUser): FormGroup {
+  createUser(user: IUserEntity): FormGroup {
     return this.fb.group({
       name: [user.name, Validators.required],
       password: [user.password, Validators.required]

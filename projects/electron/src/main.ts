@@ -1,6 +1,5 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from 'path';
-import mongoose from 'mongoose';
 import testdata from './testdata';
 import * as settings from 'electron-settings';
 import "reflect-metadata";
@@ -48,14 +47,14 @@ const setupDatabase = async () => {
     settings.getSync('database.connectionString').toString()
     : 'mongodb://localhost:27017/biuro';//?replicaSet=rs0';
 
-  await mongoose.connect(cs);
+  //await mongoose.connect(cs);
 
 
   await AppDataSource.initialize().then(() => {
     console.log('Connected to Postgres');
   });
 
-  //await testdata.populate();
+  await testdata.populate();
 }
 
 const setAppHandlers = () => {

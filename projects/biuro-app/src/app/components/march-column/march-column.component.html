@@ -1,7 +1,7 @@
 <ng-container>
     <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
         (click)="$event.stopPropagation()">
-        {{currentStep.title}}
+        {{currentStep.name}}
     </button>
 
     <button mat-icon-button aria-label="start" (click)="onStopper(); $event.stopPropagation()">

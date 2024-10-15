@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   database: "biuro",
   synchronize: true,
   //logging: true,
-  entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity],
+  entities: [MonthlyEntity, UserEntity, ClientEntity, MarchEntity, StopperEntity],
   subscribers: [],
   migrations: [],
 });

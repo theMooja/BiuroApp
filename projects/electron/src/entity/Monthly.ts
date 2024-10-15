@@ -9,8 +9,8 @@ export class MonthlyEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => ClientEntity, client => client.monthlies)
-    client: ClientEntity;
+    // @ManyToOne(() => ClientEntity, client => client.monthlies)
+    // client: ClientEntity;
 
     @Column({ nullable: false })
     year: number;
@@ -46,3 +46,4 @@ export const MonthlyController = {
             .getMany();
     }
 }
+

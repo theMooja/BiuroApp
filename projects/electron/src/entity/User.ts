@@ -1,4 +1,4 @@
-import { IUser } from "./../interfaces";
+import { IUserEntity } from "./../interfaces";
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Repository } from "typeorm";
 import { StopperEntity } from "./Stopper";
 
@@ -19,11 +19,11 @@ export class UserEntity extends BaseEntity {
 }
 
 export const UserController = {
-    get loggedUser(): IUser {
+    get loggedUser(): IUserEntity {
         return this._loggedUser;
     },
 
-    set loggedUser(user: IUser) {
+    set loggedUser(user: IUserEntity) {
         this._loggedUser = user;
     },
 
@@ -33,7 +33,7 @@ export const UserController = {
         return users;
     },
 
-    async saveUser(data: IUser) {
+    async saveUser(data: IUserEntity) {
         let user = await UserEntity.findOneBy({ name: data.name });
         if (!user) {
             user = new UserEntity();
@@ -43,3 +43,4 @@ export const UserController = {
         await user.save();
     }
 }
+

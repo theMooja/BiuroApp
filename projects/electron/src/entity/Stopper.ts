@@ -21,3 +21,5 @@ export class StopperEntity extends BaseEntity {
     seconds: number;
 }
 
+
+

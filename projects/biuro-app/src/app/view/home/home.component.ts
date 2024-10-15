@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
-import { IClient, ClientMonthly } from '../../../../../electron/src/interfaces';
+import { IClientEntity, IMonthlyEntity } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -20,6 +20,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MarchColumnComponent } from '../../components/march-column/march-column.component';
 import { NotesComponent } from '../../components/notes/notes.component';
 import { Router } from '@angular/router';
+import { MonthlyDataService } from '../../service/monthly-data.service';
 
 @Component({
   selector: 'app-home',
@@ -39,9 +40,9 @@ import { Router } from '@angular/router';
   ],
 })
 export class HomeComponent {
-  tableData: MatTableDataSource<ClientMonthly>;
-  expandedElement: ClientMonthly | null = null;
-  selection = new SelectionModel<ClientMonthly>(true);
+  tableData: MatTableDataSource<IMonthlyEntity>;
+  expandedElement: IMonthlyEntity | null = null;
+  selection = new SelectionModel<IMonthlyEntity>(true);
   infoColumns = ['email', 'biuro', 'program'];
   allInfoColumns = ['email', 'biuro', 'program', 'forma']
   currentDate: Date = new Date('1-1-2024');
@@ -49,11 +50,11 @@ export class HomeComponent {
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   lastColumn!: string;
 
-  constructor(private clientDataService: ClientDataService,
+  constructor(private monthlyDataService: MonthlyDataService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {
-    this.tableData = new MatTableDataSource<ClientMonthly>();
+    this.tableData = new MatTableDataSource<IMonthlyEntity>();
   }
 
   async ngOnInit() {
@@ -61,7 +62,7 @@ export class HomeComponent {
 
     this.tableData.sortingDataAccessor = (item: any, property) => {
       switch (property) {
-        case 'name': return (item.client as IClient)?.name;
+        case 'name': return (item.client as IClientEntity)?.name;
         default: return item[property];
       }
     }
@@ -74,7 +75,7 @@ export class HomeComponent {
     return ['name', ...this.infoColumns, 'notes', 'marchValues']
   }
 
-  onSetMarch(element: ClientMonthly) {
+  onSetMarch(element: IMonthlyEntity) {
     this.router.navigate(['/marchSetup'], { state: { monthlyId: element.id } });
   }
 
@@ -94,7 +95,7 @@ export class HomeComponent {
   }
 
   async refreshData() {
-    this.tableData.data = await this.clientDataService
+    this.tableData.data = await this.monthlyDataService
       .getMonthlies(this.currentMonthly.year, this.currentMonthly.month);
   }
 
@@ -109,7 +110,7 @@ export class HomeComponent {
     this.currentDate = normalizedMonthAndYear;
     this.cdr.detach();
     this.tableData.data = [];
-    this.clientDataService.getMonthlies(this.currentMonthly.year, this.currentMonthly.month)
+    this.monthlyDataService.getMonthlies(this.currentMonthly.year, this.currentMonthly.month)
       .then((res) => {
         this.tableData.data = res;
       });

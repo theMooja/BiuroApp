@@ -27,10 +27,7 @@ export class MarchEntity extends BaseEntity {
     stoppers: StopperEntity[];
 }
 
-export interface IClient {
-    id: number;
-    name: string;
-    monthlies: MonthlyEntity[];
-}
+
+
 
 

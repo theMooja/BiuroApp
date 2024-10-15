@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IStopper } from "./../../../../electron/src/interfaces";
+import { IStopperEntity } from "./../../../../electron/src/interfaces";
 
 
 @Injectable({
@@ -9,7 +9,6 @@ export class StopperDataService {
 
   constructor() { }
 
-  async addTime(data: IStopper) {
-    window.electron.addTime(data);
+  async addTime(data: IStopperEntity) {
   }
 }
