@@ -10,8 +10,8 @@ export class ClientEntity extends BaseEntity {
     @Column({ nullable: false })
     name: string;
 
-    // @OneToMany(() => MonthlyEntity, monthly => monthly.client)
-    // monthlies: MonthlyEntity[];
+    @OneToMany(() => MonthlyEntity, monthly => monthly.client)
+    monthlies: MonthlyEntity[];
 }
 
 

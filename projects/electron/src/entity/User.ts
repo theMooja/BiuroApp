@@ -18,29 +18,4 @@ export class UserEntity extends BaseEntity {
     stoppers: StopperEntity[];
 }
 
-export const UserController = {
-    get loggedUser(): IUserEntity {
-        return this._loggedUser;
-    },
-
-    set loggedUser(user: IUserEntity) {
-        this._loggedUser = user;
-    },
-
-    async getUsers(): Promise<UserEntity[]> {
-        let users = await UserEntity.find();
-
-        return users;
-    },
-
-    async saveUser(data: IUserEntity) {
-        let user = await UserEntity.findOneBy({ name: data.name });
-        if (!user) {
-            user = new UserEntity();
-        }
-        user.name = data.name;
-        user.password = data.password;
-        await user.save();
-    }
-}
 
