@@ -41,6 +41,7 @@ export interface IStopperEntity {
     user: IUserEntity;
     createdAt: Date;
     seconds: number;
+    from: Date,    
 }
 
 export interface IUserEntity {

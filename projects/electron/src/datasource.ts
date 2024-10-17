@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   password: "pg",
   database: "biuro",
   synchronize: true,
-  //logging: true,
+  logging: true,
   entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity],
   subscribers: [],
   migrations: [],

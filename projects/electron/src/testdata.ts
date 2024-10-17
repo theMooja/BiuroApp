@@ -153,6 +153,30 @@ const createMarches = async function (data: any) {
         weight: 1,
         value: 0
     });
+
+    data.c3m1march1 = await repo.save({
+        monthly: data.c3monthly1,
+        name: 's1',
+        sequence: 1,
+        weight: 1,
+        value: 0
+    });
+
+    data.c3m1march2 = await repo.save({
+        monthly: data.c3monthly1,
+        name: 's2',
+        sequence: 2,
+        weight: 1,
+        value: 0
+    });
+
+    data.c2m1march3 = await repo.save({
+        monthly: data.c3monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    })
 }
 
 const createStoppers = async function (data: any) {
@@ -161,13 +185,15 @@ const createStoppers = async function (data: any) {
     data.stopper1 = await repo.save({
         user: data.user1,
         march: data.c1m1march1,
-        seconds: 15 * 60
+        seconds: 15 * 60,
+        from: new Date()
     });
 
     data.stopper2 = await repo.save({
         user: data.user2,
         march: data.c1m1march2,
-        seconds: 15 * 60
+        seconds: 15 * 60,
+        from: new Date()
     });
 }
 

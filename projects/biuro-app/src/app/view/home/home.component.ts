@@ -96,7 +96,8 @@ export class HomeComponent {
 
   async refreshData() {
     this.tableData.data = await this.monthlyDataService
-      .getMonthlies(this.currentMonthly.year, this.currentMonthly.month);
+      .getMonthlies(this.currentMonthly.month, this.currentMonthly.year);
+
   }
 
   get currentMonthly(): { year: number, month: number } {
@@ -110,7 +111,7 @@ export class HomeComponent {
     this.currentDate = normalizedMonthAndYear;
     this.cdr.detach();
     this.tableData.data = [];
-    this.monthlyDataService.getMonthlies(this.currentMonthly.year, this.currentMonthly.month)
+    this.monthlyDataService.getMonthlies(this.currentMonthly.month, this.currentMonthly.year)
       .then((res) => {
         this.tableData.data = res;
       });

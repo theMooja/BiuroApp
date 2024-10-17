@@ -34,7 +34,7 @@ export class NotesComponent {
   }
 
   async onSave() {
-    this.dataService.updateNotes(this.monthly.id, this.notes);
+    this.monthlyDataService.updateNotes(this.monthly.id, this.notes);
     this.isEdit = false;
     this.hideTooltip();
   }

@@ -19,6 +19,9 @@ export class StopperEntity extends BaseEntity {
 
     @Column({ nullable: false })
     seconds: number;
+
+    @Column()
+    from: Date;
 }
 
 

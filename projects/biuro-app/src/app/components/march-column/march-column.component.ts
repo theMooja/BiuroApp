@@ -25,7 +25,18 @@ export class MarchColumnComponent {
   constructor(private marchDataService: MarchDataService) { }
 
   ngOnInit() {
-    //this.currentStep = this.findLastStep();
+    this.currentStep = this.findLastStep();
+
+    this.marchDataService.runningMarch$.subscribe(x => this.marchStarted(x))
+  }
+
+  marchStarted(march: IMarchEntity) {
+    if (march === this.currentStep) {
+      return;
+    }
+
+    if (this.isRunning)
+      this.stopStopper();
   }
 
   onStopper() {
@@ -39,40 +50,54 @@ export class MarchColumnComponent {
   startStopper() {
     this.startTime = new Date();
     this.isRunning = true;
+    this.marchDataService.startMarch(this.currentStep);
+  }
+
+  onRightClick(event: MouseEvent) {
+    event.preventDefault();
+    this.rightMenuTrigger.openMenu();
   }
 
   stopStopper() {
     this.isRunning = false;
     let seconds = differenceInSeconds(new Date(), this.startTime);
-    //this.marchDataService.addStopper(this.currentStep, seconds, this.startTime);
+    this.marchDataService.addStopper(this.currentStep, seconds, this.startTime);
   }
 
   onFifteen(e: MouseEvent) {
     if (e.button === 0) {
-      //this.marchDataService.addStopper(this.currentStep, 15 * 60, new Date())
+      this.marchDataService.addStopper(this.currentStep, 15 * 60, new Date())
     }
     if (e.button === 2) {
-      //this.marchDataService.addStopper(this.currentStep, -15 * 60, new Date())
+      this.marchDataService.addStopper(this.currentStep, -15 * 60, new Date())
     }
   }
 
-  findLastStep(){//}: IMarchEntity {
-    // let idx = this.element.marchValues.findIndex(x => !x.value || x.value === 0);
-    // if (idx === -1) idx = this.element.marchValues.length - 1;
-    // return this.element.marchValues[idx];
+  findLastStep(): IMarchEntity {
+    let idx = this.element.marches.findIndex(x => !x.value || x.value === 0);
+    if (idx === -1) idx = this.element.marches.length - 1;
+    return this.element.marches[idx];
   }
 
-  onStepValueSelected(val: any) {
+  onStepValueSelected(val: number) {
     this.currentStep.value = val;
-    //this.marchDataService.updateMarchValue(this.currentStep);
+    this.marchDataService.updateMarchValue(this.currentStep);
     this.leftMenuTrigger.closeMenu();
-    //this.currentStep = this.findLastStep();
+    this.currentStep = this.findLastStep();
+  }
+
+  onStepSelected(val: IMarchEntity) {
+    this.currentStep = val;
   }
 
   get stepValues() {
     // if (this.currentStep.type === StepType.Double) return [0, 1];
     // else 
-    
+
     return [0, 1, 2];
+  }
+
+  get steps() {
+    return this.element.marches;
   }
 }
