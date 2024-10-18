@@ -200,6 +200,7 @@ const createStoppers = async function (data: any) {
 export default {
     async populate() {
         let data = {};
+        console.log('creating test data');
 
         await clearDB();
         await createUsers(data);

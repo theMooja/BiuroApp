@@ -5,10 +5,11 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
-import { MarchDataService } from '../../service/march-data.service';
-import { IMarchEntity, StepType } from './../../../../../electron/src/interfaces';
+import { IClientEntity, IMarchEntity, IMonthlyEntity, StepType } from './../../../../../electron/src/interfaces';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
+import { ClientDataService } from '../../service/client-data.service';
+import { MonthlyDataService } from '../../service/monthly-data.service';
 
 @Component({
   selector: 'app-march-setup',
@@ -22,11 +23,13 @@ import { MatMenuModule } from '@angular/material/menu';
 export class MarchSetupComponent {
   marchForm: FormGroup;
   stepTypes = Object.values(StepType);
-  templates: IMarchEntity[] = [];
-  monthlyId!: string;
+  monthly!: IMonthlyEntity;
+  clients!: IClientEntity[];
+
 
   constructor(private formBuilder: FormBuilder,
-    private dataService: MarchDataService,
+    private monthlyDataService: MonthlyDataService,
+    private clientDataService: ClientDataService
   ) {
     this.marchForm = this.formBuilder.group({
       name: this.formBuilder.control(''),
@@ -35,36 +38,36 @@ export class MarchSetupComponent {
   }
 
   async ngOnInit() {
-    //this.templates = await this.dataService.getTemplates();
-    this.monthlyId = history.state.monthlyId;
+    this.monthly = history.state.monthly;
+    this.clients = await this.clientDataService.getClients();
+    this.marchForm.get('name')?.setValue(this.monthly.client.name);
+    this.recreateSteps(this.monthly);
   }
 
-  onEdit(template: IMarchEntity) {
-    this.steps.clear();
-    this.marchForm.get('name')?.setValue(template.name);
-    // template.steps.forEach(s => {
-    //   this.addStep(s);
-    // });
+  async onCopy(client: IClientEntity) {
+    let template = await this.monthlyDataService.getLatestMonthly(client);
+    this.recreateSteps(template);
   }
 
-  onNew() {
-    this.marchForm.get('name')?.setValue('');
+  recreateSteps(template: IMonthlyEntity) {
     this.steps.clear();
+    template.marches.sort((a, b) => a.sequence - b.sequence).forEach(m => {
+      this.addStep(m);
+    });
   }
 
   createStepGroup(step?: IMarchEntity): FormGroup {
     let group = this.formBuilder.group({
       title: this.formBuilder.control(''),
-      //type: StepType.Double,
+      type: StepType.WORK,
       weight: this.formBuilder.control(1),
-
     });
 
-    // if (step) {
-    //   group.controls.title.setValue(step.title);
-    //   group.controls.type.setValue(step.type);
-    //   group.controls.weight.setValue(step.weight);
-    // }
+    if (step) {
+      group.controls.title.setValue(step.name);
+      group.controls.type.setValue(step.type);
+      group.controls.weight.setValue(step.weight);
+    }
 
     return group;
   }
@@ -101,6 +104,8 @@ export class MarchSetupComponent {
 
   onSubmit() {
     this.updateSequenceNumbers();
-    //this.dataService.saveTemplate(this.marchForm.value);
+    console.log(this.marchForm.value);
+    
+    this.monthlyDataService.updateMarches(this.monthly.id, this.marchForm.value.steps);
   }
 }

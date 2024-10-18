@@ -1,10 +1,11 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IMarchEntity, IMonthlyEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IMarchEntity, IMonthlyEntity, IUserEntity } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
+import { ClientEntity } from "./entity/Client";
 
 
 export const setIPCHandlers = () => {
@@ -13,14 +14,15 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:User:getUsers', (e) => UserController.getUsers());
   ipcMain.handle('db:User:setUser', (e, user) => UserController.setLoggedUser(user));
 
-  // ipcMain.handle('db:March:getTemplates', (e) => dbApi.March.getTemplates());
-  // ipcMain.handle('db:March:saveTemplate', (e, template) => dbApi.March.saveTemplate(template));
-  ipcMain.handle('db:March:updateMarchValue', (e, march) => MarchController.updateMarchValue(march));
+  ipcMain.handle('db:Client:getClients', (e) => ClientController.getClients());
 
+  ipcMain.handle('db:March:updateMarchValue', (e, march) => MarchController.updateMarchValue(march));
   ipcMain.handle('db:March:addStopper', (e, march, seconds, from) => MarchController.addStopper(march, seconds, from));
-  ipcMain.handle('db:Client:getMonthlies', (e, year, month) => MonthlyController.getMonthlies(year, month));
-  // ipcMain.handle('db:Client:recreateMonthlies', (e, year, month, monthlies) => dbApi.Client.recreateMonthlies(year, month, monthlies));
-  ipcMain.handle('db:Client:updateNotes', (e, monthlyId, notes) => MonthlyController.updateNotes(monthlyId, notes));
+
+  ipcMain.handle('db:Monthly:getMonthlies', (e, year, month) => MonthlyController.getMonthlies(year, month));
+  ipcMain.handle('db:Monthly:updateNotes', (e, monthlyId, notes) => MonthlyController.updateNotes(monthlyId, notes));
+  ipcMain.handle('db:Monthly:getLatestMonthly', (e, client) => MonthlyController.getLatestMonthly(client));
+  ipcMain.handle('db:Monthly:updateMarches', (e, monthlyId, marches) => MonthlyController.updateMarches(monthlyId, marches));
 }
 
 export const MonthlyController = {
@@ -43,6 +45,34 @@ export const MonthlyController = {
       monthly.note = note;
       await monthly.save();
     }
+  },
+
+  async getLatestMonthly(client: IClientEntity): Promise<IMonthlyEntity> {
+    return await AppDataSource
+      .getRepository(MonthlyEntity)
+      .createQueryBuilder('m')
+      .leftJoinAndSelect('m.client', 'client')
+      .leftJoinAndSelect('m.marches', 'mar')
+      .where('m.client = :clientId', { clientId: client.id })
+      .orderBy('m.year', 'DESC')
+      .addOrderBy('m.month', 'DESC')
+      .getOne();
+  },
+
+  async updateMarches(monthlyId: number, marches: IMarchEntity[]) {
+    let monthly = await AppDataSource
+      .getRepository(MonthlyEntity)
+      .findOneBy({ id: monthlyId });
+
+    //todo
+    // if (monthly) {
+    //   monthly.marches = [];
+    //   marches.forEach(m => {
+    //     MarchEntity.create()
+    //   })
+    //   monthly.marches = marches;
+    //   await monthly.save();
+    // }
   }
 }
 
@@ -92,5 +122,13 @@ export const MarchController = {
 
     let stopper = StopperEntity.create({ march: marchEntity, user: UserController.loggedUser, seconds: time, from: from });
     await stopper.save();
+  }
+}
+
+export const ClientController = {
+  getClients(): Promise<IClientEntity[]> {
+    return AppDataSource
+      .getRepository(ClientEntity)
+      .find();
   }
 }

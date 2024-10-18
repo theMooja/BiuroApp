@@ -17,6 +17,7 @@ export interface IMarchEntity {
     value: number;
     monthly: IMonthlyEntity;
     stoppers: IStopperEntity[];
+    type: StepType;
 }
 
 

@@ -76,7 +76,7 @@ export class HomeComponent {
   }
 
   onSetMarch(element: IMonthlyEntity) {
-    this.router.navigate(['/marchSetup'], { state: { monthlyId: element.id } });
+    this.router.navigate(['/marchSetup'], { state: { monthly: element } });
   }
 
   onColumnChange(column: string) {

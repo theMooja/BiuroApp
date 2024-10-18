@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { MonthlyEntity } from "./Monthly";
 import { StopperEntity } from "./Stopper";
+import { StepType } from "./../interfaces";
 
 @Entity({ name: 'marches' })
 export class MarchEntity extends BaseEntity {
@@ -19,6 +20,13 @@ export class MarchEntity extends BaseEntity {
 
     @Column()
     value: number;
+
+    @Column({
+        type: 'enum',
+        enum: StepType,
+        default: StepType.WORK
+    })
+    type: StepType;
 
     @ManyToOne(() => MonthlyEntity, (monthly) => monthly.marches)
     monthly: MonthlyEntity;

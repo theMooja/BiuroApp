@@ -1,16 +1,12 @@
 <div id="view">
-    <button mat-fab color="primary" aria-label="Add" (click)="onNew()">
-        <mat-icon>add</mat-icon>
-    </button>
-
     <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>
             edit_square
         </mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-        @for(template of templates; track template.name){
-        <button mat-menu-item (click)="onEdit(template)">
+        @for(template of clients; track template.name){
+        <button mat-menu-item (click)="onCopy(template)">
             <span>{{template.name}}</span>
         </button>}
     </mat-menu>

@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { IMarchEntity, IStopperEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IMarchEntity, IStopperEntity, IUserEntity } from "./interfaces";
 
 
 const contextBridgeApi = {
@@ -11,8 +11,12 @@ const contextBridgeApi = {
   getUsers: () => ipcRenderer.invoke('db:User:getUsers'),
   setUser: (user: IUserEntity) => ipcRenderer.invoke('db:User:setUser', user),
 
-  getMonthlies: (year: number, month: number) => ipcRenderer.invoke('db:Client:getMonthlies', year, month),
-  updateNotes: (monthlyId: number, notes: string) => ipcRenderer.invoke('db:Client:updateNotes', monthlyId, notes),
+  getClients: () => ipcRenderer.invoke('db:Client:getClients'),
+
+  getMonthlies: (year: number, month: number) => ipcRenderer.invoke('db:Monthly:getMonthlies', year, month),
+  updateNotes: (monthlyId: number, notes: string) => ipcRenderer.invoke('db:Monthly:updateNotes', monthlyId, notes),
+  getLatestMonthly: (client: IClientEntity) => ipcRenderer.invoke('db:Monthly:getLatestMonthly', client),
+  updateMarches: (monthlyId: number, marches: IMarchEntity[]) => ipcRenderer.invoke('db:Monthly:updateMarches', monthlyId, marches),
 
   updateMarchValue: (march: IMarchEntity) => ipcRenderer.invoke('db:March:updateMarchValue', march),
   addStopper: (march: IMarchEntity, time: number, from: Date) => ipcRenderer.invoke('db:March:addStopper', march, time, from),
