@@ -60,21 +60,29 @@ export const MonthlyController = {
   },
 
   async updateMarches(monthlyId: number, marches: IMarchEntity[]) {
-    let monthly = await AppDataSource
-      .getRepository(MonthlyEntity)
-      .findOneBy({ id: monthlyId });
+    await AppDataSource
+      .getRepository(MarchEntity)
+      .createQueryBuilder()
+      .delete()
+      .from(MarchEntity, 'm')
+      .where('monthlyId = :monthlyId', { monthlyId })
+      .execute();
 
-    //todo
-    // if (monthly) {
-    //   monthly.marches = [];
-    //   marches.forEach(m => {
-    //     MarchEntity.create()
-    //   })
-    //   monthly.marches = marches;
-    //   await monthly.save();
-    // }
+    let monthly = await MonthlyEntity.findOne({
+      where: { id: monthlyId },
+      relations: ['marches']
+    })
+
+    monthly.marches = marches.map(march => MarchEntity.create({
+      name: march.name,
+      sequence: march.sequence,
+      weight: march.weight,
+      type: march.type
+    }));
+    monthly.save();
   }
 }
+
 
 
 export const UserController = {

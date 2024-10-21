@@ -31,7 +31,9 @@ export class MonthlyEntity extends BaseEntity {
         forma: string
     }
 
-    @OneToMany(() => MarchEntity, march => march.monthly)
+    @OneToMany(() => MarchEntity, march => march.monthly, {
+        cascade: true
+    })
     marches: MarchEntity[];
 }
 

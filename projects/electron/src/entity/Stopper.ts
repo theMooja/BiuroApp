@@ -8,7 +8,9 @@ export class StopperEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => MarchEntity, monthly => monthly.stoppers)
+    @ManyToOne(() => MarchEntity, monthly => monthly.stoppers, {
+        onDelete: 'CASCADE'
+    })
     march: MarchEntity;
 
     @ManyToOne(() => UserEntity, user => user.stoppers)

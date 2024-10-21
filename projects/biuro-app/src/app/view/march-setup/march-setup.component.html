@@ -23,7 +23,7 @@
             <div *ngFor="let step of steps.controls; let i=index" [formGroupName]="i" class="step-container">
                 <mat-form-field>
                     <mat-label>Czynność</mat-label>
-                    <input matInput formControlName="title">
+                    <input matInput formControlName="name">
                 </mat-form-field>
                 <mat-select formControlName="type">
                     <mat-option *ngFor="let type of stepTypes" [value]="type">{{ type }}</mat-option>

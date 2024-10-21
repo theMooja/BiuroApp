@@ -9,7 +9,7 @@ export class MarchEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: false })
+    @Column()
     name: string;
 
     @Column()
@@ -18,7 +18,7 @@ export class MarchEntity extends BaseEntity {
     @Column()
     weight: number;
 
-    @Column()
+    @Column({ nullable: true })
     value: number;
 
     @Column({
@@ -28,10 +28,14 @@ export class MarchEntity extends BaseEntity {
     })
     type: StepType;
 
-    @ManyToOne(() => MonthlyEntity, (monthly) => monthly.marches)
+    @ManyToOne(() => MonthlyEntity, (monthly) => monthly.marches, {
+        onDelete: 'CASCADE'
+    })
     monthly: MonthlyEntity;
 
-    @OneToMany(() => StopperEntity, (stopper) => stopper.march)
+    @OneToMany(() => StopperEntity, (stopper) => stopper.march, {
+        cascade: true
+    })
     stoppers: StopperEntity[];
 }
 
