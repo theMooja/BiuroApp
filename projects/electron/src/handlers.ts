@@ -6,6 +6,7 @@ import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
 import { ClientEntity } from "./entity/Client";
+import { In } from "typeorm";
 
 
 export const setIPCHandlers = () => {
@@ -23,6 +24,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Monthly:updateNotes', (e, monthlyId, notes) => MonthlyController.updateNotes(monthlyId, notes));
   ipcMain.handle('db:Monthly:getLatestMonthly', (e, client) => MonthlyController.getLatestMonthly(client));
   ipcMain.handle('db:Monthly:updateMarches', (e, monthlyId, marches) => MonthlyController.updateMarches(monthlyId, marches));
+  ipcMain.handle('db:Monthly:recreateMonthlies', (e, year, month, monthlies) => MonthlyController.recreateMonthlies(year, month, monthlies));
 }
 
 export const MonthlyController = {
@@ -80,6 +82,50 @@ export const MonthlyController = {
       type: march.type
     }));
     monthly.save();
+  },
+
+  async recreateMonthlies(year: number, month: number, monthlies: IMonthlyEntity[]) {
+    let clients = [];
+
+    if (monthlies.length > 0) {
+      clients = monthlies.map(m => m.client);
+    } else {
+      clients = await ClientController.getClients();
+    }
+
+    await MonthlyEntity.remove(
+      await MonthlyEntity.find(
+        { where: { year, month, client: In(clients.map(c => c.id)) } }));
+
+    for (let client of clients) {
+
+      let latest = await AppDataSource
+        .getRepository(MonthlyEntity)
+        .createQueryBuilder('m')
+        .leftJoinAndSelect('m.client', 'client')
+        .leftJoinAndSelect('m.marches', 'mar')
+        .where('m.year < :year OR (m.year = :year AND m.month < :month)', { year: year, month: month })
+        .andWhere('client.id = :clientId', { clientId: client.id })
+        .orderBy('m.year', 'DESC')
+        .addOrderBy('m.month', 'DESC')
+        .getOne();
+
+      if (!latest) continue;
+
+      let monthly = new MonthlyEntity();
+      monthly.year = year;
+      monthly.month = month;
+      monthly.client = latest.client;
+      monthly.note = latest?.note;
+      monthly.info = latest?.info;
+      monthly.marches = latest.marches.map(m => MarchEntity.create({
+        name: m.name,
+        sequence: m.sequence,
+        weight: m.weight,
+        type: m.type
+      }));
+      await monthly.save();
+    }
   }
 }
 

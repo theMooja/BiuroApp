@@ -24,4 +24,8 @@ export class MonthlyDataService {
   async updateMarches(monthlyId: number, marches: IMarchEntity[]) {
     await window.electron.updateMarches(monthlyId, marches);
   }
+
+  async recreateMonthlies(year: number, month: number, monthlies: IMonthlyEntity[]) {
+    await window.electron.recreateMonthlies(year, month, monthlies);
+  }
 }
