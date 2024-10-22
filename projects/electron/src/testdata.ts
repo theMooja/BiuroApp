@@ -4,6 +4,8 @@ import { ClientEntity } from './entity/Client';
 import { MonthlyEntity } from './entity/Monthly';
 import { MarchEntity } from './entity/March';
 import { StopperEntity } from './entity/Stopper';
+import { InvoiceEntity } from './entity/Invoice';
+import { InvoiceLineEntity } from './entity/InvoiceLine';
 
 
 const clearDB = async function () {
@@ -14,6 +16,8 @@ const clearDB = async function () {
     await entityManager.query('DELETE FROM monthlies');
     await entityManager.query('DELETE FROM clients');
     await entityManager.query('DELETE FROM users');
+    await entityManager.query('DELETE FROM invoices');
+    await entityManager.query('DELETE FROM invoicelines');
 
     // await entityManager.transaction(async (entityManager) => {
     //     await entityManager.clear(StopperEntity);
@@ -26,6 +30,7 @@ const clearDB = async function () {
 }
 
 const createUsers = async function (data: any) {
+    console.log('-----------creating users');
     let repo = AppDataSource.getRepository(UserEntity);
 
     data.user1 = await repo.save({
@@ -39,6 +44,7 @@ const createUsers = async function (data: any) {
 }
 
 const createClients = async function (data: any) {
+    console.log('-----------creating clients');
     let repo = AppDataSource.getRepository(ClientEntity);
     data.client1 = await repo.save({
         name: 'c1',
@@ -52,6 +58,7 @@ const createClients = async function (data: any) {
 }
 
 const createMonthlies = async function (data: any) {
+    console.log('-----------creating monthlies');
     let repo = AppDataSource.getRepository(MonthlyEntity);
 
     data.c1monthly1 = await repo.save({
@@ -104,6 +111,7 @@ const createMonthlies = async function (data: any) {
 }
 
 const createMarches = async function (data: any) {
+    console.log('-----------creating marches');
     let repo = AppDataSource.getRepository(MarchEntity);
 
     data.c1m1march1 = await repo.save({
@@ -180,6 +188,7 @@ const createMarches = async function (data: any) {
 }
 
 const createStoppers = async function (data: any) {
+    console.log('-----------creating stoppers');
     let repo = AppDataSource.getRepository(StopperEntity);
 
     data.stopper1 = await repo.save({
@@ -197,6 +206,26 @@ const createStoppers = async function (data: any) {
     });
 }
 
+const createInvoices = async function (data: any) {
+    console.log('-----------creating invoices');
+    let irepo = AppDataSource.getRepository(InvoiceEntity);
+    let lrepo = AppDataSource.getRepository(InvoiceLineEntity);
+
+    data.inv1 = await irepo.save({
+        no: 'inv1',
+        monthly: data.c1monthly1,
+    });
+
+    data.inv1l1 = await lrepo.save({
+        invoice: data.inv1,
+        description: 's1',
+        price: 100,
+        qtty: 1
+    });
+
+    
+}
+
 export default {
     async populate() {
         let data = {};
@@ -208,5 +237,6 @@ export default {
         await createMonthlies(data);
         await createMarches(data);
         await createStoppers(data);
+        await createInvoices(data);
     }
 }

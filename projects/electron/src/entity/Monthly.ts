@@ -38,7 +38,6 @@ export class MonthlyEntity extends BaseEntity {
     marches: MarchEntity[];
 
     @OneToMany(() => InvoiceEntity, invoice => invoice.monthly, {
-        cascade: true
     })
     invoices: InvoiceEntity[];
 }

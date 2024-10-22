@@ -29,7 +29,8 @@
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </mat-header-cell>
       <mat-cell *matCellDef="let element"
-      (dblclick)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()"> {{element.client.name}} </mat-cell>
+        (dblclick)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+        {{element.client.name}} </mat-cell>
     </ng-container>
     <!-- info columns -->
     <ng-container matColumnDef="email">
@@ -58,17 +59,23 @@
 
     <!-- /info columns -->
 
+    <ng-container matColumnDef="invoices">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Faktura </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <invoice-column [monthly]="element"></invoice-column></mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="notes">
       <mat-header-cell *matHeaderCellDef> Notki </mat-header-cell>
-      <mat-cell *matCellDef="let element"> 
-        <app-notes [monthly]="element"></app-notes>
+      <mat-cell *matCellDef="let element">
+        <notes-column [monthly]="element"></notes-column>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="marchValues">
       <mat-header-cell *matHeaderCellDef mat-sort-header> March </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <march-column [element]="element"> </march-column>
+        <march-column [monthly]="element"> </march-column>
       </mat-cell>
     </ng-container>
 

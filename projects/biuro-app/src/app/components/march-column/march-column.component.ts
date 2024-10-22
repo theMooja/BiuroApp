@@ -15,7 +15,7 @@ import { differenceInSeconds } from 'date-fns';
   styleUrl: './march-column.component.scss'
 })
 export class MarchColumnComponent {
-  @Input() element!: IMonthlyEntity;
+  @Input() monthly!: IMonthlyEntity;
   currentStep!: IMarchEntity;
   @ViewChild('leftMenuTrigger') leftMenuTrigger!: MatMenuTrigger;
   @ViewChild('rightMenuTrigger') rightMenuTrigger!: MatMenuTrigger;
@@ -74,9 +74,9 @@ export class MarchColumnComponent {
   }
 
   findLastStep(): IMarchEntity {
-    let idx = this.element.marches.findIndex(x => !x.value || x.value === 0);
-    if (idx === -1) idx = this.element.marches.length - 1;
-    return this.element.marches[idx];
+    let idx = this.monthly.marches.findIndex(x => !x.value || x.value === 0);
+    if (idx === -1) idx = this.monthly.marches.length - 1;
+    return this.monthly.marches[idx];
   }
 
   onStepValueSelected(val: number) {
@@ -98,6 +98,6 @@ export class MarchColumnComponent {
   }
 
   get steps() {
-    return this.element.marches;
+    return this.monthly.marches;
   }
 }

@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MonthlyDataService } from '../../service/monthly-data.service';
 
 @Component({
-  selector: 'app-notes',
+  selector: 'notes-column',
   standalone: true,
   imports: [MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, TextFieldModule],
   templateUrl: './notes.component.html',

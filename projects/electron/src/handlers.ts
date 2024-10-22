@@ -33,6 +33,8 @@ export const MonthlyController = {
       .getRepository(MonthlyEntity)
       .createQueryBuilder('m')
       .leftJoinAndSelect('m.client', 'client')
+      .leftJoinAndSelect('m.invoices', 'inv')
+      .leftJoinAndSelect('inv.lines', 'lin')
       .leftJoinAndSelect('m.marches', 'mar')
       .leftJoinAndSelect('mar.stoppers', 'stop')
       .where('m.month = :month AND m.year = :year', { month, year })
@@ -171,7 +173,6 @@ export const MarchController = {
   },
 
   async addStopper(march: IMarchEntity, time: number, from: Date) {
-    console.log(march, time, from);
     let marchEntity = await MarchEntity.findOneBy({ id: march.id })
 
     let stopper = StopperEntity.create({ march: marchEntity, user: UserController.loggedUser, seconds: time, from: from });

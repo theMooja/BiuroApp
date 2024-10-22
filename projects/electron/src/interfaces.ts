@@ -21,7 +21,7 @@ export interface IMarchEntity {
 }
 
 
-export interface IMonthlyEntity  {
+export interface IMonthlyEntity {
     id: number;
     year: number;
     month: number;
@@ -33,7 +33,8 @@ export interface IMonthlyEntity  {
         forma: string
     };
     client: IClientEntity,
-    marches: IMarchEntity[];
+    marches: IMarchEntity[],
+    invoices: IInvoiceEntity[]
 }
 
 export interface IStopperEntity {
@@ -42,7 +43,7 @@ export interface IStopperEntity {
     user: IUserEntity;
     createdAt: Date;
     seconds: number;
-    from: Date,    
+    from: Date,
 }
 
 export interface IUserEntity {
@@ -50,4 +51,17 @@ export interface IUserEntity {
     name: string;
     password: string;
     stoppers: IStopperEntity[];
+}
+
+export interface IInvoiceEntity {
+    id: number,
+    no: string,
+    lines: IInvoiceLineEntity[]
+}
+
+export interface IInvoiceLineEntity {
+    id: number,
+    description: string,
+    qtty: number,
+    price: number
 }

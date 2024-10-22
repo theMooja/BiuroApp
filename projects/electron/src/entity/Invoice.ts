@@ -12,7 +12,8 @@ export class InvoiceEntity extends BaseEntity {
     no: string;
 
     @OneToMany(() => InvoiceLineEntity, (item) => item.invoice, {
-        cascade: true
+        cascade: true,
+        eager: true
     })
     lines: InvoiceLineEntity[]
 

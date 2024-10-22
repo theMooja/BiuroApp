@@ -1,0 +1,14 @@
+<button mat-button (click)="onEdit();  $event.stopPropagation()" (mouseenter)="showTooltip(tooltipTemplate, $event)"
+    (mouseleave)="hideTooltip()">F</button>
+
+<ng-template #tooltipTemplate>
+    <mat-list>
+        @for(line of lines; track line.description) {
+        <mat-list-item>
+            <span matListItemTitle>{{line.description}}</span>
+            <span matListItemLine>{{line.price}} ({{line.qtty}})</span>
+        </mat-list-item>
+        }
+    </mat-list>
+
+</ng-template>

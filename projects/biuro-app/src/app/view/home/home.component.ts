@@ -21,6 +21,7 @@ import { MarchColumnComponent } from '../../components/march-column/march-column
 import { NotesComponent } from '../../components/notes/notes.component';
 import { Router } from '@angular/router';
 import { MonthlyDataService } from '../../service/monthly-data.service';
+import { InvoiceColumnComponent } from '../../components/invoice-column/invoice-column.component';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +29,7 @@ import { MonthlyDataService } from '../../service/monthly-data.service';
   imports: [NotesComponent, MarchColumnComponent, MatSort, MatSortModule, MatRippleModule,
     MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule,
     MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule,
-    MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle],
+    MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle, InvoiceColumnComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -72,7 +73,7 @@ export class HomeComponent {
   }
 
   get columns() {
-    return ['name', ...this.infoColumns, 'notes', 'marchValues']
+    return ['name', ...this.infoColumns, 'notes', 'marchValues', 'invoices']
   }
 
   onSetMarch(element: IMonthlyEntity) {
@@ -89,9 +90,9 @@ export class HomeComponent {
   }
 
   async onRecreateMonthlies() {
-    await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
+    //await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
     console.log('tableData', this.tableData.data);
-    await this.refreshData();
+    //await this.refreshData();
   }
 
   async refreshData() {
