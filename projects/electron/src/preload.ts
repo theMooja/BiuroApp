@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { IClientEntity, IMarchEntity, IMonthlyEntity, IStopperEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IInvoiceEntity, IMarchEntity, IMonthlyEntity, IStopperEntity, IUserEntity } from "./interfaces";
 
 
 const contextBridgeApi = {
@@ -21,6 +21,8 @@ const contextBridgeApi = {
 
   updateMarchValue: (march: IMarchEntity) => ipcRenderer.invoke('db:March:updateMarchValue', march),
   addStopper: (march: IMarchEntity, time: number, from: Date) => ipcRenderer.invoke('db:March:addStopper', march, time, from),
+
+  saveInvoice: (invoice: IInvoiceEntity) => ipcRenderer.invoke('db:Invoice:saveInvoice', invoice),
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);

@@ -6,6 +6,7 @@ import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { OverlayRef } from '@angular/cdk/overlay';
+import { InvoiceDataService } from '../../service/invoice-data.service';
 
 @Component({
   selector: 'app-invoice-overlay',
@@ -20,7 +21,7 @@ export class InvoiceOverlayComponent {
   monthly: IMonthlyEntity;
 
   constructor(@Inject(DATA_INJECTION_TOKEN) private data: { entity: IMonthlyEntity, overlayRef: OverlayRef },
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder, private invoiceDataService: InvoiceDataService) {
     this.monthly = this.data.entity;
 
     this.invoiceForm = this.formBuilder.group({
@@ -40,7 +41,7 @@ export class InvoiceOverlayComponent {
 
   addInvoiceLine() {
     this.lines.push(this.formBuilder.group({
-      id: this.formBuilder.control(''),
+      id: this.formBuilder.control(undefined),
       description: this.formBuilder.control(''),
       price: this.formBuilder.control(0),
       qtty: this.formBuilder.control(0)
@@ -51,8 +52,8 @@ export class InvoiceOverlayComponent {
     this.lines.removeAt(idx);
   }
 
-  onSave() {
-    console.log(this.invoiceForm.value, this.monthly.invoices);
+  async onSave() {
+    await this.invoiceDataService.saveInvoice(this.invoiceForm.value);
     this.close();
   }
 

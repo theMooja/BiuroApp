@@ -1,12 +1,13 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IMarchEntity, IMonthlyEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IInvoiceEntity, IMarchEntity, IMonthlyEntity, IUserEntity } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
 import { ClientEntity } from "./entity/Client";
 import { In } from "typeorm";
+import { InvoiceEntity } from "./entity/Invoice";
 
 
 export const setIPCHandlers = () => {
@@ -25,6 +26,8 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Monthly:getLatestMonthly', (e, client) => MonthlyController.getLatestMonthly(client));
   ipcMain.handle('db:Monthly:updateMarches', (e, monthlyId, marches) => MonthlyController.updateMarches(monthlyId, marches));
   ipcMain.handle('db:Monthly:recreateMonthlies', (e, year, month, monthlies) => MonthlyController.recreateMonthlies(year, month, monthlies));
+
+  ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
 }
 
 export const MonthlyController = {
@@ -181,9 +184,17 @@ export const MarchController = {
 }
 
 export const ClientController = {
-  getClients(): Promise<IClientEntity[]> {
-    return AppDataSource
+  async getClients(): Promise<IClientEntity[]> {
+    return await AppDataSource
       .getRepository(ClientEntity)
       .find();
+  }
+}
+
+export const InvoiceController = {
+  async saveInvoice(data: IInvoiceEntity) {
+    let repo = AppDataSource.getRepository(InvoiceEntity);
+    const invoice = Object.assign(new InvoiceEntity(), data);
+    await repo.save(invoice);
   }
 }
