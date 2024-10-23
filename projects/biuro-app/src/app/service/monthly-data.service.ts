@@ -28,4 +28,8 @@ export class MonthlyDataService {
   async recreateMonthlies(year: number, month: number, monthlies: IMonthlyEntity[]) {
     await window.electron.recreateMonthlies(year, month, monthlies);
   }
+
+  async updateInfo(entity: IMonthlyEntity) {
+    await window.electron.updateInfo(entity);
+  }
 }

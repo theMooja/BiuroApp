@@ -26,6 +26,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Monthly:getLatestMonthly', (e, client) => MonthlyController.getLatestMonthly(client));
   ipcMain.handle('db:Monthly:updateMarches', (e, monthlyId, marches) => MonthlyController.updateMarches(monthlyId, marches));
   ipcMain.handle('db:Monthly:recreateMonthlies', (e, year, month, monthlies) => MonthlyController.recreateMonthlies(year, month, monthlies));
+  ipcMain.handle('db:Monthly:updateInfo', (e, data) => MonthlyController.updateInfo(data));
 
   ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
 }
@@ -42,6 +43,15 @@ export const MonthlyController = {
       .leftJoinAndSelect('mar.stoppers', 'stop')
       .where('m.month = :month AND m.year = :year', { month, year })
       .getMany();
+  },
+
+  async updateInfo(data: IMonthlyEntity) {
+    let repo = AppDataSource.getRepository(MonthlyEntity);
+    let monthly = await repo.findOneBy({ id: data.id });
+    if (monthly) {
+      monthly.info = data.info;
+      await monthly.save();
+    }
   },
 
   async updateNotes(monthlyId: number, note: string) {
@@ -178,7 +188,12 @@ export const MarchController = {
   async addStopper(march: IMarchEntity, time: number, from: Date) {
     let marchEntity = await MarchEntity.findOneBy({ id: march.id })
 
-    let stopper = StopperEntity.create({ march: marchEntity, user: UserController.loggedUser, seconds: time, from: from });
+    let stopper = StopperEntity.create({
+      march: marchEntity,
+      user: UserController.loggedUser,
+      seconds: time,
+      from: from
+    });
     await stopper.save();
   }
 }

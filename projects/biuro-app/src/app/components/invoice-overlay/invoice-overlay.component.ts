@@ -12,7 +12,7 @@ import { InvoiceDataService } from '../../service/invoice-data.service';
   selector: 'app-invoice-overlay',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule,
-    MatInputModule, MatFormFieldModule, MatFormFieldModule],
+    MatInputModule, MatFormFieldModule],
   templateUrl: './invoice-overlay.component.html',
   styleUrl: './invoice-overlay.component.scss'
 })

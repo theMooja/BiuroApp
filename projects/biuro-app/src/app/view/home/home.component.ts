@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, ViewChild } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { IClientEntity, IMonthlyEntity } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -21,7 +21,12 @@ import { MarchColumnComponent } from '../../components/march-column/march-column
 import { NotesComponent } from '../../components/notes/notes.component';
 import { Router } from '@angular/router';
 import { MonthlyDataService } from '../../service/monthly-data.service';
-import { InvoiceColumnComponent } from '../../components/invoice-column/invoice-column.component';
+import { DATA_INJECTION_TOKEN, InvoiceColumnComponent } from '../../components/invoice-column/invoice-column.component';
+import { Overlay } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { EditInfoColumnsOverlayComponent } from '../../components/edit-info-columns-overlay/edit-info-columns-overlay.component';
+
+export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma'];
 
 @Component({
   selector: 'app-home',
@@ -44,8 +49,8 @@ export class HomeComponent {
   tableData: MatTableDataSource<IMonthlyEntity>;
   expandedElement: IMonthlyEntity | null = null;
   selection = new SelectionModel<IMonthlyEntity>(true);
-  infoColumns = ['email', 'biuro', 'program'];
-  allInfoColumns = ['email', 'biuro', 'program', 'forma']
+  infoColumns = ['email', 'firma', 'forma'];
+  allInfoColumns = allInfoColumns;
   currentDate: Date = new Date('1-1-2024');
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
@@ -53,7 +58,8 @@ export class HomeComponent {
 
   constructor(private monthlyDataService: MonthlyDataService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private overlay: Overlay
   ) {
     this.tableData = new MatTableDataSource<IMonthlyEntity>();
   }
@@ -64,6 +70,12 @@ export class HomeComponent {
     this.tableData.sortingDataAccessor = (item: any, property) => {
       switch (property) {
         case 'name': return (item.client as IClientEntity)?.name;
+        case 'email': return item.info.email;
+        case 'firma': return item.info.firma;
+        case 'forma': return item.info.forma;
+        case 'VAT': return item.info.VAT;
+        case 'ZUS': return item.info.ZUS;
+        case 'skladki': return item.info.skladki;
         default: return item[property];
       }
     }
@@ -91,8 +103,29 @@ export class HomeComponent {
 
   async onRecreateMonthlies() {
     //await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
-    console.log('tableData', this.tableData.data);
     //await this.refreshData();
+    console.log('tableData', this.tableData.data);
+  }
+
+  onEditInfoColumns(element: IMonthlyEntity) {
+    const overlayRef = this.overlay.create({
+      positionStrategy: this.overlay.position().global().centerHorizontally().centerVertically(),
+      hasBackdrop: true,
+      backdropClass: 'cdk-overlay-dark-backdrop',
+      disposeOnNavigation: true,
+    });
+
+    let data = Injector.create({
+      providers: [{
+        provide: DATA_INJECTION_TOKEN, useValue: {
+          entity: element,
+          overlayRef: overlayRef
+        }
+      }],
+    });
+    const overlayPortal = new ComponentPortal(EditInfoColumnsOverlayComponent, null, data);
+    overlayRef.attach(overlayPortal);
+    overlayRef.backdropClick().subscribe(() => overlayRef.dispose());
   }
 
   async refreshData() {

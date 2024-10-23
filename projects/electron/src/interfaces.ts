@@ -30,7 +30,8 @@ export interface IMonthlyEntity {
         email: string,
         podmiot: string,
         program: string,
-        forma: string
+        forma: string,
+        [key: string]: string;
     };
     client: IClientEntity,
     marches: IMarchEntity[],

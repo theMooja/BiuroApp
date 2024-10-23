@@ -18,15 +18,6 @@ const clearDB = async function () {
     await entityManager.query('DELETE FROM users');
     await entityManager.query('DELETE FROM invoices');
     await entityManager.query('DELETE FROM invoicelines');
-
-    // await entityManager.transaction(async (entityManager) => {
-    //     await entityManager.clear(StopperEntity);
-    //     await entityManager.clear(MarchEntity);
-    //     await entityManager.clear(MonthlyEntity);
-    //     await entityManager.clear(ClientEntity);
-    //     await entityManager.clear(UserEntity);
-        
-    // });
 }
 
 const createUsers = async function (data: any) {
@@ -67,23 +58,13 @@ const createMonthlies = async function (data: any) {
         year: 2024,
         info: {
             email: 'c1@email.com',
-            biuro: 'finka',
+            firma: 'finka',
             forma: 'vat',
-            program: 'nexo'
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
         }
     });
-
-    // data.c1monthly2 = await repo.save({
-    //     client: data.client1,
-    //     month: 2,
-    //     year: 2024,
-    //     info: {
-    //         email: 'c1@email.com',
-    //         biuro: 'finka',
-    //         forma: 'vat',
-    //         program: 'nexo'
-    //     }
-    // });
 
     data.c2monthly1 = await repo.save({
         client: data.client2,
@@ -91,9 +72,11 @@ const createMonthlies = async function (data: any) {
         year: 2024,
         info: {
             email: 'c2@email.com',
-            biuro: 'finka',
+            firma: 'fintax',
             forma: 'vat',
-            program: 'nexo'
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
         }
     });
 
@@ -103,9 +86,11 @@ const createMonthlies = async function (data: any) {
         year: 2024,
         info: {
             email: 'c3@email.com',
-            biuro: 'finka',
-            forma: 'vat',
-            program: 'nexo'
+            firma: 'finka',
+            forma: 'cit',
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
         }
     });
 }

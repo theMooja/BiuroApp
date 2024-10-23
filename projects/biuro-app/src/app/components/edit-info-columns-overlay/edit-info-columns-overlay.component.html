@@ -1,0 +1,8 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div *ngFor="let column of allInfoColumns">
+    <mat-form-field>
+      <input matInput [placeholder]="column" [formControlName]="column">
+    </mat-form-field>
+  </div>
+  <button mat-raised-button type="submit">Zapisz</button>
+</form>

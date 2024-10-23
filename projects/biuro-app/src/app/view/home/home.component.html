@@ -39,22 +39,34 @@
       <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="biuro">
+    <ng-container matColumnDef="ZUS">
       <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
-        (contextmenu)="onInfoColumnRightClick('biuro')"> biuro </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.biuro}} </mat-cell>
+        (contextmenu)="onInfoColumnRightClick('ZUS')"> ZUS </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.ZUS}} </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="program">
+    <ng-container matColumnDef="VAT">
       <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
-        (contextmenu)="onInfoColumnRightClick('program')"> program </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.program}} </mat-cell>
+        (contextmenu)="onInfoColumnRightClick('VAT')"> VAT </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.VAT}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="forma">
       <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
         (contextmenu)="onInfoColumnRightClick('forma')"> forma </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.forma}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="skladki">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+        (contextmenu)="onInfoColumnRightClick('skladki')"> składki </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.skladki}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="firma">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+        (contextmenu)="onInfoColumnRightClick('firma')"> firma </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.firma}} </mat-cell>
     </ng-container>
 
     <!-- /info columns -->
@@ -82,16 +94,8 @@
     <ng-container matColumnDef="expandedDetail">
       <mat-cell *matCellDef="let element" [attr.colspan]="2">
         <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          <button mat-raised-button (click)="onSetMarch(element)">Ustaw Marsz</button>
-          <!-- <mat-form-field>
-            <mat-label>March</mat-label>
-            <mat-select matNativeControl required (selectionChange)="onMarchTemplateSelected($event.value)"
-              [(value)]="element.marchName">
-              @for(template of templates; track template.name) {
-              <mat-option [value]="template.name">{{template.name}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field> -->
+          <button mat-raised-button (click)="onSetMarch(element)">Edytuj Marsz</button>
+          <button mat-raised-button (click)="onEditInfoColumns(element)">Edytuj Info</button>
         </div>
       </mat-cell>
     </ng-container>
