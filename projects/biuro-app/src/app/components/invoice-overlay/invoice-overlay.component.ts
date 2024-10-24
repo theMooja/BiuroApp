@@ -32,6 +32,7 @@ export class InvoiceOverlayComponent {
 
     this.invoiceForm = this.formBuilder.group({
       no: this.formBuilder.control(this.monthly.invoices[0].no),
+      id: this.formBuilder.control(this.monthly.invoices[0].id),
       lines: this.formBuilder.array(this.monthly.invoices[0].lines.map(x => this.formBuilder.group({
         id: this.formBuilder.control(x.id),
         description: this.formBuilder.control(x.description),
@@ -64,6 +65,7 @@ export class InvoiceOverlayComponent {
 
   async onSave() {
     await this.invoiceDataService.saveInvoice(this.invoiceForm.value);
+    this.monthly.invoices[0] = this.invoiceForm.value;
     this.close();
   }
 
