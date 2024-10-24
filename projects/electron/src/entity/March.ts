@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { MonthlyEntity } from "./Monthly";
 import { StopperEntity } from "./Stopper";
 import { StepType } from "./../interfaces";
@@ -37,6 +37,9 @@ export class MarchEntity extends BaseEntity {
         cascade: true
     })
     stoppers: StopperEntity[];
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 }
 
 

@@ -8,11 +8,12 @@ import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MonthlyDataService } from '../../service/monthly-data.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'notes-column',
   standalone: true,
-  imports: [MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, TextFieldModule],
+  imports: [MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, TextFieldModule, CommonModule],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.scss'
 })

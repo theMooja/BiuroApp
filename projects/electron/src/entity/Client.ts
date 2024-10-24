@@ -10,6 +10,9 @@ export class ClientEntity extends BaseEntity {
     @Column({ nullable: false })
     name: string;
 
+    @Column({ default: true })
+    isActive: boolean;
+
     @OneToMany(() => MonthlyEntity, monthly => monthly.client)
     monthlies: MonthlyEntity[];
 }

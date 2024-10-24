@@ -202,7 +202,11 @@ export const ClientController = {
   async getClients(): Promise<IClientEntity[]> {
     return await AppDataSource
       .getRepository(ClientEntity)
-      .find();
+      .find({
+        where: {
+          isActive: true
+        }
+      });
   }
 }
 
