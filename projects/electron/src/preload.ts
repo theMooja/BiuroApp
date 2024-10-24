@@ -7,6 +7,8 @@ const contextBridgeApi = {
   maximize: () => ipcRenderer.invoke('app:maximize'),
   close: () => ipcRenderer.invoke('app:close'),
 
+  getListValues: (target: string) => ipcRenderer.invoke('db:listValues', target),
+
   saveUser: (data: IUserEntity) => ipcRenderer.invoke('db:User:saveUser', data),
   getUsers: () => ipcRenderer.invoke('db:User:getUsers'),
   setUser: (user: IUserEntity) => ipcRenderer.invoke('db:User:setUser', user),

@@ -6,6 +6,8 @@ import { MarchEntity } from './entity/March';
 import { StopperEntity } from './entity/Stopper';
 import { InvoiceEntity } from './entity/Invoice';
 import { InvoiceLineEntity } from './entity/InvoiceLine';
+import { ListValueEntity } from './entity/ListValue';
+import { ListValueTargets } from './interfaces';
 
 
 const clearDB = async function () {
@@ -18,6 +20,7 @@ const clearDB = async function () {
     await entityManager.query('DELETE FROM users');
     await entityManager.query('DELETE FROM invoices');
     await entityManager.query('DELETE FROM invoicelines');
+    await entityManager.query('DELETE FROM listvalues');
 }
 
 const createUsers = async function (data: any) {
@@ -208,7 +211,21 @@ const createInvoices = async function (data: any) {
         qtty: 1
     });
 
-    
+
+}
+
+const createListValues = async function (data: any) {
+    console.log('-----------creating list values');
+    let repo = AppDataSource.getRepository(ListValueEntity);
+
+    await repo.save({
+        text: 'dokumenty',
+        target: ListValueTargets.INVOICE_DESC,
+    });
+    await repo.save({
+        text: 'deklaracje',
+        target: ListValueTargets.INVOICE_DESC,
+    });
 }
 
 export default {
@@ -223,5 +240,6 @@ export default {
         await createMarches(data);
         await createStoppers(data);
         await createInvoices(data);
+        await createListValues(data);
     }
 }

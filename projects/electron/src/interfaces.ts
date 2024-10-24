@@ -3,6 +3,10 @@ export enum StepType {
     HIDDEN = 'hidden'
 }
 
+export enum ListValueTargets {
+    INVOICE_DESC = 'invoice_description'
+}
+
 export interface IClientEntity {
     id: number;
     name: string;
@@ -65,4 +69,10 @@ export interface IInvoiceLineEntity {
     description: string,
     qtty: number,
     price: number
+}
+
+export interface IListValue {
+    text: string,
+    target: string,
+    sequence: number
 }

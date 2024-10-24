@@ -7,21 +7,27 @@ import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { InvoiceDataService } from '../../service/invoice-data.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { ListValuesService } from '../../service/list-values.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-invoice-overlay',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule,
-    MatInputModule, MatFormFieldModule],
+    MatInputModule, MatFormFieldModule, MatIcon, MatButtonModule, MatAutocompleteModule],
   templateUrl: './invoice-overlay.component.html',
   styleUrl: './invoice-overlay.component.scss'
 })
 export class InvoiceOverlayComponent {
   invoiceForm: FormGroup;
   monthly: IMonthlyEntity;
+  descriptionValues: string[] = [];
 
   constructor(@Inject(DATA_INJECTION_TOKEN) private data: { entity: IMonthlyEntity, overlayRef: OverlayRef },
-    private formBuilder: FormBuilder, private invoiceDataService: InvoiceDataService) {
+    private formBuilder: FormBuilder, private invoiceDataService: InvoiceDataService, private listValuesService: ListValuesService) {
+
     this.monthly = this.data.entity;
 
     this.invoiceForm = this.formBuilder.group({
@@ -33,6 +39,10 @@ export class InvoiceOverlayComponent {
         qtty: this.formBuilder.control(x.qtty)
       })))
     });
+  }
+
+  async ngOnInit() {
+    this.descriptionValues = await this.listValuesService.get('invoice_description')
   }
 
   get lines() {

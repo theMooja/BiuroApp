@@ -1,16 +1,18 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IInvoiceEntity, IMarchEntity, IMonthlyEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, IUserEntity } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
 import { ClientEntity } from "./entity/Client";
 import { In } from "typeorm";
 import { InvoiceEntity } from "./entity/Invoice";
+import { ListValueEntity } from "./entity/ListValue";
 
 
 export const setIPCHandlers = () => {
+  ipcMain.handle('db:listValues', (e, target) => ListValuesController.get(target));
 
   ipcMain.handle('db:User:saveUser', (e, data) => UserController.saveUser(data));
   ipcMain.handle('db:User:getUsers', (e) => UserController.getUsers());
@@ -215,5 +217,17 @@ export const InvoiceController = {
     let repo = AppDataSource.getRepository(InvoiceEntity);
     const invoice = Object.assign(new InvoiceEntity(), data);
     await repo.save(invoice);
+  }
+}
+
+export const ListValuesController = {
+  async get(target: string): Promise<IListValue[]> {
+    let repo = AppDataSource.getRepository(ListValueEntity);
+
+    return await repo.find({
+      where: {
+        target: target
+      }
+    });
   }
 }

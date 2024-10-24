@@ -1,22 +1,33 @@
-<form id="invoiceForm" [formGroup]="invoiceForm">
-    <mat-form-field>
-        <input matInput placeholder="numer" formControlName="no">
-    </mat-form-field>
-    <div formArrayName="lines">
-        <div *ngFor="let line of lines.controls; let i = index" [formGroupName]="i">
-            <input formControlName="id" type="hidden" />
-            <mat-form-field>
-                <input matInput placeholder="Kwota" formControlName="price">
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput placeholder="Ilość" formControlName="qtty">
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput placeholder="Opis" formControlName="description">
-            </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeInvoiceLine(i)">usun</button>
+<div class="container">
+    <form id="invoiceForm" [formGroup]="invoiceForm">
+        <mat-form-field>
+            <mat-label>Numer</mat-label>
+            <input matInput placeholder="numer" formControlName="no">
+        </mat-form-field>
+        <div formArrayName="lines">
+            <div *ngFor="let line of lines.controls; let i = index" [formGroupName]="i">
+                <input formControlName="id" type="hidden" />
+                <mat-form-field>
+                    <mat-label>Cena</mat-label>
+                    <input matInput placeholder="Kwota" formControlName="price">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Ilość</mat-label>
+                    <input matInput placeholder="Ilość" formControlName="qtty">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Opis</mat-label>
+                    <input matInput placeholder="Opis" formControlName="description" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        @for (option of descriptionValues; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
+                <button mat-mini-fab color="warn" (click)="removeInvoiceLine(i)"><mat-icon>remove</mat-icon></button>
+            </div>
         </div>
-    </div>
-    <button mat-icon-button color="primary" (click)="addInvoiceLine()" type="button"> + </button>
-    <button mat-button (click)="onSave()">Zapisz</button>
-</form>
+        <button mat-fab color="primary" (click)="addInvoiceLine()" type="button"> <mat-icon>add</mat-icon> </button>
+        <button mat-raised-button (click)="onSave()">Zapisz</button>
+    </form>
+</div>
