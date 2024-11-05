@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { IMonthlyEntity } from '../../../../../electron/src/interfaces';
+import { IMonthlyEntity, ListValueTargets } from '../../../../../electron/src/interfaces';
 import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -43,7 +43,7 @@ export class InvoiceOverlayComponent {
   }
 
   async ngOnInit() {
-    this.descriptionValues = await this.listValuesService.get('invoice_description')
+    this.descriptionValues = await this.listValuesService.get(ListValueTargets.INVOICE_DESC);
   }
 
   get lines() {

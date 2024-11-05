@@ -38,7 +38,7 @@ const createWindow = (): void => {
   mainWindow.loadURL(startURL);
 
 
-  mainWindow.maximize();
+  maximize();
   mainWindow.webContents.openDevTools();
 };
 
@@ -93,12 +93,14 @@ app.on('activate', () => {
 
 
 function minimize(): any {
+  mainWindow.unmaximize();
   mainWindow.setAlwaysOnTop(true);
   mainWindow.setSize(400, 100, true);
   mainWindow.setResizable(false);
 }
 
 function maximize(): any {
+  mainWindow.setResizable(true);
   mainWindow.setAlwaysOnTop(false);
   mainWindow.maximize();
   mainWindow.setResizable(true);

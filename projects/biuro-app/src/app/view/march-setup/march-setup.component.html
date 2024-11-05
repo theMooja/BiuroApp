@@ -23,7 +23,12 @@
             <div *ngFor="let step of steps.controls; let i=index" [formGroupName]="i" class="step-container">
                 <mat-form-field>
                     <mat-label>Czynność</mat-label>
-                    <input matInput formControlName="name">
+                    <input matInput formControlName="name" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        @for (option of descriptionValues; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                        }
+                    </mat-autocomplete>
                 </mat-form-field>
                 <mat-select formControlName="type">
                     <mat-option *ngFor="let type of stepTypes" [value]="type">{{ type }}</mat-option>

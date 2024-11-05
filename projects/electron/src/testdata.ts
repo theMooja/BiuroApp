@@ -226,6 +226,14 @@ const createListValues = async function (data: any) {
         text: 'deklaracje',
         target: ListValueTargets.INVOICE_DESC,
     });
+    await repo.save({
+        text: 'wprowadzanie',
+        target: ListValueTargets.STEP_DESC,
+    });
+    await repo.save({
+        text: 'skanowanie',
+        target: ListValueTargets.STEP_DESC,
+    });
 }
 
 export default {

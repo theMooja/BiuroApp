@@ -102,8 +102,8 @@ export class HomeComponent {
   }
 
   async onRecreateMonthlies() {
-    //await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
-    //await this.refreshData();
+    // await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
+    // await this.refreshData();
     console.log('tableData', this.tableData.data);
   }
 

@@ -216,7 +216,6 @@ export const InvoiceController = {
   async saveInvoice(data: IInvoiceEntity) {
     let repo = AppDataSource.getRepository(InvoiceEntity);
     const invoice = Object.assign(new InvoiceEntity(), data);
-    console.log(invoice);
     await repo.save(invoice);
   }
 }

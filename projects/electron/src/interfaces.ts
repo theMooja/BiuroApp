@@ -4,7 +4,8 @@ export enum StepType {
 }
 
 export enum ListValueTargets {
-    INVOICE_DESC = 'invoice_description'
+    INVOICE_DESC = 'invoice_description',
+    STEP_DESC = 'step_description',
 }
 
 export interface IClientEntity {

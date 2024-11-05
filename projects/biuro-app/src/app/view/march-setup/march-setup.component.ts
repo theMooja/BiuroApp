@@ -5,18 +5,20 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
-import { IClientEntity, IMarchEntity, IMonthlyEntity, StepType } from './../../../../../electron/src/interfaces';
+import { IClientEntity, IMarchEntity, IMonthlyEntity, ListValueTargets, StepType } from './../../../../../electron/src/interfaces';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { ClientDataService } from '../../service/client-data.service';
 import { MonthlyDataService } from '../../service/monthly-data.service';
+import { ListValuesService } from '../../service/list-values.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-march-setup',
   standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatSelectModule,
     MatInputModule, MatIconModule, MatButtonModule,
-    ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatMenuModule],
+    ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatMenuModule, MatAutocompleteModule],
   templateUrl: './march-setup.component.html',
   styleUrl: './march-setup.component.scss'
 })
@@ -25,11 +27,13 @@ export class MarchSetupComponent {
   stepTypes = Object.values(StepType);
   monthly!: IMonthlyEntity;
   clients!: IClientEntity[];
+  descriptionValues: string[] = [];
 
 
   constructor(private formBuilder: FormBuilder,
     private monthlyDataService: MonthlyDataService,
-    private clientDataService: ClientDataService
+    private clientDataService: ClientDataService,
+    private listValuesService: ListValuesService
   ) {
     this.marchForm = this.formBuilder.group({
       name: this.formBuilder.control(''),
@@ -42,6 +46,8 @@ export class MarchSetupComponent {
     this.clients = await this.clientDataService.getClients();
     this.marchForm.get('name')?.setValue(this.monthly.client.name);
     this.recreateSteps(this.monthly);
+
+    this.descriptionValues = await this.listValuesService.get(ListValueTargets.STEP_DESC);
   }
 
   async onCopy(client: IClientEntity) {
@@ -105,7 +111,6 @@ export class MarchSetupComponent {
 
   onSubmit() {
     this.updateSequenceNumbers();
-    console.log(this.marchForm.value);
 
     this.monthlyDataService.updateMarches(this.monthly.id, this.marchForm.value.steps);
   }
