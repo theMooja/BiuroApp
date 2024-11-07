@@ -1,3 +1,10 @@
+/*
+czy wystawiona/wysłana
+
+*/
+
+
+
 import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { InvoiceLineEntity } from "./InvoiceLine";
 import { MonthlyEntity } from "./Monthly";

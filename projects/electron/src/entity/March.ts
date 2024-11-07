@@ -1,3 +1,7 @@
+/*
+filtr do marszów
+*/
+
 import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { MonthlyEntity } from "./Monthly";
 import { StopperEntity } from "./Stopper";
