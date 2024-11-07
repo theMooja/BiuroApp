@@ -9,6 +9,7 @@ import { ClientEntity } from "./entity/Client";
 import { In } from "typeorm";
 import { InvoiceEntity } from "./entity/Invoice";
 import { ListValueEntity } from "./entity/ListValue";
+import * as settings from 'electron-settings';
 
 
 export const setIPCHandlers = () => {
@@ -159,6 +160,7 @@ export const UserController = {
 
   async setLoggedUser(user: IUserEntity) {
     this.loggedUser = await UserEntity.findOneBy({ name: user.name });
+    settings.set('lastUserName', user.name);
   },
 
   async getUsers(): Promise<IUserEntity[]> {

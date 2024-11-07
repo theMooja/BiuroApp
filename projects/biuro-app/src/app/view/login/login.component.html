@@ -1,6 +1,24 @@
 <div class="view">
-    <div *ngFor="let user of users" class="user-button">
-        <button mat-raised-button (click)="onLogin(user)">{{ user.name }}</button>
+    <mat-selection-list class="user-list">
+        <mat-list-item *ngFor="let user of users" class="user-button" (click)="onSelect(user)"
+            [activated]="user === selectedUser">
+            {{ user.name }}
+        </mat-list-item>
+    </mat-selection-list>
+
+    <div class="login-container">
+        @if (selectedUser) {
+        <form [formGroup]="loginForm">
+            <mat-form-field>
+                <input matInput formControlName="name" placeholder="Użytkownik">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="password" placeholder="Hasło" type="password">
+            </mat-form-field>
+            <button mat-raised-button color="primary" type="submit" (click)="onLogin()">Zaloguj</button>
+        </form>
+        }
+
     </div>
 
     <button (click)="test()">test</button>

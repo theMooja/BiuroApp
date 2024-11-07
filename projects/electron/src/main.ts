@@ -16,7 +16,7 @@ if (require("electron-squirrel-startup")) {
 let mainWindow: BrowserWindow | null;
 settings.configure({
   fileName: 'app-settings.json',
-  dir: process.resourcesPath
+  dir: __dirname
 });
 
 
@@ -43,13 +43,6 @@ const createWindow = (): void => {
 };
 
 const setupDatabase = async () => {
-  const cs = app.isPackaged ?
-    settings.getSync('database.connectionString').toString()
-    : 'mongodb://localhost:27017/biuro';//?replicaSet=rs0';
-
-  //await mongoose.connect(cs);
-
-
   await AppDataSource.initialize().then(() => {
     console.log('Connected to Postgres');
   });
@@ -61,6 +54,8 @@ const setAppHandlers = () => {
   ipcMain.handle('app:minimize', () => minimize());
   ipcMain.handle('app:maximize', () => maximize());
   ipcMain.handle('app:close', () => close());
+
+  ipcMain.handle('app:getLastUserName', () => settings.getSync('lastUserName'));
 }
 
 // This method will be called when Electron has finished
