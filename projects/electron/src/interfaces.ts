@@ -30,7 +30,6 @@ export interface IMonthlyEntity {
     id: number;
     year: number;
     month: number;
-    note: string;
     info: {
         email: string,
         podmiot: string,
@@ -40,7 +39,16 @@ export interface IMonthlyEntity {
     };
     client: IClientEntity,
     marches: IMarchEntity[],
-    invoices: IInvoiceEntity[]
+    invoices: IInvoiceEntity[],
+    notes: INoteEntity[]
+}
+
+export interface INoteEntity {
+    id?: number;
+    text: string,
+    user?: IUserEntity,
+    monthly: IMonthlyEntity,
+    persists: boolean
 }
 
 export interface IStopperEntity {
@@ -53,23 +61,24 @@ export interface IStopperEntity {
 }
 
 export interface IUserEntity {
-    id: number;
-    name: string;
-    password: string;
-    stoppers: IStopperEntity[];
+    id: number,
+    name: string,
+    password: string,
+    stoppers: IStopperEntity[],
+    notes: INoteEntity[],
 }
 
 export interface IInvoiceEntity {
     id: number,
     no: string,
-    lines: IInvoiceLineEntity[]
+    lines: IInvoiceLineEntity[],
 }
 
 export interface IInvoiceLineEntity {
     id: number,
     description: string,
     qtty: number,
-    price: number
+    price: number,
 }
 
 export interface IListValue {

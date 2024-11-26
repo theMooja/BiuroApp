@@ -13,6 +13,7 @@ import { ListValueTargets } from './interfaces';
 const clearDB = async function () {
     const entityManager = AppDataSource.manager;
 
+    await entityManager.query('DELETE FROM notes');
     await entityManager.query('DELETE FROM stoppers');
     await entityManager.query('DELETE FROM marches');
     await entityManager.query('DELETE FROM monthlies');

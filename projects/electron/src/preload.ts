@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { IClientEntity, IInvoiceEntity, IMarchEntity, IMonthlyEntity, IStopperEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IInvoiceEntity, IMarchEntity, IMonthlyEntity, INoteEntity, IStopperEntity, IUserEntity } from "./interfaces";
 
 
 const contextBridgeApi = {
@@ -17,7 +17,7 @@ const contextBridgeApi = {
   getClients: () => ipcRenderer.invoke('db:Client:getClients'),
 
   getMonthlies: (year: number, month: number) => ipcRenderer.invoke('db:Monthly:getMonthlies', year, month),
-  updateNotes: (monthlyId: number, notes: string) => ipcRenderer.invoke('db:Monthly:updateNotes', monthlyId, notes),
+  updateNote: (note: INoteEntity) => ipcRenderer.invoke('db:Monthly:updateNote', note),
   getLatestMonthly: (client: IClientEntity) => ipcRenderer.invoke('db:Monthly:getLatestMonthly', client),
   updateMarches: (monthlyId: number, marches: IMarchEntity[]) => ipcRenderer.invoke('db:Monthly:updateMarches', monthlyId, marches),
   recreateMonthlies: (year: number, month: number, monthlies: IMonthlyEntity[]) => ipcRenderer.invoke('db:Monthly:recreateMonthlies', year, month, monthlies),

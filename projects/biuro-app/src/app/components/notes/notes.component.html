@@ -1,10 +1,27 @@
-<button mat-button (mouseenter)="showTooltip(tooltipTemplate, $event)" (mouseleave)="hideTooltip()"
-    (click)="onEdit(); $event.stopPropagation()">N</button>
+<div class="note-container">
+
+    @for(note of notes; track note) {
+    <button mat-button (click)="onEdit()" (mouseenter)="showTooltip(tooltipTemplate, note, $event)"
+        (mouseleave)="hideTooltip()" type="button">
+        {{note.text}} </button>
+    }
+    <button mat-fab-button (click)="onAdd()" type="button">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
+
 
 <ng-template #tooltipTemplate>
-    <div>
-        <textarea matInput [(ngModel)]="notes" placeholder="Notatki" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="20"></textarea>
-        <button mat-button *ngIf="isEdit" (click)="onSave()">Zapisz</button>
-    </div>
+    <mat-card>
+        <mat-card-actions *ngIf="isEdit">
+            <button mat-stroked-button (click)="onPinUser()" [class.pinned]="currentNote.user">
+                Dla mnie</button>
+            <button mat-stroked-button (click)="onPersists()" [class.pinned]="currentNote.persists">Na zawsze</button>
+            <button mat-button (click)="onSave()">Zapisz</button>
+        </mat-card-actions>
+        <mat-card-content>
+            <textarea matInput [(ngModel)]="currentText" placeholder="Notatki" cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="20"></textarea>
+        </mat-card-content>
+    </mat-card>
 </ng-template>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IClientEntity, IMarchEntity, IMonthlyEntity } from '../../../../electron/src/interfaces';
+import { IClientEntity, IMarchEntity, IMonthlyEntity, INoteEntity } from '../../../../electron/src/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ export class MonthlyDataService {
     return monthlies;
   }
 
-  async updateNotes(monthlyId: number, notes: string) {
-    await window.electron.updateNotes(monthlyId, notes);
+  async updateNote(note: INoteEntity) {
+    await window.electron.updateNote(note);
   }
 
   async getLatestMonthly(client: IClientEntity): Promise<IMonthlyEntity> {

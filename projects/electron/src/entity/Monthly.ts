@@ -3,6 +3,7 @@ import { ClientEntity } from "./Client";
 import { MarchEntity } from "./March";
 import { AppDataSource } from "../datasource";
 import { InvoiceEntity } from "./Invoice";
+import { NoteEntity } from "./Note";
 
 @Entity({ name: 'monthlies' })
 export class MonthlyEntity extends BaseEntity {
@@ -19,8 +20,8 @@ export class MonthlyEntity extends BaseEntity {
     @Column({ nullable: false })
     month: number;
 
-    @Column({ default: '' })
-    note: string;
+    @OneToMany(() => NoteEntity,  note => note.monthly)
+    notes: NoteEntity[];
 
     @Column({
         type: 'jsonb'

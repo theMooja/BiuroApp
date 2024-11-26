@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IUserEntity } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
@@ -10,6 +10,7 @@ import { In } from "typeorm";
 import { InvoiceEntity } from "./entity/Invoice";
 import { ListValueEntity } from "./entity/ListValue";
 import * as settings from 'electron-settings';
+import { NoteEntity } from "./entity/Note";
 
 
 export const setIPCHandlers = () => {
@@ -25,7 +26,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:March:addStopper', (e, march, seconds, from) => MarchController.addStopper(march, seconds, from));
 
   ipcMain.handle('db:Monthly:getMonthlies', (e, year, month) => MonthlyController.getMonthlies(year, month));
-  ipcMain.handle('db:Monthly:updateNotes', (e, monthlyId, notes) => MonthlyController.updateNotes(monthlyId, notes));
+  ipcMain.handle('db:Monthly:updateNote', (e, note) => MonthlyController.updateNote(note));
   ipcMain.handle('db:Monthly:getLatestMonthly', (e, client) => MonthlyController.getLatestMonthly(client));
   ipcMain.handle('db:Monthly:updateMarches', (e, monthlyId, marches) => MonthlyController.updateMarches(monthlyId, marches));
   ipcMain.handle('db:Monthly:recreateMonthlies', (e, year, month, monthlies) => MonthlyController.recreateMonthlies(year, month, monthlies));
@@ -44,6 +45,7 @@ export const MonthlyController = {
       .leftJoinAndSelect('inv.lines', 'lin')
       .leftJoinAndSelect('m.marches', 'mar')
       .leftJoinAndSelect('mar.stoppers', 'stop')
+      .leftJoinAndSelect('m.notes', 'not')
       .where('m.month = :month AND m.year = :year', { month, year })
       .getMany();
   },
@@ -57,14 +59,14 @@ export const MonthlyController = {
     }
   },
 
-  async updateNotes(monthlyId: number, note: string) {
-    let monthly = await AppDataSource
-      .getRepository(MonthlyEntity)
-      .findOneBy({ id: monthlyId });
-    if (monthly) {
-      monthly.note = note;
-      await monthly.save();
-    }
+  async updateNote(note: INoteEntity) {
+    await NoteEntity.save({
+      id: note.id,
+      monthly: note.monthly,
+      text: note.text,
+      persists: note.persists,
+      user: note.user
+    });
   },
 
   async getLatestMonthly(client: IClientEntity): Promise<IMonthlyEntity> {
@@ -134,7 +136,6 @@ export const MonthlyController = {
       monthly.year = year;
       monthly.month = month;
       monthly.client = latest.client;
-      monthly.note = latest?.note;
       monthly.info = latest?.info;
       monthly.marches = latest.marches.map(m => MarchEntity.create({
         name: m.name,

@@ -1,6 +1,6 @@
-import { IUserEntity } from "./../interfaces";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Repository } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { StopperEntity } from "./Stopper";
+import { NoteEntity } from "./Note";
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
@@ -16,6 +16,9 @@ export class UserEntity extends BaseEntity {
 
     @OneToMany(() => StopperEntity, (stopper) => stopper.user)
     stoppers: StopperEntity[];
+
+    @OneToMany(() => NoteEntity, (note) => note.user)
+    notes: NoteEntity[];
 }
 
 
