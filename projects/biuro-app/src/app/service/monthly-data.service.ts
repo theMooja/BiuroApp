@@ -13,6 +13,11 @@ export class MonthlyDataService {
     return monthlies;
   }
 
+  async getMonthly(id: number): Promise<IMonthlyEntity> {
+    let monthly = await window.electron.getMonthly(id);
+    return monthly;
+  }
+
   async updateNote(note: INoteEntity) {
     await window.electron.updateNote(note);
   }

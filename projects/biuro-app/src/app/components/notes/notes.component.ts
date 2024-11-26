@@ -1,4 +1,4 @@
-import { afterNextRender, Component, inject, Injector, Input, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { afterNextRender, Component, EventEmitter, inject, Injector, Input, Output, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { IMonthlyEntity, INoteEntity } from '../../../../../electron/src/interfaces';
 import { MatButtonModule } from '@angular/material/button';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -28,6 +28,7 @@ export class NotesComponent {
   private _injector = inject(Injector);
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
   currentNote: INoteEntity;
+  @Output() refresh = new EventEmitter();
 
   constructor(private monthlyDataService: MonthlyDataService, private userDataService: UserDataService,
     private overlay: Overlay, private vcr: ViewContainerRef) { }
@@ -46,9 +47,10 @@ export class NotesComponent {
   }
 
   async onSave() {
-    this.monthlyDataService.updateNote(this.currentNote);
+    await this.monthlyDataService.updateNote(this.currentNote);
     this.isEdit = false;
     this.hideTooltip();
+    this.refresh.emit();
   }
 
   onEdit() {

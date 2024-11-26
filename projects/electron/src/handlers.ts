@@ -26,6 +26,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:March:addStopper', (e, march, seconds, from) => MarchController.addStopper(march, seconds, from));
 
   ipcMain.handle('db:Monthly:getMonthlies', (e, year, month) => MonthlyController.getMonthlies(year, month));
+  ipcMain.handle('db:Monthly:getMonthly', (e, id) => MonthlyController.getMonthly(id));
   ipcMain.handle('db:Monthly:updateNote', (e, note) => MonthlyController.updateNote(note));
   ipcMain.handle('db:Monthly:getLatestMonthly', (e, client) => MonthlyController.getLatestMonthly(client));
   ipcMain.handle('db:Monthly:updateMarches', (e, monthlyId, marches) => MonthlyController.updateMarches(monthlyId, marches));
@@ -48,6 +49,20 @@ export const MonthlyController = {
       .leftJoinAndSelect('m.notes', 'not')
       .where('m.month = :month AND m.year = :year', { month, year })
       .getMany();
+  },
+
+  async getMonthly(id: number): Promise<IMonthlyEntity> {
+    return await AppDataSource
+      .getRepository(MonthlyEntity)
+      .createQueryBuilder('m')
+      .leftJoinAndSelect('m.client', 'client')
+      .leftJoinAndSelect('m.invoices', 'inv')
+      .leftJoinAndSelect('inv.lines', 'lin')
+      .leftJoinAndSelect('m.marches', 'mar')
+      .leftJoinAndSelect('mar.stoppers', 'stop')
+      .leftJoinAndSelect('m.notes', 'not')
+      .where('m.id = :id', { id })
+      .getOne();
   },
 
   async updateInfo(data: IMonthlyEntity) {
@@ -143,6 +158,7 @@ export const MonthlyController = {
         weight: m.weight,
         type: m.type
       }));
+      monthly.notes = latest.notes.filter(n => n.persists);
       await monthly.save();
     }
   }

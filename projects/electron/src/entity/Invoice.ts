@@ -28,4 +28,10 @@ export class InvoiceEntity extends BaseEntity {
         onDelete: 'CASCADE'
     })
     monthly: MonthlyEntity
+
+    @Column({ nullable: true })
+    paidDate: Date
+
+    @Column({ nullable: true })
+    sendDate: Date
 }

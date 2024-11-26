@@ -80,7 +80,7 @@
     <ng-container matColumnDef="notes">
       <mat-header-cell *matHeaderCellDef> Notki </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <notes-column [monthly]="element"></notes-column>
+        <notes-column [monthly]="element" (refresh)="refreshMonthly(element.id)"></notes-column>
       </mat-cell>
     </ng-container>
 
