@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IStopperEntity, IUserEntity } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
@@ -206,7 +206,7 @@ export const MarchController = {
       });
   },
 
-  async addStopper(march: IMarchEntity, time: number, from: Date) {
+  async addStopper(march: IMarchEntity, time: number, from: Date): Promise<IStopperEntity> {
     let marchEntity = await MarchEntity.findOneBy({ id: march.id })
 
     let stopper = StopperEntity.create({
@@ -215,7 +215,7 @@ export const MarchController = {
       seconds: time,
       from: from
     });
-    await stopper.save();
+    return await stopper.save();
   }
 }
 

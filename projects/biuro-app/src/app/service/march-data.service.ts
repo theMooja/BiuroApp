@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IMarchEntity } from "./../../../../electron/src/interfaces";
+import { IMarchEntity, IStopperEntity } from "./../../../../electron/src/interfaces";
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class MarchDataService {
     await window.electron.updateMarchValue(march);
   }
 
-  async addStopper(march: IMarchEntity, time: number, from: Date){
-    await window.electron.addStopper(march, time, from);
+  async addStopper(march: IMarchEntity, time: number, from: Date) : Promise<IStopperEntity> {
+    return await window.electron.addStopper(march, time, from);
   }
 }

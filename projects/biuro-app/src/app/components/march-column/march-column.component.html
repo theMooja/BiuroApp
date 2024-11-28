@@ -14,6 +14,16 @@
         }
     </button>
 
+    <div class="time">
+        <div class="stopper-current">
+            {{currentTime | secondsToMMSSPipe}}
+        </div>
+
+        <div class="stopper-sum">
+            {{totalTime | secondsToMMSSPipe}}
+        </div>
+    </div>
+
     <button mat-button (mouseup)="onFifteen($event); $event.stopPropagation()" (click)="$event.stopPropagation()">
         +/- 15
     </button>

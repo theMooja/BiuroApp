@@ -23,7 +23,6 @@ export class InvoiceColumnComponent {
   constructor(
     private overlay: Overlay
   ) {
-
   }
 
   get lines() {
