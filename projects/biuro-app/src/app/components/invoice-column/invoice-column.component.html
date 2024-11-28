@@ -1,14 +1,24 @@
-<button mat-button (click)="onEdit();  $event.stopPropagation()" (mouseenter)="showTooltip(tooltipTemplate, $event)"
-    (mouseleave)="hideTooltip()">F</button>
+<div class="container">
+    <button mat-icon-button (click)="onEdit()">
+        <mat-icon>{{ monthly.invoices[0] ? 'edit': 'add' }}</mat-icon>
+    </button>
 
-<ng-template #tooltipTemplate>
-    <mat-list>
-        @for(line of lines; track line.description) {
-        <mat-list-item>
-            <span matListItemTitle>{{line.description}}</span>
-            <span matListItemLine>{{line.price}} ({{line.qtty}})</span>
-        </mat-list-item>
-        }
-    </mat-list>
+    @if(monthly.invoices[0]) {
+    <div class="lines-container">
+        <div *ngIf="monthly.invoices[0].lines[0]" class="line">{{monthly.invoices[0].lines[0].description}}(
+            {{monthly.invoices[0].lines[0].price}})</div>
+        <div *ngIf="monthly.invoices[0].lines[1]" class="line">{{monthly.invoices[0].lines[1].description}}( -
+            {{monthly.invoices[0].lines[1].price}})</div>
+    </div>
 
-</ng-template>
+    <div class="checkbox-container">
+        <div class="paid-container">
+            <mat-icon [ngStyle]="{'color': !monthly.invoices[0].paidDate ? 'red' : 'white'}">paid</mat-icon>
+        </div>
+        <div class="send-container">
+            <mat-icon [ngStyle]="{'color': !monthly.invoices[0].sendDate ? 'red' : 'white'}">send</mat-icon>
+        </div>
+    </div>
+    }
+
+</div>

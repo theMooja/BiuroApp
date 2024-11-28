@@ -69,8 +69,10 @@ export interface IUserEntity {
 }
 
 export interface IInvoiceEntity {
-    id: number,
+    id?: number,
     no: string,
+    sendDate?: Date,
+    paidDate?: Date,
     lines: IInvoiceLineEntity[],
 }
 

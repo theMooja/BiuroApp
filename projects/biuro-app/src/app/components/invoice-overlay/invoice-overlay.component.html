@@ -4,6 +4,18 @@
             <mat-label>Numer</mat-label>
             <input matInput placeholder="numer" formControlName="no">
         </mat-form-field>
+        <mat-form-field>
+            <mat-label>Data wystawienia</mat-label>
+            <input matInput [matDatepicker]="sendDatePicker" placeholder="Data wystawienia" formControlName="sendDate">
+            <mat-datepicker-toggle matSuffix [for]="sendDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #sendDatePicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Data zapłaty</mat-label>
+            <input matInput [matDatepicker]="paidDatePicker" placeholder="Data zapłaty" formControlName="paidDate">
+            <mat-datepicker-toggle matSuffix [for]="paidDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #paidDatePicker></mat-datepicker>
+        </mat-form-field>
         <div formArrayName="lines">
             <div *ngFor="let line of lines.controls; let i = index" [formGroupName]="i">
                 <input formControlName="id" type="hidden" />
