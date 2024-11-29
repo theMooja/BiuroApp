@@ -235,6 +235,14 @@ const createListValues = async function (data: any) {
         text: 'skanowanie',
         target: ListValueTargets.STEP_DESC,
     });
+    await repo.save({
+        text: 'pracownicy',
+        target: ListValueTargets.REPORT,
+    });
+    await repo.save({
+        text: 'klienci',
+        target: ListValueTargets.REPORT,
+    });
 }
 
 export default {

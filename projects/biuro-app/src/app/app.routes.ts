@@ -7,12 +7,14 @@ import { LoginComponent } from './view/login/login.component';
 import { MinimalComponent } from './view/minimal/minimal.component';
 import { userResolver } from './service/user-data.service';
 import { lastUserNameResolver } from './service/local-storage.service';
+import { ReportsComponent } from './view/reports/reports.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'settings', component: SettingsComponent },
     { path: 'marchSetup', component: MarchSetupComponent },
     { path: 'userSetup', component: UserSetupComponent },
+    { path: 'reports', component: ReportsComponent },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     {
         path: 'login', component: LoginComponent, resolve: {

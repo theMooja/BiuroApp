@@ -11,6 +11,7 @@ import { InvoiceEntity } from "./entity/Invoice";
 import { ListValueEntity } from "./entity/ListValue";
 import * as settings from 'electron-settings';
 import { NoteEntity } from "./entity/Note";
+import { ReportEntity } from "./entity/Report";
 
 
 export const setIPCHandlers = () => {
@@ -34,6 +35,8 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Monthly:updateInfo', (e, data) => MonthlyController.updateInfo(data));
 
   ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
+
+  ipcMain.handle('db:Report:generate', (e, name, data) => ReportController.generateReport(name, data));
 }
 
 export const MonthlyController = {
@@ -248,5 +251,19 @@ export const ListValuesController = {
         target: target
       }
     });
+  }
+}
+
+export const ReportController = {
+  async generateReport(name: string, data: any) {
+    console.log('----------------------generating report', name, data);
+
+    let repo = AppDataSource.getRepository(ReportEntity);
+    let report = new ReportEntity();
+    report.name = name;
+    report.type = data.type;
+    report.input = JSON.stringify(data);
+    report.output = '';
+    await repo.save(report);
   }
 }

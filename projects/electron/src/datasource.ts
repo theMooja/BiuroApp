@@ -8,6 +8,7 @@ import { InvoiceEntity } from './entity/Invoice';
 import { InvoiceLineEntity } from './entity/InvoiceLine';
 import { ListValueEntity } from './entity/ListValue';
 import { NoteEntity } from './entity/Note';
+import { ReportEntity } from './entity/Report';
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -18,7 +19,7 @@ export const AppDataSource = new DataSource({
   database: "biuro",
   synchronize: true,
   logging: true,
-  entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity, InvoiceEntity, InvoiceLineEntity, ListValueEntity, NoteEntity],
+  entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity, InvoiceEntity, InvoiceLineEntity, ListValueEntity, NoteEntity, ReportEntity],
   subscribers: [],
   migrations: [],
 });

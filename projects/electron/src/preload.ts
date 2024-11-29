@@ -28,6 +28,8 @@ const contextBridgeApi = {
   addStopper: (march: IMarchEntity, time: number, from: Date) => ipcRenderer.invoke('db:March:addStopper', march, time, from),
 
   saveInvoice: (invoice: IInvoiceEntity) => ipcRenderer.invoke('db:Invoice:saveInvoice', invoice),
+
+  generateReport: (name: string, data: any) => ipcRenderer.invoke('db:Report:generate', name, data),
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);

@@ -7,12 +7,17 @@
             </button>
         </div>
         <div class="button-container">
+            <button mat-fab aria-label="reports" routerLink="/reports">
+                <mat-icon>summarize</mat-icon>
+            </button>
+        </div>
+        <div class="button-container">
             <button mat-fab aria-label="settings" routerLink="/settings">
                 <mat-icon>settings</mat-icon>
             </button>
         </div>
         <div class="button-container">
-            <button mat-fab aria-label="settings" (click)="onMinimize()" routerLink="/minimal">
+            <button mat-fab aria-label="minimize" (click)="onMinimize()" routerLink="/minimal">
                 <mat-icon>minimize</mat-icon>
             </button>
         </div>
