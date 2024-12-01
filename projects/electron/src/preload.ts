@@ -29,7 +29,7 @@ const contextBridgeApi = {
 
   saveInvoice: (invoice: IInvoiceEntity) => ipcRenderer.invoke('db:Invoice:saveInvoice', invoice),
 
-  generateReport: (name: string, data: any) => ipcRenderer.invoke('db:Report:generate', name, data),
+  generateReport: (type: string, name: string, data: any) => ipcRenderer.invoke('db:Report:generate', type, name, data),
   getHeaders: () => ipcRenderer.invoke('db:Report:getHeaders'),
   getReport: (report: IReportHeader) => ipcRenderer.invoke('db:Report:getReport', report),
 }

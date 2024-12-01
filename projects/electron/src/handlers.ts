@@ -35,7 +35,7 @@ export const setIPCHandlers = () => {
 
   ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
 
-  ipcMain.handle('db:Report:generate', (e, name, data) => ReportController.generateReport(name, data));
+  ipcMain.handle('db:Report:generate', (e, type, name, data) => ReportController.generateReport(type, name, data));
   ipcMain.handle('db:Report:getReport', (e, header) => ReportController.getReport(header));
   ipcMain.handle('db:Report:getHeaders', (e) => ReportController.getHeaders());
 }
@@ -256,12 +256,12 @@ export const ListValuesController = {
 }
 
 export const ReportController = {
-  async generateReport(name: string, data: any): Promise<IReportHeader> {
+  async generateReport(type: string, name: string, data: any): Promise<IReportHeader> {
 
     let repo = AppDataSource.getRepository(ReportEntity);
     let report = new ReportEntity();
     report.name = name;
-    report.type = data.type;
+    report.type = type;
     report.input = JSON.stringify(data);
     report.output = '';
 
