@@ -263,7 +263,7 @@ export const ReportController = {
     report.name = name;
     report.type = type;
     report.input = JSON.stringify(data);
-    report.output = '';
+    report.output = await this.generateReportOutput(type, data);
 
     return await repo.save(report);
   },
@@ -277,5 +277,75 @@ export const ReportController = {
   async getHeaders(): Promise<IReportHeader[]> {
     let repo = AppDataSource.getRepository(ReportEntity);
     return await repo.find();
+  },
+
+  async generateReportOutput(reportType: string, input: any): Promise<string> {
+    switch (reportType) {
+      case 'pracownicy':
+        return await this.generateEmployeesReportOutput(input);
+
+      default:
+        return '';
+    }
+
+  },
+
+  async generateEmployeesReportOutput(input: any): Promise<string> {
+    let output: { [user: string]: { sum: number, entries: { client: string, stepName: string, time: number, value: number }[] } };
+
+    let data = await AppDataSource.getRepository(StopperEntity).createQueryBuilder('s')
+      .leftJoinAndSelect('s.user', 'u')
+      .leftJoinAndSelect('s.march', 'm')
+      .leftJoinAndSelect('m.monthly', 'o')
+      .leftJoinAndSelect('o.client', 'c')
+      .where('o.month = :month', { month: input.month })
+      .andWhere('o.year = :year', { year: input.year })
+      .getMany();
+
+    let monthlyEntities = await AppDataSource.getRepository(MonthlyEntity).createQueryBuilder('m')
+      .leftJoinAndSelect('m.marches', 'a')
+      .leftJoinAndSelect('m.invoices', 'i')
+      .leftJoinAndSelect('i.lines', 'l')
+      .where('m.month = :month', { month: input.month })
+      .andWhere('m.year = :year', { year: input.year })
+      .getMany();
+
+    let monthlies = monthlyEntities.map((val) => {
+      let weigthSum = val.marches.reduce((acc, val) => acc + val.weight, 0);
+      let invSum = val.invoices.reduce((acc, val) => acc + val.lines.reduce(
+        (acc, val) => acc + val.price, 0), 0);
+
+      return {
+        monthlyId: val.id,
+        weigthSum: weigthSum,
+        invSum: invSum
+      }
+    });
+
+    output = data.reduce((acc, val) => {
+      if (!acc[val.user.name]) {
+        acc[val.user.name] = { sum: 0, entries: [] };
+      }
+      let monthly = monthlies.find(m => m.monthlyId == val.march.monthly.id);
+      let weightSum = monthly.weigthSum;
+      let value = (val.march.weight / weightSum) * monthly.invSum;
+
+      acc[val.user.name].sum += value;
+
+      acc[val.user.name].entries.push({
+        client: val.march.monthly.client.name,
+        stepName: val.march.name,
+        time: val.seconds,
+        value: value
+      });
+
+      return acc;
+    }, {} as { [user: string]: { sum: number, entries: { client: string, stepName: string, time: number, value: number }[] } });
+
+    console.log('-------------------------');
+    console.log(input);
+    console.table(output)
+
+    return JSON.stringify(output);
   }
 }

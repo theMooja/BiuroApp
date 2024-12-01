@@ -8,7 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { EmployeesDialogComponent } from '../../report/employees/employees-dialog/employees-dialog.component';
+import { EmployeesReportDialogComponent } from '../../report/employees/employees-dialog/employees-report-dialog.component';
 
 @Component({
   selector: 'app-reports',
@@ -36,7 +36,7 @@ export class ReportsComponent {
 
     switch (reportType) {
       case 'pracownicy':
-        const dialogRef = this.matDialog.open(EmployeesDialogComponent, {
+        const dialogRef = this.matDialog.open(EmployeesReportDialogComponent, {
 
         });
         dialogRef.afterClosed().subscribe(result => {

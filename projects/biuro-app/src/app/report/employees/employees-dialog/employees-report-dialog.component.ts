@@ -9,15 +9,15 @@ import { MatInputModule } from '@angular/material/input';
 
 
 @Component({
-  selector: 'app-employees-dialog',
+  selector: 'app-employees-report-dialog',
   standalone: true,
   imports: [MatDialogModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
-  templateUrl: './employees-dialog.component.html',
-  styleUrl: './employees-dialog.component.scss',
+  templateUrl: './employees-report-dialog.component.html',
+  styleUrl: './employees-report-dialog.component.scss',
   providers: []
 })
-export class EmployeesDialogComponent {
-  readonly dialogRef = inject(MatDialogRef<EmployeesDialogComponent>);
+export class EmployeesReportDialogComponent {
+  readonly dialogRef = inject(MatDialogRef<EmployeesReportDialogComponent>);
   readonly date = new FormControl();
   readonly name = new FormControl();
   dateFormat = 'MM/YYYY';
