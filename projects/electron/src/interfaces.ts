@@ -89,3 +89,15 @@ export interface IListValue {
     target: string,
     sequence: number
 }
+
+export interface IReportHeader {
+    id?: number,
+    type: string,
+    name: string,
+    isLoading?: number
+}
+
+export interface IReport extends IReportHeader {
+    input: string,
+    output: string
+}

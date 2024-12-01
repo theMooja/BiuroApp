@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IStopperEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, IUserEntity } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
@@ -12,7 +12,6 @@ import { ListValueEntity } from "./entity/ListValue";
 import * as settings from 'electron-settings';
 import { NoteEntity } from "./entity/Note";
 import { ReportEntity } from "./entity/Report";
-
 
 export const setIPCHandlers = () => {
   ipcMain.handle('db:listValues', (e, target) => ListValuesController.get(target));
@@ -37,6 +36,8 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
 
   ipcMain.handle('db:Report:generate', (e, name, data) => ReportController.generateReport(name, data));
+  ipcMain.handle('db:Report:getReport', (e, header) => ReportController.getReport(header));
+  ipcMain.handle('db:Report:getHeaders', (e) => ReportController.getHeaders());
 }
 
 export const MonthlyController = {
@@ -255,8 +256,7 @@ export const ListValuesController = {
 }
 
 export const ReportController = {
-  async generateReport(name: string, data: any) {
-    console.log('----------------------generating report', name, data);
+  async generateReport(name: string, data: any): Promise<IReportHeader> {
 
     let repo = AppDataSource.getRepository(ReportEntity);
     let report = new ReportEntity();
@@ -264,6 +264,18 @@ export const ReportController = {
     report.type = data.type;
     report.input = JSON.stringify(data);
     report.output = '';
-    await repo.save(report);
+
+    return await repo.save(report);
+  },
+
+  async getReport(report: IReportHeader): Promise<IReport> {
+    let repo = AppDataSource.getRepository(ReportEntity);
+    let reportEntity = await repo.findOneBy({ id: report.id });
+    return reportEntity;
+  },
+
+  async getHeaders(): Promise<IReportHeader[]> {
+    let repo = AppDataSource.getRepository(ReportEntity);
+    return await repo.find();
   }
 }

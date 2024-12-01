@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { IClientEntity, IInvoiceEntity, IMarchEntity, IMonthlyEntity, INoteEntity, IStopperEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IInvoiceEntity, IMarchEntity, IMonthlyEntity, INoteEntity, IReportHeader, IStopperEntity, IUserEntity } from "./interfaces";
 
 
 const contextBridgeApi = {
@@ -30,6 +30,8 @@ const contextBridgeApi = {
   saveInvoice: (invoice: IInvoiceEntity) => ipcRenderer.invoke('db:Invoice:saveInvoice', invoice),
 
   generateReport: (name: string, data: any) => ipcRenderer.invoke('db:Report:generate', name, data),
+  getHeaders: () => ipcRenderer.invoke('db:Report:getHeaders'),
+  getReport: (report: IReportHeader) => ipcRenderer.invoke('db:Report:getReport', report),
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);

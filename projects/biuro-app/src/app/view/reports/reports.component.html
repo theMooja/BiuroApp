@@ -1,6 +1,7 @@
-<ng-container>
-    <mat-toolbar class="toolbar">
-        <button mat-button [matMenuTriggerFor]="leftMenu">dodaj</button>
+<mat-sidenav-container class="sidenav-container">
+
+    <mat-sidenav mode="side" disableClose="false" opened fixedInViewport="true">
+        <button class="open-button" mat-raised-button [matMenuTriggerFor]="leftMenu">dodaj</button>
         <mat-menu #leftMenu="matMenu">
             @for(val of reportNames; track val){
             <div mat-menu-item (mouseup)="onAdd(val)">{{val}}</div>
@@ -8,8 +9,16 @@
 
         </mat-menu>
 
-        <span class="spacer"></span>
+        <mat-nav-list>
+            @for(val of reportHeaders; track val){
+            @if(val) {<a mat-list-item (mouseup)="onOpen(val)" [disabled]="!!val.isLoading">{{val.name}}</a>}
+            }
+        </mat-nav-list>
+    </mat-sidenav>
 
-    </mat-toolbar>
-
-</ng-container>
+    <mat-sidenav-content class="sidenav-content">
+        @if (activeReport) {
+        <button mat-fab aria-label="close">asdasdasdasdasdasdasdasdasdasdasdasd</button>
+        }
+    </mat-sidenav-content>
+</mat-sidenav-container>
