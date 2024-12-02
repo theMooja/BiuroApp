@@ -7,7 +7,7 @@ import { StopperEntity } from './entity/Stopper';
 import { InvoiceEntity } from './entity/Invoice';
 import { InvoiceLineEntity } from './entity/InvoiceLine';
 import { ListValueEntity } from './entity/ListValue';
-import { ListValueTargets } from './interfaces';
+import { ListValueTargets, StepType } from './interfaces';
 
 
 const clearDB = async function () {
@@ -107,7 +107,7 @@ const createMarches = async function (data: any) {
         monthly: data.c1monthly1,
         name: 's1',
         sequence: 1,
-        weight: 1,
+        weight: 5,
         value: 0
     });
 
@@ -115,7 +115,7 @@ const createMarches = async function (data: any) {
         monthly: data.c1monthly1,
         name: 's2',
         sequence: 2,
-        weight: 1,
+        weight: 2,
         value: 0
     });
 
@@ -123,8 +123,17 @@ const createMarches = async function (data: any) {
         monthly: data.c1monthly1,
         name: 's3',
         sequence: 3,
-        weight: 1,
+        weight: 2,
         value: 0
+    });
+
+    data.c1m1march3 = await repo.save({
+        monthly: data.c1monthly1,
+        name: 's4h',
+        sequence: 3,
+        weight: 1,
+        value: 0,
+        type: StepType.HIDDEN
     });
 
     data.c2m1march1 = await repo.save({
@@ -187,10 +196,31 @@ const createStoppers = async function (data: any) {
         from: new Date()
     });
 
-    data.stopper2 = await repo.save({
+    data.stopper12 = await repo.save({
+        user: data.user1,
+        march: data.c1m1march1,
+        seconds: 45 * 60,
+        from: new Date()
+    });
+
+    data.stopper13 = await repo.save({
+        user: data.user1,
+        march: data.c1m1march1,
+        seconds: -10 * 60,
+        from: new Date()
+    });
+
+    data.stopper21 = await repo.save({
         user: data.user2,
         march: data.c1m1march2,
         seconds: 15 * 60,
+        from: new Date()
+    });
+
+    data.stopper22 = await repo.save({
+        user: data.user2,
+        march: data.c1m1march1,
+        seconds: 50 * 60,
         from: new Date()
     });
 }

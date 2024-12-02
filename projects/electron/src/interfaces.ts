@@ -101,3 +101,15 @@ export interface IReport extends IReportHeader {
     input: string,
     output: string
 }
+
+export interface IEmployeesReportOutput {
+    [user: string]: {
+        sumValue: number,
+        entries: {
+            client: string,
+            stepName: string,
+            time: number,
+            value: number
+        }[]
+    }
+}

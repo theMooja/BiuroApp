@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, IUserEntity } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
@@ -263,7 +263,8 @@ export const ReportController = {
     report.name = name;
     report.type = type;
     report.input = JSON.stringify(data);
-    report.output = await this.generateReportOutput(type, data);
+    let output = await this.generateReportOutput(type, data);
+    report.output = JSON.stringify(output);
 
     return await repo.save(report);
   },
@@ -290,8 +291,7 @@ export const ReportController = {
 
   },
 
-  async generateEmployeesReportOutput(input: any): Promise<string> {
-    let output: { [user: string]: { sum: number, entries: { client: string, stepName: string, time: number, value: number }[] } };
+  async generateEmployeesReportOutput(input: any): Promise<IEmployeesReportOutput> {
 
     let data = await AppDataSource.getRepository(StopperEntity).createQueryBuilder('s')
       .leftJoinAndSelect('s.user', 'u')
@@ -322,30 +322,36 @@ export const ReportController = {
       }
     });
 
-    output = data.reduce((acc, val) => {
+    let output = data.reduce((acc, val) => {
       if (!acc[val.user.name]) {
-        acc[val.user.name] = { sum: 0, entries: [] };
+        acc[val.user.name] = { sumValue: 0, entries: [] };
       }
       let monthly = monthlies.find(m => m.monthlyId == val.march.monthly.id);
       let weightSum = monthly.weigthSum;
       let value = (val.march.weight / weightSum) * monthly.invSum;
 
-      acc[val.user.name].sum += value;
+      acc[val.user.name].sumValue += value;
 
-      acc[val.user.name].entries.push({
-        client: val.march.monthly.client.name,
-        stepName: val.march.name,
-        time: val.seconds,
-        value: value
-      });
+      let entry = acc[val.user.name].entries.find(e => e.client == val.march.monthly.client.name && e.stepName == val.march.name);
+      if (entry) {
+        entry.time += val.seconds;
+        entry.value += value;
+      } else {
+        acc[val.user.name].entries.push({
+          client: val.march.monthly.client.name,
+          stepName: val.march.name,
+          time: val.seconds,
+          value: value
+        });
+      }
 
       return acc;
-    }, {} as { [user: string]: { sum: number, entries: { client: string, stepName: string, time: number, value: number }[] } });
+    }, {} as IEmployeesReportOutput);
 
     console.log('-------------------------');
     console.log(input);
     console.table(output)
 
-    return JSON.stringify(output);
+    return output;
   }
 }
