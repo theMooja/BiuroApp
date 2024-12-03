@@ -322,35 +322,48 @@ export const ReportController = {
       }
     });
 
-    let output = data.reduce((acc, val) => {
-      if (!acc[val.user.name]) {
-        acc[val.user.name] = { sumValue: 0, entries: [] };
-      }
-      let monthly = monthlies.find(m => m.monthlyId == val.march.monthly.id);
-      let weightSum = monthly.weigthSum;
-      let value = (val.march.weight / weightSum) * monthly.invSum;
-
-      acc[val.user.name].sumValue += value;
-
-      let entry = acc[val.user.name].entries.find(e => e.client == val.march.monthly.client.name && e.stepName == val.march.name);
-      if (entry) {
-        entry.time += val.seconds;
-        entry.value += value;
+    let marches = data.reduce((acc, stopper) => {
+      let march = acc.find(m => m.marchId === stopper.march.id);
+      if (!march) {
+        acc.push({
+          marchId: stopper.march.id,
+          sumTime: stopper.seconds
+        });
       } else {
-        acc[val.user.name].entries.push({
-          client: val.march.monthly.client.name,
-          stepName: val.march.name,
-          time: val.seconds,
-          value: value
+        march.sumTime += stopper.seconds;
+      }
+      return acc;
+    }, [] as { marchId: number, sumTime: number }[]);
+
+    let output = data.reduce((acc, stopper) => {
+      if (!acc[stopper.user.name]) {
+        acc[stopper.user.name] = { sumValue: 0, entries: [] };
+      }
+      let monthly = monthlies.find(m => m.monthlyId == stopper.march.monthly.id);
+      let weightSum = monthly.weigthSum;
+      let marchValue = (stopper.march.weight / weightSum) * monthly.invSum;
+      let stopperTimeSum = marches.find(m => m.marchId == stopper.march.id).sumTime;
+      let stopperValue = (stopper.seconds / stopperTimeSum) * marchValue;
+
+      acc[stopper.user.name].sumValue += stopperValue;
+
+      let entry = acc[stopper.user.name].entries
+        .find(e => e.client == stopper.march.monthly.client.name && e.stepName == stopper.march.name);
+
+      if (entry) {
+        entry.time += stopper.seconds;
+        entry.value += stopperValue;
+      } else {
+        acc[stopper.user.name].entries.push({
+          client: stopper.march.monthly.client.name,
+          stepName: stopper.march.name,
+          time: stopper.seconds,
+          value: stopperValue
         });
       }
 
       return acc;
     }, {} as IEmployeesReportOutput);
-
-    console.log('-------------------------');
-    console.log(input);
-    console.table(output)
 
     return output;
   }

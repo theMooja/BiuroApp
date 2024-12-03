@@ -1,6 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
 
-    <mat-sidenav mode="side" disableClose="false" opened fixedInViewport="true">
+    <mat-sidenav class="sidenav-nav" mode="side" disableClose="false" opened fixedInViewport="true">
         <button class="open-button" mat-raised-button [matMenuTriggerFor]="leftMenu">dodaj</button>
         <mat-menu #leftMenu="matMenu">
             @for(val of reportNames; track val){
@@ -17,8 +17,11 @@
     </mat-sidenav>
 
     <mat-sidenav-content class="sidenav-content">
-        @if (activeReport) {
-        <button mat-fab aria-label="close">asdasdasdasdasdasdasdasdasdasdasdasd</button>
+        @if (!activeReport) {
+            Wybierz raport
+        }
+        @else if (activeReport.type === 'pracownicy') {
+        <app-employees-report [report]="activeReport"></app-employees-report>
         }
     </mat-sidenav-content>
 </mat-sidenav-container>

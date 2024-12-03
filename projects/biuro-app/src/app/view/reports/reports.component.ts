@@ -9,11 +9,12 @@ import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { EmployeesReportDialogComponent } from '../../report/employees/employees-dialog/employees-report-dialog.component';
+import { EmployeesReportComponent } from '../../report/employees/employees-report/employees-report.component';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [MatSidenavModule, MatIconModule, MatMenuModule, MatListModule, CommonModule],
+  imports: [MatSidenavModule, MatIconModule, MatMenuModule, MatListModule, CommonModule, EmployeesReportComponent],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })

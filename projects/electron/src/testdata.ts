@@ -127,7 +127,7 @@ const createMarches = async function (data: any) {
         value: 0
     });
 
-    data.c1m1march3 = await repo.save({
+    data.c1m1march4 = await repo.save({
         monthly: data.c1monthly1,
         name: 's4h',
         sequence: 3,
@@ -206,6 +206,13 @@ const createStoppers = async function (data: any) {
     data.stopper13 = await repo.save({
         user: data.user1,
         march: data.c1m1march1,
+        seconds: -10 * 60,
+        from: new Date()
+    });
+
+    data.stopper14 = await repo.save({
+        user: data.user1,
+        march: data.c1m1march3,
         seconds: -10 * 60,
         from: new Date()
     });
