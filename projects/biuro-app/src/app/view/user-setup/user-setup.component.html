@@ -18,6 +18,13 @@
                     </mat-error>
                 </mat-form-field>
 
+                <mat-form-field appearance="fill" class="user-field">
+                    <mat-label>Uprawnienia</mat-label>
+                    <mat-select formControlName="permission" >
+                        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
                 <button mat-icon-button color="warn" (click)="saveUser(i)">
                     <mat-icon>save</mat-icon>
                 </button>

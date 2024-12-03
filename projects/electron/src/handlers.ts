@@ -198,6 +198,8 @@ export const UserController = {
     }
     user.name = data.name;
     user.password = data.password;
+    user.permission = data.permission;
+    
     await user.save();
   }
 }

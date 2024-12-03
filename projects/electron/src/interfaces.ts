@@ -3,6 +3,11 @@ export enum StepType {
     HIDDEN = 'hidden'
 }
 
+export enum Permission {
+    FULL = "Pełny dostęp",
+    PARTIAL = "Ograniczony dostęp"
+}
+
 export enum ListValueTargets {
     INVOICE_DESC = 'invoice_description',
     STEP_DESC = 'step_description',
@@ -67,6 +72,7 @@ export interface IUserEntity {
     password: string,
     stoppers: IStopperEntity[],
     notes: INoteEntity[],
+    permission: Permission
 }
 
 export interface IInvoiceEntity {

@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { pl } from 'date-fns/locale';
 import { setDefaultOptions } from 'date-fns';
 import { DateAdapter } from '@angular/material/core';
+import { UserDataService } from './service/user-data.service';
+import { Permission } from '../../../electron/src/interfaces';
 
 
 @Component({
@@ -15,12 +17,14 @@ import { DateAdapter } from '@angular/material/core';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  Permission = Permission;
   title = 'BiuroApp';
   isLogin: boolean = true;
   isMinimized: boolean = true;
 
   constructor(private readonly dateAdapter: DateAdapter<any>,
-    private router: Router
+    private router: Router,
+    private userService: UserDataService
   ) {
     setDefaultOptions({ locale: pl });
     dateAdapter.setLocale(pl);
@@ -28,9 +32,13 @@ export class AppComponent {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
         this.isLogin = event.urlAfterRedirects === '/login';
-        this.isMinimized = event.urlAfterRedirects ==='/minimal';
+        this.isMinimized = event.urlAfterRedirects === '/minimal';
       }
     });
+  }
+
+  get user() {
+    return this.userService.user;
   }
 
   onMinimize() {
