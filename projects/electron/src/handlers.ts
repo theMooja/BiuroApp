@@ -38,6 +38,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Report:generate', (e, type, name, data) => ReportController.generateReport(type, name, data));
   ipcMain.handle('db:Report:getReport', (e, header) => ReportController.getReport(header));
   ipcMain.handle('db:Report:getHeaders', (e) => ReportController.getHeaders());
+  ipcMain.handle('db:Report:removeReport', (e, report) => ReportController.removeReport(report));
 }
 
 export const MonthlyController = {
@@ -280,6 +281,14 @@ export const ReportController = {
     return await repo.find();
   },
 
+  async removeReport(report: IReportHeader) {
+    let repo = AppDataSource.getRepository(ReportEntity);
+    let entity = await repo.findOneBy({ id: report.id });
+    if (entity) {
+      await repo.remove(entity);
+    }
+  },
+
   async generateReportOutput(reportType: string, input: any): Promise<string> {
     switch (reportType) {
       case 'pracownicy':
@@ -367,4 +376,6 @@ export const ReportController = {
 
     return output;
   }
+
+
 }

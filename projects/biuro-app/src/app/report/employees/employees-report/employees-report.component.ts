@@ -20,8 +20,4 @@ export class EmployeesReportComponent {
   get data() {
     return JSON.parse(this.report.output) as IEmployeesReportOutput;
   }
-
-  test() {
-    console.log(this.data);
-  }
 }

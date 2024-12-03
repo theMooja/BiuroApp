@@ -32,6 +32,7 @@ const contextBridgeApi = {
   generateReport: (type: string, name: string, data: any) => ipcRenderer.invoke('db:Report:generate', type, name, data),
   getHeaders: () => ipcRenderer.invoke('db:Report:getHeaders'),
   getReport: (report: IReportHeader) => ipcRenderer.invoke('db:Report:getReport', report),
+  removeReport: (report: IReportHeader) => ipcRenderer.invoke('db:Report:removeReport', report),
 }
 
 contextBridge.exposeInMainWorld('electron', contextBridgeApi);

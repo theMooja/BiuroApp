@@ -10,11 +10,13 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { EmployeesReportDialogComponent } from '../../report/employees/employees-dialog/employees-report-dialog.component';
 import { EmployeesReportComponent } from '../../report/employees/employees-report/employees-report.component';
+import { MatButtonModule } from '@angular/material/button';
+import { ConfirmationDialogComponent } from '../../utils/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [MatSidenavModule, MatIconModule, MatMenuModule, MatListModule, CommonModule, EmployeesReportComponent],
+  imports: [MatSidenavModule, MatIconModule, MatMenuModule, MatListModule, CommonModule, EmployeesReportComponent, MatButtonModule],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
@@ -24,7 +26,7 @@ export class ReportsComponent {
   reportHeaders: IReportHeader[];
   loadingIdx: number = 0;
 
-  constructor(private listValuesService: ListValuesService, private reportService: ReportsService, private matDialog: MatDialog) {
+  constructor(private dialog: MatDialog, private listValuesService: ListValuesService, private reportService: ReportsService, private matDialog: MatDialog) {
 
   }
 
@@ -44,7 +46,7 @@ export class ReportsComponent {
           this.onGenerate(reportType, result);
         });
     }
-    
+
   }
 
   onGenerate(reportType: string, data: any) {
@@ -67,5 +69,19 @@ export class ReportsComponent {
 
   async onOpen(report: IReportHeader) {
     this.activeReport = await this.reportService.getReport(report);
+  }
+
+  async onRemove(report: IReportHeader) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: { title: 'Wiesz co robisz?', message: 'Usunąć ten raport?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.reportService.removeReport(report);
+        this.reportHeaders.splice(this.reportHeaders.indexOf(report), 1);
+      }
+    });
   }
 }
