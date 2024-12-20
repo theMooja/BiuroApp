@@ -17,6 +17,7 @@ export enum ListValueTargets {
 export interface IClientEntity {
     id: number;
     name: string;
+    isActive: true;
     monthlies: IMonthlyEntity[];
 }
 
