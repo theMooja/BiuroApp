@@ -78,6 +78,7 @@ export class HomeComponent {
         case 'VAT': return item.info.VAT;
         case 'ZUS': return item.info.ZUS;
         case 'skladki': return item.info.skladki;
+        case 'marchValues': return item.currentStep;
         default: return item[property];
       }
     }

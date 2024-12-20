@@ -38,7 +38,7 @@ export class MarchColumnComponent {
   constructor(private marchDataService: MarchDataService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.currentStep = this.findLastStep();
+    this.onStepSelected(this.findLastStep());
 
     this.marchDataService.runningMarch$.subscribe(x => this.marchStarted(x))
   }
@@ -109,12 +109,13 @@ export class MarchColumnComponent {
 
   onStepSelected(val: IMarchEntity) {
     this.currentStep = val;
+    this.monthly.currentStep = val.name;
   }
 
   tryCurrentStep(name?: string) {
     if (name) {
       let step = this.monthly.marches.find(x => x.name === name);
-      step && (this.currentStep = step);
+      step && this.onStepSelected(step);
     } else {
       this.currentStep = this.findLastStep();
     }

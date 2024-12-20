@@ -29,6 +29,7 @@ export interface IMarchEntity {
     monthly: IMonthlyEntity;
     stoppers: IStopperEntity[];
     type: StepType;
+    
 }
 
 
@@ -46,7 +47,8 @@ export interface IMonthlyEntity {
     client: IClientEntity,
     marches: IMarchEntity[],
     invoices: IInvoiceEntity[],
-    notes: INoteEntity[]
+    notes: INoteEntity[],
+    currentStep?: string;
 }
 
 export interface INoteEntity {
