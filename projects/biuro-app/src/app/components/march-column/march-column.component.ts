@@ -79,8 +79,8 @@ export class MarchColumnComponent {
     clearInterval(this.intervalId);
     let seconds = differenceInSeconds(new Date(), this.startTime);
     let stopper = await this.marchDataService.addStopper(this.currentStep, seconds, this.startTime);
-    this.currentStep.stoppers.push(stopper);  
-    this.isRunning = false;  
+    this.currentStep.stoppers.push(stopper);
+    this.isRunning = false;
   }
 
   async onFifteen(e: MouseEvent) {
@@ -109,6 +109,15 @@ export class MarchColumnComponent {
 
   onStepSelected(val: IMarchEntity) {
     this.currentStep = val;
+  }
+
+  tryCurrentStep(name?: string) {
+    if (name) {
+      let step = this.monthly.marches.find(x => x.name === name);
+      step && (this.currentStep = step);
+    } else {
+      this.currentStep = this.findLastStep();
+    }
   }
 
   get stepValues() {

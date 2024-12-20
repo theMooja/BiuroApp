@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, Injector, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, Output, ViewChild, ViewChildren } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
-import { IClientEntity, IMonthlyEntity } from '../../../../../electron/src/interfaces';
+import { IClientEntity, IMonthlyEntity, StepType } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -14,7 +14,7 @@ import { MatCalendar, MatDatepicker, MatDatepickerToggle } from '@angular/materi
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule } from '@angular/cdk/menu';
-import { MatButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MarchColumnComponent } from '../../components/march-column/march-column.component';
@@ -25,6 +25,7 @@ import { DATA_INJECTION_TOKEN, InvoiceColumnComponent } from '../../components/i
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { EditInfoColumnsOverlayComponent } from '../../components/edit-info-columns-overlay/edit-info-columns-overlay.component';
+import { EventEmitter } from 'stream';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma'];
 
@@ -32,7 +33,7 @@ export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma
   selector: 'app-home',
   standalone: true,
   imports: [NotesComponent, MarchColumnComponent, MatSort, MatSortModule, MatRippleModule,
-    MatButton, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule,
+    MatButtonModule, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule,
     MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule,
     MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle, InvoiceColumnComponent],
   templateUrl: './home.component.html',
@@ -46,6 +47,7 @@ export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma
   ],
 })
 export class HomeComponent {
+  @ViewChildren(MarchColumnComponent) marchColumns: MarchColumnComponent[];
   tableData: MatTableDataSource<IMonthlyEntity>;
   expandedElement: IMonthlyEntity | null = null;
   selection = new SelectionModel<IMonthlyEntity>(true);
@@ -86,6 +88,26 @@ export class HomeComponent {
 
   get columns() {
     return ['name', ...this.infoColumns, 'notes', 'marchValues', 'invoices']
+  }
+
+  get allStepNames() {
+    const uniqueStepNames = new Set<string>();
+    for (let monthly of this.tableData.data) {
+      if (monthly.marches) {
+        for (let march of monthly.marches) {
+          if (march.type === StepType.HIDDEN) continue;
+          uniqueStepNames.add(march.name);
+        }
+      }
+    }
+
+    return Array.from(uniqueStepNames);
+  }
+
+  onMarchFilterChange(name?: string) {
+    for (let column of this.marchColumns) {
+      column.tryCurrentStep(name);
+    }
   }
 
   onSetMarch(element: IMonthlyEntity) {
@@ -134,7 +156,7 @@ export class HomeComponent {
   }
 
   async refreshMonthly(id: number) {
-    
+
     let newMonthly = await this.monthlyDataService.getMonthly(id);
     let idx = this.tableData.data.findIndex(x => x.id === id);
     let data = this.tableData.data;

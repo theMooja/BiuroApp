@@ -27,44 +27,45 @@
   <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
 
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"
         (dblclick)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
         {{element.client.name}} </mat-cell>
     </ng-container>
     <!-- info columns -->
     <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
         (contextmenu)="onInfoColumnRightClick('email')"> eMail </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ZUS">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
         (contextmenu)="onInfoColumnRightClick('ZUS')"> ZUS </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.ZUS}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="VAT">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
         (contextmenu)="onInfoColumnRightClick('VAT')"> VAT </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.VAT}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="forma">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
         (contextmenu)="onInfoColumnRightClick('forma')"> forma </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.forma}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="skladki">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
         (contextmenu)="onInfoColumnRightClick('skladki')"> składki </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.skladki}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="firma">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="outer"
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
         (contextmenu)="onInfoColumnRightClick('firma')"> firma </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.info.firma}} </mat-cell>
     </ng-container>
@@ -85,10 +86,14 @@
     </ng-container>
 
     <ng-container matColumnDef="marchValues">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> March </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <march-column [monthly]="element"> </march-column>
-      </mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> March
+        <button mat-mini-fab [matMenuTriggerFor]="marchMenu" (click)="$event.stopPropagation()">
+          <mat-icon>filter</mat-icon>
+        </button>
+      </mat-header-cell>
+      <mat-cell *matCellDef=" let element">
+          <march-column [monthly]="element"> </march-column>
+          </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="expandedDetail">
@@ -108,7 +113,7 @@
     <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
   </mat-table>
 
-  <ng-template #outer>
+  <ng-template #infoColumnsMenu>
     <div class="column-menu" cdkMenu>
       @for(c of allInfoColumns; track c; let idx = $index) {
       <button mat-button class="column-menu-item" cdkMenuItem (click)="onColumnChange(c)"
@@ -118,4 +123,12 @@
     </div>
   </ng-template>
 
+  <mat-menu #marchMenu="matMenu">
+    <div class="march-menu" cdkMenu>
+      <button mat-menu-item class="march-menu-item" cdkMenuItem (click)="onMarchFilterChange()">Aktualne</button>
+      @for(c of allStepNames; track c; let idx = $index) {
+      <button mat-menu-item class="march-menu-item" cdkMenuItem (click)="onMarchFilterChange(c)">{{c}}</button>
+      }
+    </div>
+  </mat-menu>
 </ng-container>
