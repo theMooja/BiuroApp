@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
-import { IMonthlyEntity, IMarchEntity } from '../../../../../electron/src/interfaces';
+import { IMonthlyEntity, IMarchEntity, StepType } from '../../../../../electron/src/interfaces';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -95,9 +95,15 @@ export class MarchColumnComponent {
   }
 
   findLastStep(): IMarchEntity {
-    let idx = this.monthly.marches.findIndex(x => !x.value || x.value === 0);
-    if (idx === -1) idx = this.monthly.marches.length - 1;
-    return this.monthly.marches[idx];
+    let visible = this.monthly.marches
+      .filter(x => x.type !== StepType.HIDDEN);
+
+    let last = visible
+      .find(x => !x.value || x.value === 0);
+
+    if (last) return last;
+    return visible
+      .sort((a, b) => b.sequence - a.sequence)[0];
   }
 
   onStepValueSelected(val: number) {
