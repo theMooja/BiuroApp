@@ -14,4 +14,10 @@ export class ClientDataService {
       this.data = await window.electron.getClients();
     return this.data;
   }
+
+  async saveClient(client: IClientEntity): Promise<IClientEntity> {
+    let saved = await window.electron.saveClient(client);
+    await this.getClients(true);
+    return saved;
+  }
 }

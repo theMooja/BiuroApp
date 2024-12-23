@@ -21,6 +21,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:User:setUser', (e, user) => UserController.setLoggedUser(user));
 
   ipcMain.handle('db:Client:getClients', (e) => ClientController.getClients());
+  ipcMain.handle('db:Client:saveClient', (e, client) => ClientController.saveClient(client));
 
   ipcMain.handle('db:March:updateMarchValue', (e, march) => MarchController.updateMarchValue(march));
   ipcMain.handle('db:March:addStopper', (e, march, seconds, from) => MarchController.addStopper(march, seconds, from));
@@ -235,6 +236,17 @@ export const ClientController = {
           isActive: true
         }
       });
+  }
+
+  async saveClient(client: IClientEntity) : Promise<IClientEntity> {
+    let repo = AppDataSource.getRepository(ClientEntity);
+    return await repo.save(client);
+    // if(client.id) {
+    //   let saved = await repo.update(client.id, client);
+    //   return saved;
+    // } else {
+      
+    // }
   }
 }
 

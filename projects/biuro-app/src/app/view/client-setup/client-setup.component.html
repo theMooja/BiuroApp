@@ -1,6 +1,7 @@
-<button mat-button [matMenuTriggerFor]="clientMenu"> Edit </button>
+<button mat-raised-button [matMenuTriggerFor]="clientMenu"> Edytuj </button>
+<button mat-raised-button (click)="onNew()"> Nowy </button>
 
-<form id="marchForm" [formGroup]="form"> 
+<form id="marchForm" [formGroup]="form">
     <mat-form-field>
         <mat-label>Id</mat-label>
         <input matInput formControlName="id" readonly>
@@ -9,12 +10,15 @@
         <mat-label>Nazwa</mat-label>
         <input matInput formControlName="name" required>
     </mat-form-field>
+    <mat-checkbox formControlName="isActive">Aktywny</mat-checkbox>
 </form>
+
+<button mat-raised-button (click)="onSave()" [disabled]="!form.valid">Zapisz</button>
 
 <mat-menu #clientMenu="matMenu">
     @for(client of clients; track client.id) {
-        <button mat-menu-item (click)="onEdit(client)">
-            <span>{{client.name}}</span>
-        </button>
+    <button mat-menu-item (click)="onEdit(client)">
+        <span>{{client.name}}</span>
+    </button>
     }
 </mat-menu>

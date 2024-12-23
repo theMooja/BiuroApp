@@ -15,6 +15,7 @@ const contextBridgeApi = {
   setUser: (user: IUserEntity) => ipcRenderer.invoke('db:User:setUser', user),
 
   getClients: () => ipcRenderer.invoke('db:Client:getClients'),
+  saveClient: (client: IClientEntity) => ipcRenderer.invoke('db:Client:saveClient', client),
 
   getMonthlies: (year: number, month: number) => ipcRenderer.invoke('db:Monthly:getMonthlies', year, month),
   getMonthly: (id: number) => ipcRenderer.invoke('db:Monthly:getMonthly', id),
