@@ -17,7 +17,7 @@ export enum ListValueTargets {
 export interface IClientEntity {
     id: number;
     name: string;
-    isActive: true;
+    isActive: boolean;
     monthlies: IMonthlyEntity[];
 }
 
@@ -30,7 +30,7 @@ export interface IMarchEntity {
     monthly: IMonthlyEntity;
     stoppers: IStopperEntity[];
     type: StepType;
-    
+    finishedAt: Date;
 }
 
 

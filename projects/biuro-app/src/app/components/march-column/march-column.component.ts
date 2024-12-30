@@ -99,10 +99,10 @@ export class MarchColumnComponent {
       .filter(x => x.type !== StepType.HIDDEN);
 
     let last = visible
-      .find(x => !x.value || x.value === 0);
+      .find(x => x.value === 0);
 
     if (last) return last;
-    return visible
+    return visible.slice()
       .sort((a, b) => b.sequence - a.sequence)[0];
   }
 
@@ -135,6 +135,6 @@ export class MarchColumnComponent {
   }
 
   get steps() {
-    return this.monthly.marches;
+    return this.monthly.marches.filter(m => m.type !== StepType.HIDDEN);
   }
 }

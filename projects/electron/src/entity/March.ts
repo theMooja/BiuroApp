@@ -44,6 +44,9 @@ export class MarchEntity extends BaseEntity {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column({ nullable: true })
+    finishedAt: Date;
 }
 
 

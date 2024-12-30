@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, IUserEntity } from "./interfaces";
+import { IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, IUserEntity, StepType } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
@@ -54,6 +54,7 @@ export const MonthlyController = {
       .leftJoinAndSelect('mar.stoppers', 'stop')
       .leftJoinAndSelect('m.notes', 'not')
       .where('m.month = :month AND m.year = :year', { month, year })
+      .orderBy('mar.sequence', 'ASC')
       .getMany();
   },
 
@@ -207,11 +208,17 @@ export const UserController = {
 
 export const MarchController = {
   async updateMarchValue(march: IMarchEntity) {
+    const update: Partial<MarchEntity> = {
+      value: march.value
+    };
+
+    if (march.type === StepType.WORK && march.value === 2) {
+      update.finishedAt = new Date();
+    }
+
     await AppDataSource
       .getRepository(MarchEntity)
-      .update(march.id, {
-        value: march.value
-      });
+      .update(march.id, update);
   },
 
   async addStopper(march: IMarchEntity, time: number, from: Date): Promise<IStopperEntity> {
