@@ -7,11 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MarchDataService } from '../../service/march-data.service';
 import { differenceInSeconds } from 'date-fns';
 import { SecondsToMMSSPipe } from '../../utils/seconds-to-mmss.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'march-column',
   standalone: true,
-  imports: [MatMenuModule, MatButtonModule, MatIconModule, SecondsToMMSSPipe],
+  imports: [MatMenuModule, MatButtonModule, MatIconModule, SecondsToMMSSPipe, CommonModule],
   templateUrl: './march-column.component.html',
   styleUrl: './march-column.component.scss'
 })
@@ -136,5 +137,27 @@ export class MarchColumnComponent {
 
   get steps() {
     return this.monthly.marches.filter(m => m.type !== StepType.HIDDEN);
+  }
+
+  getStepDescriptionClass(val: number) {
+    return 'step-desc-' + val;
+  }
+
+  getStepValueClass(val: number) {
+    return 'step-value-' + val;
+  }
+
+  getStepDescription(val: number) {
+    switch (val) {
+      case 0:
+        return 'Do zrobienia'
+      case 1:
+        return 'Nie ukończone'
+      case 2:
+        return 'Zrobione'
+      default:
+        return ''
+    }
+
   }
 }

@@ -6,3 +6,47 @@
     left: 0;
     visibility: hidden;
 }
+
+.round-gradient {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+$green: #23bb23;
+$yellow: #d0db34;
+$red: #db3434;
+
+
+.step-desc-2 {
+    background: radial-gradient(circle, $green, rgba($green, 0.3), rgba($green, 0.01));
+}
+
+.step-desc-1 {
+    background: radial-gradient(circle, $yellow, rgba($yellow, 0.3), rgba($yellow, 0.01));
+}
+
+.step-desc-0 {
+    background: radial-gradient(circle, $red, rgba($red, 0.3), rgba($red, 0.01));
+}
+
+.step-value-2 {
+    color: $green;
+}
+
+.step-value-1 {
+    color: $yellow;
+}
+
+.step-value-0 {
+    color: $red;
+}
+
+.content {
+    //color: white;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+}

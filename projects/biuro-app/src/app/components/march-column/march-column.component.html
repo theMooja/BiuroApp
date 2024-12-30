@@ -1,7 +1,8 @@
 <ng-container>
     @if (currentStep) {
     <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
-        (click)="$event.stopPropagation()" (contextmenu)="onRightClick($event)">
+        (click)="$event.stopPropagation()" (contextmenu)="onRightClick($event)"
+        [ngClass]="getStepValueClass(currentStep.value)">
         {{currentStep.name}}
         <div class="menu-hook" [matMenuTriggerFor]="rightMenu" #rightMenuTrigger="matMenuTrigger"></div>
     </button>
@@ -30,14 +31,22 @@
 
     <mat-menu #leftMenu="matMenu">
         @for(val of stepValues; track val){
-        <div mat-menu-item (mouseup)="onStepValueSelected(val)">{{val}}</div>
+        <div mat-menu-item (mouseup)="onStepValueSelected(val)">
+            <div class="round-gradient" [ngClass]="getStepDescriptionClass(val)">
+                <div class="content"> {{getStepDescription(val)}}</div>
+            </div>
+        </div>
         }
 
     </mat-menu>
 
     <mat-menu #rightMenu="matMenu">
         @for(val of steps; track val) {
-        <div mat-menu-item (mouseup)="onStepSelected(val)">{{val.name}}</div>
+        <div mat-menu-item (mouseup)="onStepSelected(val)">
+            <div class="round-gradient" [ngClass]="getStepDescriptionClass(val.value)">
+                <div class="content"> {{val.name}}</div>
+            </div>
+        </div>
         }
 
     </mat-menu>
