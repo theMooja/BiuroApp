@@ -1,33 +1,40 @@
 <ng-container>
     @if (currentStep) {
-    <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
-        (click)="$event.stopPropagation()" (contextmenu)="onRightClick($event)"
-        [ngClass]="getStepValueClass(currentStep.value)">
-        {{currentStep.name}}
-        <div class="menu-hook" [matMenuTriggerFor]="rightMenu" #rightMenuTrigger="matMenuTrigger"></div>
-    </button>
+    <div class="container">
 
-    <button mat-icon-button aria-label="start" (click)="onStopper(); $event.stopPropagation()">
-        @if (isRunning) {
-        <mat-icon>stop_circle</mat-icon>
-        } @else {
-        <mat-icon>play_circle</mat-icon>
-        }
-    </button>
+        <div class="stopper">
+            <div class="time">
+                <div class="stopper-current">
+                    {{currentTime | secondsToMMSSPipe}}
+                </div>
 
-    <div class="time">
-        <div class="stopper-current">
-            {{currentTime | secondsToMMSSPipe}}
+                <div class="stopper-sum">
+                    {{totalTime | secondsToMMSSPipe}}
+                </div>
+            </div>
+
+            <button mat-icon-button aria-label="start" (click)="onStopper(); $event.stopPropagation()">
+                @if (isRunning) {
+                <mat-icon>stop_circle</mat-icon>
+                } @else {
+                <mat-icon>play_circle</mat-icon>
+                }
+            </button>
+
+            <button mat-button (mouseup)="onFifteen($event); $event.stopPropagation()"
+                (click)="$event.stopPropagation()">
+                +/- 15
+            </button>
         </div>
-
-        <div class="stopper-sum">
-            {{totalTime | secondsToMMSSPipe}}
+        <div class="step">
+            <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
+                (click)="$event.stopPropagation()" (contextmenu)="onRightClick($event)"
+                [ngClass]="getStepValueClass(currentStep.value)">
+                {{currentStep.name}}
+                <div class="menu-hook" [matMenuTriggerFor]="rightMenu" #rightMenuTrigger="matMenuTrigger"></div>
+            </button>
         </div>
     </div>
-
-    <button mat-button (mouseup)="onFifteen($event); $event.stopPropagation()" (click)="$event.stopPropagation()">
-        +/- 15
-    </button>
 
     <mat-menu #leftMenu="matMenu">
         @for(val of stepValues; track val){

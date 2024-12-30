@@ -9,10 +9,16 @@
     }
 }
 
+.march-filter-button {
+    margin-left: 2em;
+}
+
+
 .march-menu-container {
     background-color: indianred;
+
     .march-menu-item {
-        
+
         width: 5em;
         height: 2em;
         display: block;
@@ -31,4 +37,8 @@
     .spacer {
         flex: 1 1 auto;
     }
+}
+
+.mat-column-marchValues {
+    flex: 0 0 20%;
 }

@@ -19,10 +19,10 @@ export class MarchEntity extends BaseEntity {
     @Column()
     sequence: number;
 
-    @Column()
+    @Column({ default: 0 })
     weight: number;
 
-    @Column({ nullable: true })
+    @Column({ default: 0 })
     value: number;
 
     @Column({

@@ -77,6 +77,7 @@ export class MarchColumnComponent {
   }
 
   async stopStopper() {
+    if (!this.isRunning) return;
     clearInterval(this.intervalId);
     let seconds = differenceInSeconds(new Date(), this.startTime);
     let stopper = await this.marchDataService.addStopper(this.currentStep, seconds, this.startTime);
@@ -107,9 +108,11 @@ export class MarchColumnComponent {
       .sort((a, b) => b.sequence - a.sequence)[0];
   }
 
-  onStepValueSelected(val: number) {
+  async onStepValueSelected(val: number) {
     this.currentStep.value = val;
     this.marchDataService.updateMarchValue(this.currentStep);
+    await this.stopStopper();
+
     this.leftMenuTrigger.closeMenu();
     this.currentStep = this.findLastStep();
   }

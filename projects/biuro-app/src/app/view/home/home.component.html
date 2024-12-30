@@ -86,14 +86,15 @@
     </ng-container>
 
     <ng-container matColumnDef="marchValues">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> March
-        <button mat-mini-fab [matMenuTriggerFor]="marchMenu" (click)="$event.stopPropagation()">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Marsz
+        <button class="march-filter-button" mat-mini-fab [matMenuTriggerFor]="marchMenu"
+          (click)="$event.stopPropagation()">
           <mat-icon>filter</mat-icon>
         </button>
       </mat-header-cell>
       <mat-cell *matCellDef=" let element">
-          <march-column [monthly]="element"> </march-column>
-          </mat-cell>
+        <march-column [monthly]="element"> </march-column>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="expandedDetail">
