@@ -243,7 +243,7 @@ export const ClientController = {
           isActive: true
         }
       });
-  }
+  },
 
   async saveClient(client: IClientEntity) : Promise<IClientEntity> {
     let repo = AppDataSource.getRepository(ClientEntity);
