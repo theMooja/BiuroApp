@@ -5,6 +5,18 @@ import * as settings from 'electron-settings';
 import "reflect-metadata";
 import { AppDataSource } from './datasource';
 import { setIPCHandlers } from "./handlers";
+import { autoUpdater } from 'electron-updater';
+const log = require('electron-log');
+
+autoUpdater.logger = log;
+autoUpdater.on('update-available', (info) => {
+  log.info('Update available:', info);
+});
+
+autoUpdater.on('update-downloaded', () => {
+  log.info('Update downloaded; the app will now install.');
+  //autoUpdater.quitAndInstall(); // Apply the update immediately
+});
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -37,7 +49,7 @@ const createWindow = (): void => {
 
   mainWindow.loadURL(startURL);
 
-
+  autoUpdater.checkForUpdatesAndNotify();
   maximize();
   mainWindow.webContents.openDevTools();
 };
