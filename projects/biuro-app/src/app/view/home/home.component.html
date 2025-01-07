@@ -7,7 +7,7 @@
     <span class="spacer"></span>
     <ng-container>
 
-      <button mat-icon-button [matMenuTriggerFor]="myMenu" #calTrigger="matMenuTrigger">
+      <button mat-icon-button [matMenuTriggerFor]="myMenu" #calTrigger="matMenuTrigger" class="calendar-button">
         <mat-icon>calendar_today</mat-icon>{{currentDate | date: 'MMM': undefined : 'pl-PL'}}
       </button>
       <mat-menu #myMenu="matMenu">
