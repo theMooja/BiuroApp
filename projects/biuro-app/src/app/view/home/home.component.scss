@@ -13,12 +13,10 @@
     margin-left: 2em;
 }
 
-
 .march-menu-container {
     background-color: indianred;
 
     .march-menu-item {
-
         width: 5em;
         height: 2em;
         display: block;
@@ -34,9 +32,10 @@
 }
 
 .toolbar {
-.calendar-button {
-    margin-right: 5px;
-}
+    background-color: chartreuse;
+    .calendar-button {
+        margin-right: 5px;
+    }
 
     .spacer {
         flex: 1 1 auto;

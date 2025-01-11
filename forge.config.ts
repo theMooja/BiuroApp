@@ -12,7 +12,7 @@ const config: ForgeConfig = {
     extraResource: ['app-settings.json']
   },
   rebuildConfig: {},
-  makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+  makers: [new MakerSquirrel({})],
   plugins: [
     new AutoUnpackNativesPlugin({}),
   ],
