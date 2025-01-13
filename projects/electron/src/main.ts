@@ -3,11 +3,12 @@ import path from 'path';
 import testdata from './testdata';
 import * as settings from 'electron-settings';
 import "reflect-metadata";
-import { AppDataSource } from './datasource';
+import { initializeDatabase } from './datasource';
 import { setIPCHandlers } from "./handlers";
 
-const { updateElectronApp } = require('update-electron-app')
-updateElectronApp()
+const { updateElectronApp } = require('update-electron-app');
+if (app.isPackaged)
+  updateElectronApp();
 
 
 
@@ -46,11 +47,24 @@ const createWindow = (): void => {
 };
 
 const setupDatabase = async () => {
-  await AppDataSource.initialize().then(() => {
+  let config: any = {};
+
+  if (app.isPackaged) {
+    let dbsettings: any = settings.getSync('database')
+    config.port = dbsettings.port;
+    config.host = dbsettings.host;
+    config.username = dbsettings.username;
+    config.password = dbsettings.password;
+    config.database = dbsettings.database;
+    config.logging = false;
+  }
+
+  await initializeDatabase(config).then(() => {
     console.log('Connected to Postgres');
   });
 
-  await testdata.populate();
+  if (!app.isPackaged)
+    await testdata.populate();
 }
 
 const setAppHandlers = () => {

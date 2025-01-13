@@ -10,16 +10,21 @@ import { ListValueEntity } from './entity/ListValue';
 import { NoteEntity } from './entity/Note';
 import { ReportEntity } from './entity/Report';
 
-export const AppDataSource = new DataSource({
-  type: "postgres",
-  host: "localhost",
-  port: 5432,
-  username: "postgres",
-  password: "pg",
-  database: "biuro",
-  synchronize: true,
-  logging: true,
-  entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity, InvoiceEntity, InvoiceLineEntity, ListValueEntity, NoteEntity, ReportEntity],
-  subscribers: [],
-  migrations: [],
-});
+export let AppDataSource: DataSource;
+
+export const initializeDatabase = async (options: any) => {
+  let config = {
+    type: "postgres",
+    host: "localhost",
+    port: 5432,
+    username: "postgres",
+    password: "pg",
+    database: "biuro",
+    synchronize: true,
+    logging: true,
+    entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity, InvoiceEntity, InvoiceLineEntity, ListValueEntity, NoteEntity, ReportEntity],
+  }
+  AppDataSource = new DataSource({ ...config, ...options });
+
+  return AppDataSource.initialize();
+};
