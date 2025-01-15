@@ -57,7 +57,8 @@ export interface INoteEntity {
     text: string,
     user?: IUserEntity,
     monthly: IMonthlyEntity,
-    persists: boolean
+    persists: boolean,
+    deleteing?: boolean
 }
 
 export interface IStopperEntity {

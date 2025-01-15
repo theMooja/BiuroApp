@@ -29,6 +29,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Monthly:getMonthlies', (e, year, month) => MonthlyController.getMonthlies(year, month));
   ipcMain.handle('db:Monthly:getMonthly', (e, id) => MonthlyController.getMonthly(id));
   ipcMain.handle('db:Monthly:updateNote', (e, note) => MonthlyController.updateNote(note));
+  ipcMain.handle('db:Monthly:deleteNote', (e, note) => MonthlyController.deleteNote(note));
   ipcMain.handle('db:Monthly:getLatestMonthly', (e, client) => MonthlyController.getLatestMonthly(client));
   ipcMain.handle('db:Monthly:updateMarches', (e, monthlyId, marches) => MonthlyController.updateMarches(monthlyId, marches));
   ipcMain.handle('db:Monthly:recreateMonthlies', (e, year, month, monthlies) => MonthlyController.recreateMonthlies(year, month, monthlies));
@@ -89,6 +90,10 @@ export const MonthlyController = {
       persists: note.persists,
       user: note.user
     });
+  },
+
+  async deleteNote(note: INoteEntity) {
+    await NoteEntity.getRepository().delete({ id: note.id });
   },
 
   async getLatestMonthly(client: IClientEntity): Promise<IMonthlyEntity> {
@@ -201,7 +206,7 @@ export const UserController = {
     user.name = data.name;
     user.password = data.password;
     user.permission = data.permission;
-    
+
     await user.save();
   }
 }
@@ -245,14 +250,14 @@ export const ClientController = {
       });
   },
 
-  async saveClient(client: IClientEntity) : Promise<IClientEntity> {
+  async saveClient(client: IClientEntity): Promise<IClientEntity> {
     let repo = AppDataSource.getRepository(ClientEntity);
     return await repo.save(client);
     // if(client.id) {
     //   let saved = await repo.update(client.id, client);
     //   return saved;
     // } else {
-      
+
     // }
   }
 }

@@ -20,6 +20,7 @@ const contextBridgeApi = {
   getMonthlies: (year: number, month: number) => ipcRenderer.invoke('db:Monthly:getMonthlies', year, month),
   getMonthly: (id: number) => ipcRenderer.invoke('db:Monthly:getMonthly', id),
   updateNote: (note: INoteEntity) => ipcRenderer.invoke('db:Monthly:updateNote', note),
+  deleteNote: (note: INoteEntity) => ipcRenderer.invoke('db:Monthly:deleteNote', note), 
   getLatestMonthly: (client: IClientEntity) => ipcRenderer.invoke('db:Monthly:getLatestMonthly', client),
   updateMarches: (monthlyId: number, marches: IMarchEntity[]) => ipcRenderer.invoke('db:Monthly:updateMarches', monthlyId, marches),
   recreateMonthlies: (year: number, month: number, monthlies: IMonthlyEntity[]) => ipcRenderer.invoke('db:Monthly:recreateMonthlies', year, month, monthlies),

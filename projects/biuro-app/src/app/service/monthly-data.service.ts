@@ -22,6 +22,10 @@ export class MonthlyDataService {
     await window.electron.updateNote(note);
   }
 
+  async deleteNote(note: INoteEntity) {
+    await window.electron.deleteNote(note);
+  }
+
   async getLatestMonthly(client: IClientEntity): Promise<IMonthlyEntity> {
     return await window.electron.getLatestMonthly(client);
   }

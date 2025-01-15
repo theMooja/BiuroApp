@@ -1,13 +1,16 @@
-<div class="note-container">
-
-    @for(note of notes; track note) {
-    <button mat-button (click)="onEdit()" (mouseenter)="showTooltip(tooltipTemplate, note, $event)"
-        (mouseleave)="hideTooltip()" type="button">
-        {{note.text}} </button>
-    }
-    <button mat-fab (click)="onAdd()" type="button">
+<div class="view">
+    <button mat-mini-fab (click)="onAdd()" type="button">
         <mat-icon>add</mat-icon>
     </button>
+    <div class="note-container">
+        @for(note of notes; track note) {
+        <button mat-button (click)="onEdit()" (mouseenter)="showTooltip(tooltipTemplate, note, $event)"
+            (mouseleave)="hideTooltip()" type="button" class="note-button">
+            {{note.text}} </button>
+        }
+    </div>
+
+
 </div>
 
 
@@ -17,7 +20,12 @@
             <button mat-stroked-button (click)="onPinUser()" [class.pinned]="currentNote.user">
                 Dla mnie</button>
             <button mat-stroked-button (click)="onPersists()" [class.pinned]="currentNote.persists">Na zawsze</button>
-            <button mat-button (click)="onSave()">Zapisz</button>
+            <button mat-icon-button (click)="onSave()">
+                <mat-icon>check</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onDelete()" [class.danger]="currentNote.deleteing">
+                <mat-icon>delete</mat-icon>
+            </button>
         </mat-card-actions>
         <mat-card-content>
             <textarea matInput [(ngModel)]="currentText" placeholder="Notatki" cdkTextareaAutosize

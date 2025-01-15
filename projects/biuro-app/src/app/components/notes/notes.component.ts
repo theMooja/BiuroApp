@@ -46,6 +46,21 @@ export class NotesComponent {
     this.currentNote.text = val
   }
 
+  async onDelete() {
+    if (this.currentNote.deleteing) {
+      
+      if (this.currentNote.id)
+        await this.monthlyDataService.deleteNote(this.currentNote);
+      
+      this.notes.splice(this.notes.indexOf(this.currentNote), 1);
+      this.isEdit = false;
+      this.hideTooltip();
+
+    } else {
+      this.currentNote.deleteing = true;
+    }
+  }
+
   async onSave() {
     await this.monthlyDataService.updateNote(this.currentNote);
     this.isEdit = false;
@@ -89,9 +104,9 @@ export class NotesComponent {
         .flexibleConnectedTo(event.target as HTMLElement)
         .withPositions([
           {
-            originX: 'center',
+            originX: 'start',
             originY: 'bottom',
-            overlayX: 'center',
+            overlayX: 'start',
             overlayY: 'top',
           },
         ]);
