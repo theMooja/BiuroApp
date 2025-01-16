@@ -48,10 +48,10 @@ export class NotesComponent {
 
   async onDelete() {
     if (this.currentNote.deleteing) {
-      
+
       if (this.currentNote.id)
         await this.monthlyDataService.deleteNote(this.currentNote);
-      
+
       this.notes.splice(this.notes.indexOf(this.currentNote), 1);
       this.isEdit = false;
       this.hideTooltip();
@@ -65,7 +65,7 @@ export class NotesComponent {
     await this.monthlyDataService.updateNote(this.currentNote);
     this.isEdit = false;
     this.hideTooltip();
-    this.refresh.emit();
+    this.refresh.emit(this.monthly.id);
   }
 
   onEdit() {
@@ -84,7 +84,7 @@ export class NotesComponent {
 
   onPinUser() {
     if (this.currentNote.user) {
-      this.currentNote.user = undefined;
+      delete this.currentNote.user;
       return;
     }
     this.currentNote.user = this.userDataService.user;

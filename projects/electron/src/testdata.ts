@@ -30,7 +30,8 @@ const createUsers = async function (data: any) {
 
     data.user1 = await repo.save({
         name: 'U1',
-        password: 'p1'
+        password: 'p1',
+        
     });
     data.user2 = await repo.save({
         name: 'U2',

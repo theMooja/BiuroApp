@@ -56,9 +56,4 @@ export class LoginComponent {
     this.userService.setLoggedUser(this.selectedUser);
     this.router.navigateByUrl('/home');
   }
-
-  async test() {
-    let data = await this.monthlyDataService.getMonthlies(1, 2024);
-    console.log(data);
-  }
 }

@@ -54,6 +54,7 @@ export const MonthlyController = {
       .leftJoinAndSelect('m.marches', 'mar')
       .leftJoinAndSelect('mar.stoppers', 'stop')
       .leftJoinAndSelect('m.notes', 'not')
+      .leftJoinAndSelect('not.user', 'user')
       .where('m.month = :month AND m.year = :year', { month, year })
       .orderBy('mar.sequence', 'ASC')
       .getMany();
@@ -69,6 +70,7 @@ export const MonthlyController = {
       .leftJoinAndSelect('m.marches', 'mar')
       .leftJoinAndSelect('mar.stoppers', 'stop')
       .leftJoinAndSelect('m.notes', 'not')
+      .leftJoinAndSelect('not.user', 'user')
       .where('m.id = :id', { id })
       .getOne();
   },
@@ -88,7 +90,7 @@ export const MonthlyController = {
       monthly: note.monthly,
       text: note.text,
       persists: note.persists,
-      user: note.user
+      user: note.user === undefined ? null : note.user
     });
   },
 
