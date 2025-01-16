@@ -87,9 +87,9 @@
 
     <ng-container matColumnDef="marchValues">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Marsz
-        <button class="march-filter-button" mat-mini-fab [matMenuTriggerFor]="marchMenu"
+        <button class="march-filter-button" mat-icon-button [matMenuTriggerFor]="marchMenu"
           (click)="$event.stopPropagation()">
-          <mat-icon>filter</mat-icon>
+          <mat-icon>filter_list</mat-icon>
         </button>
       </mat-header-cell>
       <mat-cell *matCellDef=" let element">

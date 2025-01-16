@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .view {
     display: flex;
     flex-direction: row;
@@ -6,7 +8,7 @@
     
 
     .menu-bar {
-        background-color: aqua;
+        background-color: $secondary-green;
         display: flex;
         flex-direction: column;
         
@@ -21,6 +23,6 @@
 
     .outlet {
         flex: 1;
-        background-color: beige;
+        background-color: $tetiary-green;
     }
 }

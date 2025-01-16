@@ -4,6 +4,15 @@
     </button>
 
     @if(monthly.invoices[0]) {
+    <div class="checkbox-container">
+        <div class="icon-container">
+            <mat-icon [ngStyle]="{'color': !monthly.invoices[0].paidDate ? 'red' : 'white'}">paid</mat-icon>
+        </div>
+        <div class="icon-container">
+            <mat-icon [ngStyle]="{'color': !monthly.invoices[0].sendDate ? 'red' : 'white'}">send</mat-icon>
+        </div>
+    </div>
+
     <div class="lines-container">
         <div *ngIf="monthly.invoices[0].lines[0]" class="line">{{monthly.invoices[0].lines[0].description}}(
             {{monthly.invoices[0].lines[0].price}})</div>
@@ -11,14 +20,7 @@
             {{monthly.invoices[0].lines[1].price}})</div>
     </div>
 
-    <div class="checkbox-container">
-        <div class="paid-container">
-            <mat-icon [ngStyle]="{'color': !monthly.invoices[0].paidDate ? 'red' : 'white'}">paid</mat-icon>
-        </div>
-        <div class="send-container">
-            <mat-icon [ngStyle]="{'color': !monthly.invoices[0].sendDate ? 'red' : 'white'}">send</mat-icon>
-        </div>
-    </div>
+
     }
 
 </div>

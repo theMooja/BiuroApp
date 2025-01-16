@@ -1,3 +1,5 @@
+@import './../../variables.scss';
+
 .client-table {
     .detail-row {
         flex-basis: 0;
@@ -6,6 +8,10 @@
 
     .selected {
         background-color: burlywood;
+    }
+
+    .cdk-row:not(.detail-row){
+        height: 120px;
     }
 }
 
@@ -41,6 +47,6 @@
     }
 }
 
-.mat-column-marchValues {
-    flex: 0 0 20%;
-}
+// .mat-column-marchValues {
+//     flex: 0 0 20%;
+// }

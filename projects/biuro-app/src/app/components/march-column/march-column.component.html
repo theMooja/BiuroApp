@@ -1,17 +1,17 @@
 <ng-container>
     @if (currentStep) {
-    <div class="container">
+    <div class="view">
+
+        <div class="step">
+            <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
+                (click)="$event.stopPropagation()" (contextmenu)="onRightClick($event)"
+                [ngClass]="getStepValueClass(currentStep.value)">
+                {{currentStep.name}}
+                <div class="menu-hook" [matMenuTriggerFor]="rightMenu" #rightMenuTrigger="matMenuTrigger"></div>
+            </button>
+        </div>
 
         <div class="stopper">
-            <div class="time">
-                <div class="stopper-current">
-                    {{currentTime | secondsToMMSSPipe}}
-                </div>
-
-                <div class="stopper-sum">
-                    {{totalTime | secondsToMMSSPipe}}
-                </div>
-            </div>
 
             <button mat-icon-button aria-label="start" (click)="onStopper(); $event.stopPropagation()">
                 @if (isRunning) {
@@ -21,19 +21,25 @@
                 }
             </button>
 
+            <div class="time">
+                @if (isRunning) {
+                <div class="stopper-current">
+                    {{currentTime | secondsToMMSSPipe}}
+                </div>
+                } @else {
+                <div class="stopper-sum">
+                    {{totalTime | secondsToMMSSPipe}}
+                </div>
+                }
+
+            </div>
+
             <button mat-button (mouseup)="onFifteen($event); $event.stopPropagation()"
                 (click)="$event.stopPropagation()">
                 +/- 15
             </button>
         </div>
-        <div class="step">
-            <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
-                (click)="$event.stopPropagation()" (contextmenu)="onRightClick($event)"
-                [ngClass]="getStepValueClass(currentStep.value)">
-                {{currentStep.name}}
-                <div class="menu-hook" [matMenuTriggerFor]="rightMenu" #rightMenuTrigger="matMenuTrigger"></div>
-            </button>
-        </div>
+
     </div>
 
     <mat-menu #leftMenu="matMenu">
