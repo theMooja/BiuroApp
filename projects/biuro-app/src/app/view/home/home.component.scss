@@ -1,6 +1,11 @@
 @import './../../variables.scss';
 
 .client-table {
+
+    .cdk-header-row {
+        background-color: $primary-green;
+    }
+
     .detail-row {
         flex-basis: 0;
         min-height: initial;
@@ -10,8 +15,13 @@
         background-color: burlywood;
     }
 
-    .cdk-row:not(.detail-row){
+    .cdk-row:not(.detail-row) {
         height: 120px;
+    }
+
+    .mat-mdc-row .mat-mdc-cell {
+        // border-right: .1px dotted $tetiary-black;
+        // cursor: pointer;
     }
 }
 
