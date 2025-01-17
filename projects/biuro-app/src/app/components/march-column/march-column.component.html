@@ -3,10 +3,11 @@
     <div class="view">
 
         <div class="step">
-            <button mat-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
+            <button mat-stroked-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
                 (click)="$event.stopPropagation()" (contextmenu)="onRightClick($event)"
                 [ngClass]="getStepValueClass(currentStep.value)">
                 {{currentStep.name}}
+                <mat-icon iconPositionEnd>menu</mat-icon>
                 <div class="menu-hook" [matMenuTriggerFor]="rightMenu" #rightMenuTrigger="matMenuTrigger"></div>
             </button>
         </div>

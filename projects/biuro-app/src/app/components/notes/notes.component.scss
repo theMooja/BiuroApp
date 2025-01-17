@@ -16,10 +16,16 @@
 }
 
 .note-button {
-    max-width: fit-content;
+    display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 130px;
+}
+
+.add-button {
+    width: 32px;
+    height: 32px;
 }
 
 .pinned {
