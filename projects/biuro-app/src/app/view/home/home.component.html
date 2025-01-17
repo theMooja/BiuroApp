@@ -1,14 +1,10 @@
 <ng-container>
 
   <mat-toolbar class="toolbar">
-    <button mat-raised-button (click)="onRecreateMonthlies()">
-      RECREATE
-    </button>
-    <span class="spacer"></span>
-    <ng-container>
 
-      <button mat-icon-button [matMenuTriggerFor]="myMenu" #calTrigger="matMenuTrigger" class="calendar-button">
-        <mat-icon>calendar_today</mat-icon>{{currentDate | date: 'MMM': undefined : 'pl-PL'}}
+    <ng-container>
+      <button mat-raised-button [matMenuTriggerFor]="myMenu" #calTrigger="matMenuTrigger" class="calendar-button">
+        <mat-icon>calendar_today</mat-icon>{{currentDate | nominativeDate : 'MMMM' : 'pl-PL'}}
       </button>
       <mat-menu #myMenu="matMenu">
         <div (click)="$event.stopPropagation();">
@@ -19,9 +15,19 @@
 
         </div>
       </mat-menu>
-
-
     </ng-container>
+
+    <span class="spacer"></span>
+
+    <button mat-icon-button [matMenuTriggerFor]="hiddenMenu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #hiddenMenu="matMenu">
+      <button mat-raised-button (click)="onRecreateMonthlies($event)" [class.danger]="isRecreating"
+        class="recreate-button">
+        RECREATE
+      </button>
+    </mat-menu>
   </mat-toolbar>
 
   <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>

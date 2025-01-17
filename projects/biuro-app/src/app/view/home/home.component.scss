@@ -48,6 +48,8 @@
 }
 
 .toolbar {
+
+
     .calendar-button {
         margin-right: 5px;
     }
@@ -55,7 +57,22 @@
     .spacer {
         flex: 1 1 auto;
     }
+
+
 }
+
+.danger {
+    color: $primary-red !important;
+}
+
+.column-menu {
+    background-color: $secondary-black;
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    border: solid 1px $primary-black;
+}
+
 
 // .mat-column-marchValues {
 //     flex: 0 0 20%;

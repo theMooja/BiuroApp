@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, Injector, Output, ViewChild, ViewChildren } from '@angular/core';
-import { ClientDataService } from '../../service/client-data.service';
+import { ChangeDetectorRef, Component, Injector, ViewChild, ViewChildren } from '@angular/core';
 import { IClientEntity, IMonthlyEntity, StepType } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,7 +24,7 @@ import { DATA_INJECTION_TOKEN, InvoiceColumnComponent } from '../../components/i
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { EditInfoColumnsOverlayComponent } from '../../components/edit-info-columns-overlay/edit-info-columns-overlay.component';
-import { EventEmitter } from 'stream';
+import { NominativeDatePipe } from '../../utils/nominative-date.pipe';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma'];
 
@@ -35,7 +34,7 @@ export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma
   imports: [NotesComponent, MarchColumnComponent, MatSort, MatSortModule, MatRippleModule,
     MatButtonModule, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule,
     MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule,
-    MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle, InvoiceColumnComponent],
+    MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle, InvoiceColumnComponent, NominativeDatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -57,6 +56,7 @@ export class HomeComponent {
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   lastColumn!: string;
+  isRecreating: boolean = false;
 
   constructor(private monthlyDataService: MonthlyDataService,
     private cdr: ChangeDetectorRef,
@@ -124,10 +124,18 @@ export class HomeComponent {
     this.lastColumn = column;
   }
 
-  async onRecreateMonthlies() {
+  async onRecreateMonthlies(event: MouseEvent) {
+    if (this.isRecreating) {
+      this.isRecreating = false;
+      console.log('tableData', this.tableData.data);
+    }
+    else {
+      this.isRecreating = true;
+      event.stopPropagation();
+    }
     // await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
     // await this.refreshData();
-    console.log('tableData', this.tableData.data);
+
   }
 
   onEditInfoColumns(element: IMonthlyEntity) {
