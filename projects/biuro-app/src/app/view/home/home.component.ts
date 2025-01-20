@@ -127,7 +127,7 @@ export class HomeComponent {
   async onRecreateMonthlies(event: MouseEvent) {
     if (this.isRecreating) {
       this.isRecreating = false;
-      console.log('tableData', this.tableData.data);
+
     }
     else {
       this.isRecreating = true;
@@ -162,6 +162,8 @@ export class HomeComponent {
   async refreshData() {
     this.tableData.data = await this.monthlyDataService
       .getMonthlies(this.currentMonthly.month, this.currentMonthly.year);
+
+    console.log('tableData', this.tableData.data);
   }
 
   async refreshMonthly(id: number) {
@@ -180,14 +182,11 @@ export class HomeComponent {
     }
   }
 
-  onDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
+  async onDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
     this.currentDate = normalizedMonthAndYear;
     this.cdr.detach();
     this.tableData.data = [];
-    this.monthlyDataService.getMonthlies(this.currentMonthly.month, this.currentMonthly.year)
-      .then((res) => {
-        this.tableData.data = res;
-      });
+    await this.refreshData();
 
     trigger.closeMenu();
   }
