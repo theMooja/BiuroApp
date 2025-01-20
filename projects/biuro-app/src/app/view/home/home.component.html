@@ -19,6 +19,11 @@
 
     <span class="spacer"></span>
 
+    <button mat-icon-button (click)="toggleSelectionMode(); $event.stopPropagation()" type="button"
+      [style.color]="selectionMode ? 'green' : 'white'">
+      <mat-icon>task_alt</mat-icon>
+    </button>
+
     <button mat-icon-button (click)="refreshData()">
       <mat-icon>refresh</mat-icon>
     </button>
@@ -36,8 +41,23 @@
 
   <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
 
+    <!-- <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container> -->
+
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+
+        Nazwa
       </mat-header-cell>
       <mat-cell *matCellDef="let element"
         (dblclick)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
@@ -117,7 +137,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
-    <mat-row (click)="selection.toggle(element)" *matRowDef="let element; columns: columns"
+    <mat-row (click)="selectionMode ? selection.toggle(element): null" *matRowDef="let element; columns: columns"
       [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
     </mat-row>
 

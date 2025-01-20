@@ -50,6 +50,7 @@ export class HomeComponent {
   tableData: MatTableDataSource<IMonthlyEntity>;
   expandedElement: IMonthlyEntity | null = null;
   selection = new SelectionModel<IMonthlyEntity>(true);
+  selectionMode: boolean = false;
   infoColumns = ['email', 'firma', 'forma'];
   allInfoColumns = allInfoColumns;
   currentDate: Date = new Date('1-1-2024');
@@ -194,5 +195,9 @@ export class HomeComponent {
   viewChangedHandler(event: any) {
     this.calendar.currentView = 'year';
     this.cdr.reattach();
+  }
+
+  toggleSelectionMode() {
+    this.selectionMode = !this.selectionMode
   }
 }
