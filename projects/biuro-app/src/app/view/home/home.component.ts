@@ -128,15 +128,13 @@ export class HomeComponent {
   async onRecreateMonthlies(event: MouseEvent) {
     if (this.isRecreating) {
       this.isRecreating = false;
-
+      await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
+      await this.refreshData();
     }
     else {
       this.isRecreating = true;
       event.stopPropagation();
     }
-    // await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
-    // await this.refreshData();
-
   }
 
   onEditInfoColumns(element: IMonthlyEntity) {

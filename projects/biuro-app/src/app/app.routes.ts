@@ -6,7 +6,7 @@ import { UserSetupComponent } from './view/user-setup/user-setup.component';
 import { LoginComponent } from './view/login/login.component';
 import { MinimalComponent } from './view/minimal/minimal.component';
 import { userResolver } from './service/user-data.service';
-import { lastUserNameResolver } from './service/local-storage.service';
+import { appVersionResolver, lastUserNameResolver } from './service/local-storage.service';
 import { ReportsComponent } from './view/reports/reports.component';
 import { ClientSetupComponent } from './view/client-setup/client-setup.component';
 
@@ -21,7 +21,8 @@ export const routes: Routes = [
     {
         path: 'login', component: LoginComponent, resolve: {
             users: userResolver,
-            lastUserName: lastUserNameResolver
+            lastUserName: lastUserNameResolver,
+            appVersion: appVersionResolver
         }
     },
     { path: 'minimal', component: MinimalComponent }

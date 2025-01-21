@@ -21,6 +21,7 @@ export class LoginComponent {
   users: IUserEntity[] = [];
   selectedUser!: IUserEntity;
   loginForm!: FormGroup;
+  appVersion!: string;
 
   constructor(private userService: UserDataService,
     private router: Router,
@@ -40,11 +41,13 @@ export class LoginComponent {
       let lastUserName = data['lastUserName'];
       if (lastUserName) {
         let user = this.users.find((u) => u.name === lastUserName);
-        if(user) {
+        if (user) {
           this.onSelect(user);
         }
       }
-    });    
+      this.appVersion = data['appVersion'];
+    });
+
   }
 
   onSelect(user: IUserEntity) {

@@ -136,16 +136,19 @@ export const MonthlyController = {
   async recreateMonthlies(year: number, month: number, monthlies: IMonthlyEntity[]) {
     let clients = [];
 
+    //get clients to create monthlies
     if (monthlies.length > 0) {
       clients = monthlies.map(m => m.client);
     } else {
       clients = await ClientController.getClients();
     }
 
+    //remove current monthlies
     await MonthlyEntity.remove(
       await MonthlyEntity.find(
         { where: { year, month, client: In(clients.map(c => c.id)) } }));
 
+    //copy monthlies
     for (let client of clients) {
 
       let latest = await AppDataSource
@@ -172,7 +175,7 @@ export const MonthlyController = {
         weight: m.weight,
         type: m.type
       }));
-      monthly.notes = latest.notes.filter(n => n.persists);
+      monthly.notes = latest.notes?.filter(n => n.persists);
       await monthly.save();
     }
   }

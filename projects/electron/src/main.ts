@@ -73,6 +73,8 @@ const setAppHandlers = () => {
   ipcMain.handle('app:close', () => close());
 
   ipcMain.handle('app:getLastUserName', () => settings.getSync('lastUserName'));
+
+  ipcMain.handle('app:getVersion', () => app.getVersion());
 }
 
 // This method will be called when Electron has finished

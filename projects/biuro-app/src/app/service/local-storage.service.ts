@@ -11,6 +11,10 @@ export class LocalStorageService {
   async getLastUserName() {
     return await window.electron.getLastUserName();
   }
+
+  async getAppVersion() {
+    return await window.electron.getVersion();
+  }
 }
 
 export const lastUserNameResolver: ResolveFn<string> = (
@@ -18,4 +22,11 @@ export const lastUserNameResolver: ResolveFn<string> = (
   state: RouterStateSnapshot,
 ) => {
   return inject(LocalStorageService).getLastUserName();
+};
+
+export const appVersionResolver: ResolveFn<string> = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
+  return inject(LocalStorageService).getAppVersion();
 };
