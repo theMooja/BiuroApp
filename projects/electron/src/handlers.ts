@@ -156,14 +156,14 @@ export const MonthlyController = {
         .createQueryBuilder('m')
         .leftJoinAndSelect('m.client', 'client')
         .leftJoinAndSelect('m.marches', 'mar')
-        .where('m.year < :year OR (m.year = :year AND m.month < :month)', { year: year, month: month })
+        .leftJoinAndSelect('m.notes', 'n')
+        .where('(m.year < :year OR (m.year = :year AND m.month < :month))', { year: year, month: month })
         .andWhere('client.id = :clientId', { clientId: client.id })
         .orderBy('m.year', 'DESC')
         .addOrderBy('m.month', 'DESC')
         .getOne();
 
       if (!latest) continue;
-
       let monthly = new MonthlyEntity();
       monthly.year = year;
       monthly.month = month;
