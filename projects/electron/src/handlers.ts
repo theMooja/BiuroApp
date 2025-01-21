@@ -157,6 +157,7 @@ export const MonthlyController = {
         .leftJoinAndSelect('m.client', 'client')
         .leftJoinAndSelect('m.marches', 'mar')
         .leftJoinAndSelect('m.notes', 'n')
+        .leftJoinAndSelect('n.user', 'user')
         .where('(m.year < :year OR (m.year = :year AND m.month < :month))', { year: year, month: month })
         .andWhere('client.id = :clientId', { clientId: client.id })
         .orderBy('m.year', 'DESC')
@@ -175,7 +176,7 @@ export const MonthlyController = {
         weight: m.weight,
         type: m.type
       }));
-      monthly.notes = latest.notes?.filter(n => n.persists);
+      monthly.notes = latest.notes?.filter(n => n.persists).map(n => ({ ...n, id: undefined } as NoteEntity));
       await monthly.save();
     }
   }

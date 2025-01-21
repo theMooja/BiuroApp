@@ -20,7 +20,9 @@ export class MonthlyEntity extends BaseEntity {
     @Column({ nullable: false })
     month: number;
 
-    @OneToMany(() => NoteEntity,  note => note.monthly)
+    @OneToMany(() => NoteEntity, note => note.monthly, {
+        cascade: true
+    })
     notes: NoteEntity[];
 
     @Column({
