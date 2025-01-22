@@ -43,7 +43,7 @@ export class ReportsComponent {
 
         });
         dialogRef.afterClosed().subscribe(result => {
-          this.onGenerate(reportType, result);
+          result && this.onGenerate(reportType, result);
         });
     }
 

@@ -60,7 +60,7 @@ const createMonthlies = async function (data: any) {
     data.c1monthly1 = await repo.save({
         client: data.client1,
         month: 1,
-        year: 2024,
+        year: 2025,
         info: {
             email: 'c1@email.com',
             firma: 'finka',
@@ -74,7 +74,7 @@ const createMonthlies = async function (data: any) {
     data.c2monthly1 = await repo.save({
         client: data.client2,
         month: 1,
-        year: 2024,
+        year: 2025,
         info: {
             email: 'c2@email.com',
             firma: 'fintax',
@@ -88,7 +88,7 @@ const createMonthlies = async function (data: any) {
     data.c3monthly1 = await repo.save({
         client: data.client3,
         month: 1,
-        year: 2024,
+        year: 2025,
         info: {
             email: 'c3@email.com',
             firma: 'finka',
@@ -177,7 +177,7 @@ const createMarches = async function (data: any) {
         value: 0
     });
 
-    data.c2m1march3 = await repo.save({
+    data.c3m1march3 = await repo.save({
         monthly: data.c3monthly1,
         name: 's3',
         sequence: 3,

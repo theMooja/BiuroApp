@@ -5,13 +5,14 @@ import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
 @Component({
   selector: 'app-employees-report-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  imports: [MatDialogModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule],
   templateUrl: './employees-report-dialog.component.html',
   styleUrl: './employees-report-dialog.component.scss',
   providers: []

@@ -85,6 +85,7 @@ export interface IInvoiceEntity {
     sendDate?: Date,
     paidDate?: Date,
     lines: IInvoiceLineEntity[],
+    monthly: IMonthlyEntity,
 }
 
 export interface IInvoiceLineEntity {

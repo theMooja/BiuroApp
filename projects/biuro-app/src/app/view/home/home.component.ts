@@ -53,7 +53,7 @@ export class HomeComponent {
   selectionMode: boolean = false;
   infoColumns = ['email', 'firma', 'forma'];
   allInfoColumns = allInfoColumns;
-  currentDate: Date = new Date('1-1-2024');
+  currentDate: Date = new Date('1-1-2025');
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   lastColumn!: string;
