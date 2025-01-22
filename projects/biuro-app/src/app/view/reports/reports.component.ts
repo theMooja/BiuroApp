@@ -12,6 +12,7 @@ import { EmployeesReportDialogComponent } from '../../report/employees/employees
 import { EmployeesReportComponent } from '../../report/employees/employees-report/employees-report.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmationDialogComponent } from '../../utils/confirmation-dialog/confirmation-dialog.component';
+import { ClientReportDialogComponent } from '../../report/clients/client-dialog/client-report-dialog.component';
 
 @Component({
   selector: 'app-reports',
@@ -39,14 +40,21 @@ export class ReportsComponent {
 
     switch (reportType) {
       case 'pracownicy':
-        const dialogRef = this.matDialog.open(EmployeesReportDialogComponent, {
+        const empDialogRef = this.matDialog.open(EmployeesReportDialogComponent, {
 
         });
-        dialogRef.afterClosed().subscribe(result => {
+        empDialogRef.afterClosed().subscribe(result => {
+          result && this.onGenerate(reportType, result);
+        });
+        break;
+      case 'klienci':
+        const cliDialogRef = this.matDialog.open(ClientReportDialogComponent, {
+
+        });
+        cliDialogRef.afterClosed().subscribe(result => {
           result && this.onGenerate(reportType, result);
         });
     }
-
   }
 
   onGenerate(reportType: string, data: any) {

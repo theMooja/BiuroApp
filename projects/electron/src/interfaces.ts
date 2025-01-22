@@ -124,3 +124,6 @@ export interface IEmployeesReportOutput {
         }[]
     }
 }
+
+export interface IClientsReportOutput {
+}
