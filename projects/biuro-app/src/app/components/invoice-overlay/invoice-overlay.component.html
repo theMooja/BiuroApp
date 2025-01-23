@@ -1,23 +1,27 @@
 <div class="container">
     <form id="invoiceForm" [formGroup]="invoiceForm">
-        <mat-form-field>
-            <mat-label>Numer</mat-label>
-            <input matInput placeholder="numer" formControlName="no">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Data wystawienia</mat-label>
-            <input matInput [matDatepicker]="sendDatePicker" placeholder="Data wystawienia" formControlName="sendDate">
-            <mat-datepicker-toggle matSuffix [for]="sendDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #sendDatePicker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Data zapłaty</mat-label>
-            <input matInput [matDatepicker]="paidDatePicker" placeholder="Data zapłaty" formControlName="paidDate">
-            <mat-datepicker-toggle matSuffix [for]="paidDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #paidDatePicker></mat-datepicker>
-        </mat-form-field>
-        <div formArrayName="lines">
-            <div *ngFor="let line of lines.controls; let i = index" [formGroupName]="i">
+        <div class="header flex-gap">
+            <mat-form-field>
+                <mat-label>Numer</mat-label>
+                <input matInput placeholder="numer" formControlName="no">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Data wystawienia</mat-label>
+                <input matInput [matDatepicker]="sendDatePicker" placeholder="Data wystawienia"
+                    formControlName="sendDate">
+                <mat-datepicker-toggle matSuffix [for]="sendDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sendDatePicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Data zapłaty</mat-label>
+                <input matInput [matDatepicker]="paidDatePicker" placeholder="Data zapłaty" formControlName="paidDate">
+                <mat-datepicker-toggle matSuffix [for]="paidDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #paidDatePicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="divider"></div>
+        <div formArrayName="lines" class="flex-gap lines-container">
+            <div *ngFor="let line of lines.controls; let i = index" [formGroupName]="i" class="flex-gap">
                 <input formControlName="id" type="hidden" />
                 <mat-form-field>
                     <mat-label>Cena</mat-label>
@@ -39,7 +43,10 @@
                 <button mat-mini-fab color="warn" (click)="removeInvoiceLine(i)"><mat-icon>remove</mat-icon></button>
             </div>
         </div>
-        <button mat-fab color="primary" (click)="addInvoiceLine()" type="button"> <mat-icon>add</mat-icon> </button>
-        <button mat-raised-button (click)="onSave()">Zapisz</button>
+        <div class="button-container">
+            <button mat-fab color="primary" (click)="addInvoiceLine()" type="button"> <mat-icon>add</mat-icon> </button>
+            <button mat-raised-button (click)="onSave()">Zapisz</button>
+        </div>
+
     </form>
 </div>

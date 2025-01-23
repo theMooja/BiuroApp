@@ -1,6 +1,32 @@
+@import './../../variables.scss';
+
 .container {
-    background-color: aliceblue;
+    background-color: $secondary-green;
     padding: 1em;
     border-radius: 1em;
-    
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+    margin-top: 1em;
+    align-items: center;
+}
+
+.flex-gap {
+    display: flex;
+    gap: 1em;
+    align-items: baseline;
+}
+
+.lines-container {
+    flex-direction: column;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: $tetiary-black;
+    margin: 1em 0px;
 }

@@ -8,11 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
 import { MonthlyDataService } from '../../service/monthly-data.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-edit-info-columns-overlay',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule],
+  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule],
   templateUrl: './edit-info-columns-overlay.component.html',
   styleUrl: './edit-info-columns-overlay.component.scss'
 })

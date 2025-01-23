@@ -49,3 +49,4 @@ export class AppComponent {
     window.electron.close();
   }
 }
+

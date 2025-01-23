@@ -1,7 +1,8 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div *ngFor="let column of allInfoColumns">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="overlay-container">
+  <div *ngFor="let column of allInfoColumns" class="line">
     <mat-form-field>
-      <input matInput [placeholder]="column" [formControlName]="column">
+      <mat-label>{{column}}</mat-label>
+        <input matInput [placeholder]="column" [formControlName]="column">
     </mat-form-field>
   </div>
   <button mat-raised-button type="submit">Zapisz</button>
