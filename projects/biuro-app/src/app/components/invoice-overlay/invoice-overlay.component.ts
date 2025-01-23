@@ -70,6 +70,7 @@ export class InvoiceOverlayComponent {
   }
 
   async onSave() {
+    console.log(this.invoiceForm.value);
     await this.invoiceDataService.saveInvoice({
       ...this.invoiceForm.value,
       monthly: this.monthly

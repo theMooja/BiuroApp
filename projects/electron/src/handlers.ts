@@ -12,6 +12,7 @@ import { ListValueEntity } from "./entity/ListValue";
 import * as settings from 'electron-settings';
 import { NoteEntity } from "./entity/Note";
 import { ReportEntity } from "./entity/Report";
+import { InvoiceLineEntity } from "./entity/InvoiceLine";
 
 export const setIPCHandlers = () => {
   ipcMain.handle('db:listValues', (e, target) => ListValuesController.get(target));
@@ -270,9 +271,55 @@ export const ClientController = {
 
 export const InvoiceController = {
   async saveInvoice(data: IInvoiceEntity) {
-    let repo = AppDataSource.getRepository(InvoiceEntity);
-    const invoice = Object.assign(new InvoiceEntity(), data);
-    await repo.save(invoice);
+    let invoiceRepo = AppDataSource.getRepository(InvoiceEntity);
+    const lineRepo = AppDataSource.getRepository(InvoiceLineEntity);
+    const monthlyRepo = AppDataSource.getRepository(MonthlyEntity);
+
+    let invoice = await invoiceRepo.findOne({
+      where: { id: data.id },
+      relations: ['lines'],
+    });
+
+    if (!invoice) {
+      invoice = new InvoiceEntity();
+      invoice.no = data.no;
+      invoice.monthly = await monthlyRepo.findOneBy({ id: data.monthly.id });
+      invoice.paidDate = data.paidDate;
+      invoice.sendDate = data.sendDate;
+    }
+
+    //remove
+    const inputLineIds = data.lines.map((line) => line.id);
+    const linesToRemove = invoice.lines.filter(
+      (line) => !inputLineIds.includes(line.id)
+    );
+
+    if (linesToRemove.length) {
+      await lineRepo.remove(linesToRemove);
+    }
+
+    //add and update
+    const updatedLines = data.lines.map((line) => {
+
+      if (line.id) {
+        const existingLine = invoice.lines.find((l) => l.id === line.id);
+        if (existingLine) {
+          existingLine.description = line.description;
+          existingLine.price = line.price;
+          existingLine.qtty = line.qtty;
+          return existingLine;
+        }
+      }
+
+      const newLine = new InvoiceLineEntity();
+      newLine.description = line.description;
+      newLine.price = line.price;
+      newLine.qtty = line.qtty;
+      return newLine;
+    });
+
+    invoice.lines = updatedLines;
+    await invoiceRepo.save(invoice);
   }
 }
 
