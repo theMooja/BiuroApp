@@ -1,8 +1,8 @@
 {
     "database": {
         "username": "postgres",
-        "password": "pg",
+        "password": "pgf1nka",
         "database": "biuro"
     },
-    "lastUserName": "U2"
+    "lastUserName": ""
 }

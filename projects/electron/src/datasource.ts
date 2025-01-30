@@ -15,11 +15,11 @@ export let AppDataSource: DataSource;
 export const initializeDatabase = async (options: any) => {
   let config = {
     type: "postgres",
-    host: "localhost",
+    host: "192.168.3.10",
     port: 5432,
     username: "postgres",
-    password: "pg",
-    database: "biuro",
+    password: "pgf1nka",
+    database: "test",
     synchronize: true,
     logging: true,
     entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity, InvoiceEntity, InvoiceLineEntity, ListValueEntity, NoteEntity, ReportEntity],

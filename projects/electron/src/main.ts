@@ -61,7 +61,8 @@ const setupDatabase = async () => {
 
   await initializeDatabase(config).then(() => {
     console.log('Connected to Postgres');
-  });
+  })
+    .catch(err => console.error('Error:', err));
 
   if (!app.isPackaged)
     await testdata.populate();
