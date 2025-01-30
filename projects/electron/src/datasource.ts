@@ -13,18 +13,20 @@ import { ReportEntity } from './entity/Report';
 export let AppDataSource: DataSource;
 
 export const initializeDatabase = async (options: any) => {
-  let config = {
+  let configDefault = {
     type: "postgres",
-    host: "192.168.3.10",
+    host: "localhost",
     port: 5432,
     username: "postgres",
-    password: "pgf1nka",
-    database: "test",
+    password: "pg",
+    database: "biuro",
     synchronize: true,
     logging: true,
     entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity, InvoiceEntity, InvoiceLineEntity, ListValueEntity, NoteEntity, ReportEntity],
   }
-  AppDataSource = new DataSource({ ...config, ...options });
+  let config = { ...configDefault, ...options };
+  console.log(config);
+  AppDataSource = new DataSource(config);
 
   return AppDataSource.initialize();
 };

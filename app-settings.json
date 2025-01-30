@@ -2,7 +2,9 @@
     "database": {
         "username": "postgres",
         "password": "pgf1nka",
-        "database": "biuro"
+        "database": "biuro",
+        "host": "192.168.3.10",
+        "port": 5432
     },
     "lastUserName": ""
 }

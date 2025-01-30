@@ -28,7 +28,7 @@ export class MarchEntity extends BaseEntity {
     @Column({
         type: 'enum',
         enum: StepType,
-        default: StepType.WORK
+        default: StepType.GYR
     })
     type: StepType;
 

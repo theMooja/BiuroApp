@@ -1,5 +1,8 @@
+//value 1 = done, 0 = not done
 export enum StepType {
-    WORK = 'work',
+    GYR = '3 światla',  // 1 2 0
+    GR = '2 światla',   // 1 0
+    DATE = 'data',      // 1 0
     HIDDEN = 'hidden'
 }
 

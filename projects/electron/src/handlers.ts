@@ -224,7 +224,13 @@ export const MarchController = {
       value: march.value
     };
 
-    if (march.type === StepType.WORK && march.value === 2) {
+    if (march.type === StepType.GYR && march.value === 1) {
+      update.finishedAt = new Date();
+    }
+    if (march.type === StepType.GR && march.value === 1) {
+      update.finishedAt = new Date();
+    }
+    if (march.type === StepType.DATE && march.value === 1) {
       update.finishedAt = new Date();
     }
 

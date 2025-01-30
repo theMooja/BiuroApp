@@ -65,7 +65,7 @@ export class MarchSetupComponent {
   createStepGroup(step?: IMarchEntity): FormGroup {
     let group = this.formBuilder.group({
       name: this.formBuilder.control(''),
-      type: StepType.WORK,
+      type: StepType.GYR,
       weight: this.formBuilder.control(1),
       sequence: this.formBuilder.control(0),
     });

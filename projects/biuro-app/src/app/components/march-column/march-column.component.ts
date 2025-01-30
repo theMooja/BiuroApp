@@ -36,6 +36,10 @@ export class MarchColumnComponent {
       this.currentStep.stoppers.reduce((prev, curr) => prev + curr.seconds, 0)
   }
 
+  get isDateStep() {
+    return this.currentStep.type === StepType.DATE;
+  }
+
   constructor(private marchDataService: MarchDataService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -101,7 +105,7 @@ export class MarchColumnComponent {
       .filter(x => x.type !== StepType.HIDDEN);
 
     let last = visible
-      .find(x => x.value === 0);
+      .find(x => x.value !== 1); //1 = done
 
     if (last) return last;
     return visible.slice()
@@ -132,10 +136,14 @@ export class MarchColumnComponent {
   }
 
   get stepValues() {
-    // if (this.currentStep.type === StepType.Double) return [0, 1];
-    // else 
-
-    return [0, 1, 2];
+    switch (this.currentStep.type) {
+      case StepType.GR:
+        return [1, 0];
+      case StepType.GYR:
+        return [1, 2, 0];
+      default:
+        return [0];
+    }
   }
 
   get steps() {

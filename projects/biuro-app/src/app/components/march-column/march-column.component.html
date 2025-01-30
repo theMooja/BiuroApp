@@ -44,6 +44,10 @@
     </div>
 
     <mat-menu #leftMenu="matMenu">
+        @if (isDateStep) {
+
+        }
+        @else {
         @for(val of stepValues; track val){
         <div mat-menu-item (mouseup)="onStepValueSelected(val)">
             <div class="round-gradient" [ngClass]="getStepDescriptionClass(val)">
@@ -51,6 +55,8 @@
             </div>
         </div>
         }
+        }
+
 
     </mat-menu>
 
