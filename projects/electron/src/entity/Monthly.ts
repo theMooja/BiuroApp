@@ -33,7 +33,7 @@ export class MonthlyEntity extends BaseEntity {
         podmiot: string,
         program: string,
         forma: string,
-        //wlasciciel: string,
+        wlasciciel: string,
     }
 
     @OneToMany(() => MarchEntity, march => march.monthly, {

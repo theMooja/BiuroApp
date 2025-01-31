@@ -174,7 +174,8 @@ export const MonthlyController = {
           email: '',
           podmiot: '',
           program: '',
-          forma: ''
+          forma: '',
+          wlasciciel: '',
         };
         monthly.marches = [MarchEntity.create({
           name: '1',

@@ -26,7 +26,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { EditInfoColumnsOverlayComponent } from '../../components/edit-info-columns-overlay/edit-info-columns-overlay.component';
 import { NominativeDatePipe } from '../../utils/nominative-date.pipe';
 
-export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma'];
+export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel'];
 
 @Component({
   selector: 'app-home',
