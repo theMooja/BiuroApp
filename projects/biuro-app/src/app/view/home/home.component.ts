@@ -69,7 +69,7 @@ export class HomeComponent {
 
   async ngOnInit() {
     this.refreshData();
-
+    
     this.tableData.sortingDataAccessor = (item: any, property) => {
       switch (property) {
         case 'name': return (item.client as IClientEntity)?.name;

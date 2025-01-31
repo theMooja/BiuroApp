@@ -151,7 +151,7 @@ export const MonthlyController = {
 
     //copy monthlies
     for (let client of clients) {
-
+      console.log('loooooop', month);
       let latest = await AppDataSource
         .getRepository(MonthlyEntity)
         .createQueryBuilder('m')
@@ -164,20 +164,38 @@ export const MonthlyController = {
         .orderBy('m.year', 'DESC')
         .addOrderBy('m.month', 'DESC')
         .getOne();
-
-      if (!latest) continue;
+      console.log(latest);
       let monthly = new MonthlyEntity();
-      monthly.year = year;
-      monthly.month = month;
-      monthly.client = latest.client;
-      monthly.info = latest?.info;
-      monthly.marches = latest.marches.map(m => MarchEntity.create({
-        name: m.name,
-        sequence: m.sequence,
-        weight: m.weight,
-        type: m.type
-      }));
-      monthly.notes = latest.notes?.filter(n => n.persists).map(n => ({ ...n, id: undefined } as NoteEntity));
+      if (!latest) {
+        monthly.year = year;
+        monthly.month = month;
+        monthly.client = await ClientEntity.findOneBy({ id: client.id });
+        monthly.info = {
+          email: '',
+          podmiot: '',
+          program: '',
+          forma: ''
+        };
+        monthly.marches = [MarchEntity.create({
+          name: '1',
+          sequence: 1,
+          weight: 0,
+        })];
+      }
+      else {
+        monthly.year = year;
+        monthly.month = month;
+        monthly.client = latest.client;
+        monthly.info = latest?.info;
+        monthly.marches = latest.marches.map(m => MarchEntity.create({
+          name: m.name,
+          sequence: m.sequence,
+          weight: m.weight,
+          type: m.type
+        }));
+        monthly.notes = latest.notes?.filter(n => n.persists).map(n => ({ ...n, id: undefined } as NoteEntity));
+      }
+
       await monthly.save();
     }
   }
