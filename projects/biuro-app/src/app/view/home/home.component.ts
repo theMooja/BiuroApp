@@ -68,8 +68,11 @@ export class HomeComponent {
   }
 
   async ngOnInit() {
+    let d = sessionStorage.getItem('currentDate');
+    if (d)
+      this.currentDate = new Date(JSON.parse(d));
     this.refreshData();
-    
+
     this.tableData.sortingDataAccessor = (item: any, property) => {
       switch (property) {
         case 'name': return (item.client as IClientEntity)?.name;
@@ -183,6 +186,7 @@ export class HomeComponent {
 
   async onDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
     this.currentDate = normalizedMonthAndYear;
+    sessionStorage.setItem('currentDate', JSON.stringify(this.currentDate));
     this.cdr.detach();
     this.tableData.data = [];
     await this.refreshData();
