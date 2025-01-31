@@ -46,6 +46,7 @@ export interface IMonthlyEntity {
         podmiot: string,
         program: string,
         forma: string,
+        wlasciciel: string,
         [key: string]: string;
     };
     client: IClientEntity,
