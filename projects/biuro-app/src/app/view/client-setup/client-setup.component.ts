@@ -41,12 +41,15 @@ export class ClientSetupComponent {
   onSave() {
     if (this.form.valid) {
       let client = this.form.value;
-      this.clientService.saveClient(client);
+      this.clientService.saveClient(client).then((res) => {
+        this.form.get('id')?.setValue(res.id);
+      });
     }
   }
 
   onNew() {
     this.form.reset();
+    this.form.get('isActive')?.setValue(true);
   }
 
   get clients() {
