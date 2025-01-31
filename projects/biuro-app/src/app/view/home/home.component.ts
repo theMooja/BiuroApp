@@ -11,7 +11,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCalendar, MatDatepicker, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { CommonModule } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule } from '@angular/cdk/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
@@ -25,6 +25,7 @@ import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { EditInfoColumnsOverlayComponent } from '../../components/edit-info-columns-overlay/edit-info-columns-overlay.component';
 import { NominativeDatePipe } from '../../utils/nominative-date.pipe';
+import { SettingsDataService } from '../../service/settings-data.service';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel'];
 
@@ -60,6 +61,7 @@ export class HomeComponent {
   isRecreating: boolean = false;
 
   constructor(private monthlyDataService: MonthlyDataService,
+    private settingsDataService: SettingsDataService,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private overlay: Overlay
@@ -71,7 +73,10 @@ export class HomeComponent {
     let d = sessionStorage.getItem('currentDate');
     if (d)
       this.currentDate = new Date(JSON.parse(d));
+
     this.refreshData();
+
+    await this.restoreInfoColumns();
 
     this.tableData.sortingDataAccessor = (item: any, property) => {
       switch (property) {
@@ -81,6 +86,7 @@ export class HomeComponent {
         case 'forma': return item.info.forma;
         case 'VAT': return item.info.VAT;
         case 'ZUS': return item.info.ZUS;
+        case 'wlasciciel': return item.info.wlasciciel;
         case 'skladki': return item.info.skladki;
         case 'marchValues': return item.currentStep;
         default: return item[property];
@@ -122,6 +128,7 @@ export class HomeComponent {
   onColumnChange(column: string) {
     let idx = this.infoColumns.indexOf(this.lastColumn);
     this.infoColumns[idx] = column;
+    this.saveInfoColumns();
   }
 
   onInfoColumnRightClick(column: string) {
@@ -201,5 +208,17 @@ export class HomeComponent {
 
   toggleSelectionMode() {
     this.selectionMode = !this.selectionMode
+  }
+
+  saveInfoColumns() {
+    this.settingsDataService.setSettings('infoColumns', JSON.stringify(this.infoColumns));
+  }
+
+  async restoreInfoColumns() {
+    let data = await this.settingsDataService.getSettings('infoColumns');
+    if (data) {
+      
+      this.infoColumns = JSON.parse(data);
+    }
   }
 }

@@ -75,6 +75,8 @@ const setAppHandlers = () => {
   ipcMain.handle('app:close', () => close());
 
   ipcMain.handle('app:getLastUserName', () => settings.getSync('lastUserName'));
+  ipcMain.handle('app:getAppSettings', (e, key: string) => getSettings(key));
+  ipcMain.handle('app:setAppSettings', (e, key: string, value: string) => setSettings(key, value));
 
   ipcMain.handle('app:getVersion', () => app.getVersion());
 }
@@ -124,4 +126,12 @@ function maximize(): any {
 
 function close() {
   mainWindow.close();
+}
+
+async function getSettings(key: string) {
+  return await settings.get(key);
+}
+
+async function setSettings(key: string, value: string) {
+  return await settings.set(key, value);
 }

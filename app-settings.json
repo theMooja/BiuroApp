@@ -6,5 +6,6 @@
         "host": "192.168.3.10",
         "port": 5432
     },
-    "lastUserName": ""
+    "lastUserName": "U1",
+    "infoColumns": "[\"email\",\"firma\",\"forma\"]"
 }

@@ -8,6 +8,8 @@ const contextBridgeApi = {
   close: () => ipcRenderer.invoke('app:close'),
   getLastUserName: () => ipcRenderer.invoke('app:getLastUserName'),
   getVersion: () => ipcRenderer.invoke('app:getVersion'),
+  getAppSettings: (key: string) => ipcRenderer.invoke('app:getAppSettings', key),
+  setAppSettings: (key: string, value: string) => ipcRenderer.invoke('app:setAppSettings', key, value),
 
   getListValues: (target: string) => ipcRenderer.invoke('db:listValues', target),
 
