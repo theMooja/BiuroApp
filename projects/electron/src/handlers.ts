@@ -250,7 +250,7 @@ export const MarchController = {
       update.finishedAt = new Date();
     }
     if (march.type === StepType.DATE && march.value === 1) {
-      update.finishedAt = new Date();
+      update.finishedAt = march.finishedAt;
     }
 
     await AppDataSource

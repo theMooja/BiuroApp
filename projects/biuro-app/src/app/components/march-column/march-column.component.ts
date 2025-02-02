@@ -1,18 +1,19 @@
 import { ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
 import { IMonthlyEntity, IMarchEntity, StepType } from '../../../../../electron/src/interfaces';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule, MatMenu } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MarchDataService } from '../../service/march-data.service';
 import { differenceInSeconds } from 'date-fns';
 import { SecondsToMMSSPipe } from '../../utils/seconds-to-mmss.pipe';
 import { CommonModule } from '@angular/common';
+import { MatCalendar, MatDatepicker, MatDatepickerModule, MatDatepickerToggle } from '@angular/material/datepicker';
 
 @Component({
   selector: 'march-column',
   standalone: true,
-  imports: [MatMenuModule, MatButtonModule, MatIconModule, SecondsToMMSSPipe, CommonModule],
+  imports: [MatCalendar, MatMenuModule, MatButtonModule, MatIconModule, SecondsToMMSSPipe, CommonModule, MatDatepickerModule, MatMenuModule],
   templateUrl: './march-column.component.html',
   styleUrl: './march-column.component.scss'
 })
@@ -20,10 +21,13 @@ export class MarchColumnComponent {
   @Input() monthly!: IMonthlyEntity;
   currentStep!: IMarchEntity;
   @ViewChild('leftMenuTrigger') leftMenuTrigger!: MatMenuTrigger;
-  @ViewChild('rightMenuTrigger') rightMenuTrigger!: MatMenuTrigger;
   isRunning!: boolean;
   startTime!: Date;
   intervalId?: any;
+
+  get currentDate() {
+    return this.currentStep.finishedAt;
+  }
 
   get currentTime() {
     if (!this.isRunning) return 0;
@@ -75,11 +79,6 @@ export class MarchColumnComponent {
     }, 1000);
   }
 
-  onRightClick(event: MouseEvent) {
-    event.preventDefault();
-    this.rightMenuTrigger.openMenu();
-  }
-
   async stopStopper() {
     if (!this.isRunning) return;
     clearInterval(this.intervalId);
@@ -119,6 +118,16 @@ export class MarchColumnComponent {
 
     this.leftMenuTrigger.closeMenu();
     this.currentStep = this.findLastStep();
+  }
+
+  onDateSelected(event: any, calendar: MatMenuTrigger) {
+    let date = new Date(event);
+    console.log(date);
+    this.currentStep.value = 1;
+    this.currentStep.finishedAt = date;
+    this.marchDataService.updateMarchValue(this.currentStep);
+    this.currentStep = this.findLastStep();
+    calendar.closeMenu();
   }
 
   onStepSelected(val: IMarchEntity) {

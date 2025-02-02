@@ -2,13 +2,13 @@
     @if (currentStep) {
     <div class="view">
 
-        <div class="step">
+        <div class="step-button">
             <button mat-stroked-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
-                (click)="$event.stopPropagation()" (contextmenu)="onRightClick($event)"
-                [ngClass]="getStepValueClass(currentStep.value)">
+                (click)="$event.stopPropagation()" [ngClass]="getStepValueClass(currentStep.value)">
                 {{currentStep.name}}
-                <mat-icon iconPositionEnd>menu</mat-icon>
-                <div class="menu-hook" [matMenuTriggerFor]="rightMenu" #rightMenuTrigger="matMenuTrigger"></div>
+                @if (isDateStep) {<div class="status-bar">
+                    {{currentDate | date: 'dd-MM-yyyy' : 'pl-PL' }}
+                </div>}
             </button>
         </div>
 
@@ -44,30 +44,45 @@
     </div>
 
     <mat-menu #leftMenu="matMenu">
-        @if (isDateStep) {
+        <div class="menu">
+            <div class="step-values-container">
+                @if (isDateStep) {
+                <button mat-flat-button [matMenuTriggerFor]="myMenu" #menuTrigger="matMenuTrigger"
+                    (click)="$event.stopPropagation();">
+                    @if (currentDate) {
+                    {{currentDate | date: 'dd-MM' : 'pl-PL' }}
+                    } @else {
+                    Wybierz datę
+                    }
+                </button>
+                <mat-menu #myMenu="matMenu" #menu>
+                    <div (click)="$event.stopPropagation();">
+                        <mat-calendar style="width:15rem" #calendar panelClass="month-picker" [selected]="currentDate"
+                            (selectedChange)="onDateSelected($event, menuTrigger)">
+                        </mat-calendar>
 
-        }
-        @else {
-        @for(val of stepValues; track val){
-        <div mat-menu-item (mouseup)="onStepValueSelected(val)">
-            <div class="round-gradient" [ngClass]="getStepDescriptionClass(val)">
-                <div class="content"> {{getStepDescription(val)}}</div>
+                    </div>
+                </mat-menu>
+                }
+                @else {
+                @for(val of stepValues; track val){
+                <div mat-menu-item (mouseup)="onStepValueSelected(val)">
+                    <div class="round-gradient" [ngClass]="getStepDescriptionClass(val)">
+                    </div>
+                </div>
+                }
+                }
+            </div>
+            <div class="steps-container">
+                @for(val of steps; track val) {
+                <div mat-menu-item (mouseup)="onStepSelected(val)">
+                    <div class="round-gradient" [ngClass]="getStepValueClass(val.value)">
+                        <div class="content"> {{val.name}}</div>
+                    </div>
+                </div>
+                }
             </div>
         </div>
-        }
-        }
-
-
-    </mat-menu>
-
-    <mat-menu #rightMenu="matMenu">
-        @for(val of steps; track val) {
-        <div mat-menu-item (mouseup)="onStepSelected(val)">
-            <div class="round-gradient" [ngClass]="getStepDescriptionClass(val.value)">
-                <div class="content"> {{val.name}}</div>
-            </div>
-        </div>
-        }
 
     </mat-menu>
     }
