@@ -21,7 +21,7 @@ if (require("electron-squirrel-startup")) {
 let mainWindow: BrowserWindow | null;
 settings.configure({
   fileName: 'app-settings.json',
-  dir: __dirname
+  dir: app.isPackaged ? process.resourcesPath : __dirname
 });
 
 
