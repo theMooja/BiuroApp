@@ -1,1 +1,2 @@
 load info columns before render
+updateMarches - remove stoppers from deleted updateMarches

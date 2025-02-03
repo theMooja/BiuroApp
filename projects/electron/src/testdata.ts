@@ -51,6 +51,24 @@ const createClients = async function (data: any) {
     data.client3 = await repo.save({
         name: 'c3',
     });
+    data.client4 = await repo.save({
+        name: 'c4',
+    });
+    data.client5 = await repo.save({
+        name: 'c5',
+    });
+    data.client6 = await repo.save({
+        name: 'c6',
+    });
+    data.client7 = await repo.save({
+        name: 'c7',
+    });
+    data.client8 = await repo.save({
+        name: 'c8',
+    });
+    data.client9 = await repo.save({
+        name: 'c9',
+    });
 }
 
 const createMonthlies = async function (data: any) {

@@ -2,6 +2,10 @@
 
 .client-table {
 
+    max-height: calc(100% - 64px);
+    overflow-y: auto;
+    overflow-x: hidden;
+
     .cdk-header-row {
         background-color: $primary-green;
     }
