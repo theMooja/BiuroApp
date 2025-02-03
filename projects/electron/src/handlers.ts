@@ -112,26 +112,51 @@ export const MonthlyController = {
   },
 
   async updateMarches(monthlyId: number, marches: IMarchEntity[]) {
-    await AppDataSource
-      .getRepository(MarchEntity)
-      .createQueryBuilder()
-      .delete()
-      .from(MarchEntity, 'm')
-      .where('monthlyId = :monthlyId', { monthlyId })
-      .execute();
+    const marchRepository = AppDataSource.getRepository(MarchEntity);
 
     let monthly = await MonthlyEntity.findOne({
       where: { id: monthlyId },
-      relations: ['marches']
-    })
+      relations: ['marches', 'marches.stoppers']
+    });
+    if (!monthly) {
+      throw new Error("Monthly entity not found");
+    }
 
-    monthly.marches = marches.map(march => MarchEntity.create({
-      name: march.name,
-      sequence: march.sequence,
-      weight: march.weight,
-      type: march.type
-    }));
-    monthly.save();
+    const existingMarches = monthly.marches;
+
+    // Map existing marches for easy lookup
+    const existingMarchesMap = new Map(existingMarches.map(march => [march.id, march]));
+    const updatedMarches: MarchEntity[] = [];
+
+    for (const march of marches) {
+        if (march.id && existingMarchesMap.has(march.id)) {
+            // Update existing march
+            const existingMarch = existingMarchesMap.get(march.id);
+            existingMarch.sequence = march.sequence;
+            existingMarch.weight = march.weight;
+            existingMarch.type = march.type;
+            updatedMarches.push(existingMarch);
+        } else {
+            // Create new march
+            updatedMarches.push(marchRepository.create({
+                name: march.name,
+                sequence: march.sequence,
+                weight: march.weight,
+                type: march.type,
+                monthly: monthly
+            }));
+        }
+    }
+
+    // Save updated and new marches
+    await marchRepository.save(updatedMarches);
+
+    // Determine marches to delete (existing but not in the updated list)
+    const marchesToDelete = existingMarches.filter(march => !marches.some(m => m.id === march.id));
+
+    if (marchesToDelete.length > 0) {
+        await marchRepository.remove(marchesToDelete);
+    }
   },
 
   async recreateMonthlies(year: number, month: number, monthlies: IMonthlyEntity[]) {

@@ -64,18 +64,21 @@ export class MarchSetupComponent {
 
   createStepGroup(step?: IMarchEntity): FormGroup {
     let group = this.formBuilder.group({
+      id: this.formBuilder.control(0),
       name: this.formBuilder.control(''),
       type: StepType.GYR,
       weight: this.formBuilder.control(1),
       sequence: this.formBuilder.control(0),
     });
+    group.controls.id.setValue(null);
 
     if (step) {
+      group.controls.id.setValue(step.id);
       group.controls.name.setValue(step.name);
       group.controls.type.setValue(step.type);
       group.controls.weight.setValue(step.weight);
     }
-
+    
     return group;
   }
 
@@ -111,7 +114,6 @@ export class MarchSetupComponent {
 
   onSubmit() {
     this.updateSequenceNumbers();
-
     this.monthlyDataService.updateMarches(this.monthly.id, this.marchForm.value.steps);
   }
 }
