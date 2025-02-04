@@ -175,15 +175,6 @@ export class HomeComponent {
     console.log('tableData', this.tableData.data);
   }
 
-  async refreshMonthly(id: number) {
-
-    let newMonthly = await this.monthlyDataService.getMonthly(id);
-    let idx = this.tableData.data.findIndex(x => x.id === id);
-    let data = this.tableData.data;
-    data[idx] = newMonthly;
-    this.tableData.data = data;
-  }
-
   get currentMonthly(): { year: number, month: number } {
     return {
       year: this.currentDate.getFullYear(),

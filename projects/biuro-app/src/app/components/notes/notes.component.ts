@@ -28,7 +28,7 @@ export class NotesComponent {
   private _injector = inject(Injector);
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
   currentNote: INoteEntity;
-  @Output() refresh = new EventEmitter();
+  //@Output() refresh = new EventEmitter();
 
   constructor(private monthlyDataService: MonthlyDataService, private userDataService: UserDataService,
     private overlay: Overlay, private vcr: ViewContainerRef) { }
@@ -62,10 +62,12 @@ export class NotesComponent {
   }
 
   async onSave() {
-    await this.monthlyDataService.updateNote(this.currentNote);
+    let note = await this.monthlyDataService.updateNote(this.currentNote);
+    this.currentNote.id = note.id;
     this.isEdit = false;
     this.hideTooltip();
-    this.refresh.emit(this.monthly.id);
+
+    //this.refresh.emit(this.monthly.id);
   }
 
   onEdit() {

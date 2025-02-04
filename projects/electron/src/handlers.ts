@@ -86,13 +86,15 @@ export const MonthlyController = {
   },
 
   async updateNote(note: INoteEntity) {
-    await NoteEntity.save({
+    let updated = await NoteEntity.save({
       id: note.id,
       monthly: note.monthly,
       text: note.text,
       persists: note.persists,
       user: note.user === undefined ? null : note.user
     });
+
+    return updated as INoteEntity;
   },
 
   async deleteNote(note: INoteEntity) {
@@ -129,23 +131,23 @@ export const MonthlyController = {
     const updatedMarches: MarchEntity[] = [];
 
     for (const march of marches) {
-        if (march.id && existingMarchesMap.has(march.id)) {
-            // Update existing march
-            const existingMarch = existingMarchesMap.get(march.id);
-            existingMarch.sequence = march.sequence;
-            existingMarch.weight = march.weight;
-            existingMarch.type = march.type;
-            updatedMarches.push(existingMarch);
-        } else {
-            // Create new march
-            updatedMarches.push(marchRepository.create({
-                name: march.name,
-                sequence: march.sequence,
-                weight: march.weight,
-                type: march.type,
-                monthly: monthly
-            }));
-        }
+      if (march.id && existingMarchesMap.has(march.id)) {
+        // Update existing march
+        const existingMarch = existingMarchesMap.get(march.id);
+        existingMarch.sequence = march.sequence;
+        existingMarch.weight = march.weight;
+        existingMarch.type = march.type;
+        updatedMarches.push(existingMarch);
+      } else {
+        // Create new march
+        updatedMarches.push(marchRepository.create({
+          name: march.name,
+          sequence: march.sequence,
+          weight: march.weight,
+          type: march.type,
+          monthly: monthly
+        }));
+      }
     }
 
     // Save updated and new marches
@@ -155,7 +157,7 @@ export const MonthlyController = {
     const marchesToDelete = existingMarches.filter(march => !marches.some(m => m.id === march.id));
 
     if (marchesToDelete.length > 0) {
-        await marchRepository.remove(marchesToDelete);
+      await marchRepository.remove(marchesToDelete);
     }
   },
 
@@ -176,7 +178,6 @@ export const MonthlyController = {
 
     //copy monthlies
     for (let client of clients) {
-      console.log('loooooop', month);
       let latest = await AppDataSource
         .getRepository(MonthlyEntity)
         .createQueryBuilder('m')
@@ -189,7 +190,7 @@ export const MonthlyController = {
         .orderBy('m.year', 'DESC')
         .addOrderBy('m.month', 'DESC')
         .getOne();
-      console.log(latest);
+
       let monthly = new MonthlyEntity();
       if (!latest) {
         monthly.year = year;

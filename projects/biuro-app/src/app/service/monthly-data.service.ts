@@ -18,8 +18,8 @@ export class MonthlyDataService {
     return monthly;
   }
 
-  async updateNote(note: INoteEntity) {
-    await window.electron.updateNote(note);
+  async updateNote(note: INoteEntity) : Promise<INoteEntity> {
+    return await window.electron.updateNote(note);
   }
 
   async deleteNote(note: INoteEntity) {
