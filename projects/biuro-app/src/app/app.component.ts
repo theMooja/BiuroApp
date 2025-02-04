@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,13 @@ export class AppComponent {
   title = 'BiuroApp';
   isLogin: boolean = true;
   isMinimized: boolean = true;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key === 'l') {
+      this.router.navigateByUrl('/login');
+    }
+  }
 
   constructor(private readonly dateAdapter: DateAdapter<any>,
     private router: Router,
@@ -47,10 +54,6 @@ export class AppComponent {
 
   onClose() {
     window.electron.close();
-  }
-
-  onInfo() {
-    window.electron.toggleDevTools();
   }
 }
 

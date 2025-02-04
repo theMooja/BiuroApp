@@ -9,10 +9,12 @@ import { userResolver } from './service/user-data.service';
 import { appVersionResolver, lastUserNameResolver } from './service/local-storage.service';
 import { ReportsComponent } from './view/reports/reports.component';
 import { ClientSetupComponent } from './view/client-setup/client-setup.component';
+import { InfoComponent } from './view/info/info.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'settings', component: SettingsComponent },
+    { path: 'info', component: InfoComponent },
     { path: 'marchSetup', component: MarchSetupComponent },
     { path: 'userSetup', component: UserSetupComponent },
     { path: 'reports', component: ReportsComponent },
