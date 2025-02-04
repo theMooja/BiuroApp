@@ -326,10 +326,14 @@ export const InvoiceController = {
     const lineRepo = AppDataSource.getRepository(InvoiceLineEntity);
     const monthlyRepo = AppDataSource.getRepository(MonthlyEntity);
 
-    let invoice = await invoiceRepo.findOne({
-      where: { id: data.id },
-      relations: ['lines'],
-    });
+    let invoice: InvoiceEntity;
+
+    if (data.id) {
+      invoice = await invoiceRepo.findOne({
+        where: { id: data.id },
+        relations: ['lines'],
+      });
+    }
 
     if (!invoice) {
       invoice = new InvoiceEntity();
@@ -341,11 +345,11 @@ export const InvoiceController = {
 
     //remove
     const inputLineIds = data.lines.map((line) => line.id);
-    const linesToRemove = invoice.lines.filter(
+    const linesToRemove = invoice.lines?.filter(
       (line) => !inputLineIds.includes(line.id)
     );
 
-    if (linesToRemove.length) {
+    if (linesToRemove?.length) {
       await lineRepo.remove(linesToRemove);
     }
 
