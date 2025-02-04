@@ -46,6 +46,7 @@ export class NotesComponent {
     this.currentNote.text = val
   }
 
+
   async onDelete() {
     if (this.currentNote.deleteing) {
 
@@ -136,5 +137,9 @@ export class NotesComponent {
         injector: this._injector,
       },
     );
+  }
+
+  isForMe(note: INoteEntity) {
+    return !note.user || note.user.id === this.userDataService?.user?.id;
   }
 }

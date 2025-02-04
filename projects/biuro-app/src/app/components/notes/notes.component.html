@@ -4,9 +4,11 @@
     </button>
     <div class="note-container">
         @for(note of notes; track note) {
+        @if(isForMe(note)){
         <button mat-stroked-button (click)="onEdit()" (mouseenter)="showTooltip(tooltipTemplate, note, $event)"
             (mouseleave)="hideTooltip()" type="button" class="note-button">
             {{note.text}} </button>
+        }
         }
     </div>
 
