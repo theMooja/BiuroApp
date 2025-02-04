@@ -48,5 +48,9 @@ export class AppComponent {
   onClose() {
     window.electron.close();
   }
+
+  onInfo() {
+    window.electron.toggleDevTools();
+  }
 }
 

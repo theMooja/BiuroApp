@@ -73,12 +73,14 @@ const setAppHandlers = () => {
   ipcMain.handle('app:minimize', () => minimize());
   ipcMain.handle('app:maximize', () => maximize());
   ipcMain.handle('app:close', () => close());
+  ipcMain.handle('app:toggleDevTools', () => toggleDevTools());
 
   ipcMain.handle('app:getLastUserName', () => settings.getSync('lastUserName'));
   ipcMain.handle('app:getAppSettings', (e, key: string) => getSettings(key));
   ipcMain.handle('app:setAppSettings', (e, key: string, value: string) => setSettings(key, value));
 
   ipcMain.handle('app:getVersion', () => app.getVersion());
+
 }
 
 // This method will be called when Electron has finished
@@ -134,4 +136,12 @@ async function getSettings(key: string) {
 
 async function setSettings(key: string, value: string) {
   return await settings.set(key, value);
+}
+
+function toggleDevTools() {
+  if(mainWindow.webContents.isDevToolsOpened()) {
+    mainWindow.webContents.closeDevTools();
+  } else {
+    mainWindow.webContents.openDevTools();
+  }
 }
