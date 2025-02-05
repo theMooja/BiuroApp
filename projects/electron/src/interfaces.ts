@@ -7,8 +7,21 @@ export enum StepType {
 }
 
 export enum Permission {
-    FULL = "Pełny dostęp",
-    PARTIAL = "Ograniczony dostęp"
+    SUPER = "super",
+    FULL = "full",
+    USER = "user"
+}
+
+export function hasAccess(user: IUserEntity | undefined, permission: Permission) {
+    if(!user) return false;
+    if (permission === Permission.SUPER) {
+        return user.permission === Permission.SUPER;
+    }
+    else if (permission === Permission.FULL) {
+        return user.permission === Permission.SUPER || user.permission === Permission.FULL;
+    } else {
+        return true;
+    }
 }
 
 export enum ListValueTargets {

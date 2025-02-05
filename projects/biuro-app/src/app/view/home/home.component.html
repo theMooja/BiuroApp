@@ -32,10 +32,13 @@
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #hiddenMenu="matMenu">
+      @if(hasAccess(user, Permission.SUPER)){
       <button mat-raised-button (click)="onRecreateMonthlies($event)" [class.danger]="isRecreating"
         class="recreate-button">
         RECREATE
       </button>
+      }
+
     </mat-menu>
   </mat-toolbar>
 
@@ -136,7 +139,8 @@
     <ng-container matColumnDef="expandedDetail">
       <mat-cell *matCellDef="let element" [attr.colspan]="2">
         <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          <button mat-raised-button (click)="onSetMarch(element)">Edytuj Marsz</button>
+          @if(hasAccess(user, Permission.FULL)) {
+          <button mat-raised-button (click)="onSetMarch(element)">Edytuj Marsz</button>}
           <button mat-raised-button (click)="onEditInfoColumns(element)">Edytuj Info</button>
         </div>
       </mat-cell>

@@ -1,2 +1,52 @@
 load info columns before render
 updateMarches - remove stoppers from deleted updateMarches
+
+
+
+
+
+
+
+
+INSERT INTO monthlies ("clientId", year, month, info)
+VALUES (
+   
+    91, -- Foreign key referencing ClientEntity
+    2025, -- Year
+    1, -- February
+    '{
+  "VAT": null,
+  "ZUS": null,
+  "email": "",
+  "firma": null,
+  "forma": "",
+  "skladki": null,
+  "wlasciciel": ""
+}'::jsonb
+)
+RETURNING id;
+
+INSERT INTO marches ("monthlyId", name, sequence, weight, type)
+VALUES (229, 'lala', 0, 0, '2 światla');
+
+WITH inserted_monthly AS (
+    INSERT INTO monthlies ("clientId", year, month, info)
+    VALUES (
+        91, -- Foreign key referencing ClientEntity
+        2025, -- Year
+        1, -- February
+        '{
+            "VAT": null,
+            "ZUS": null,
+            "email": "",
+            "firma": null,
+            "forma": "",
+            "skladki": null,
+            "wlasciciel": ""
+        }'::jsonb
+    )
+    RETURNING id
+)
+INSERT INTO marches ("monthlyId", name, sequence, weight, type)
+SELECT id, 'lala', 0, 0, '2 światla' FROM inserted_monthly
+RETURNING id;

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Injector, ViewChild, ViewChildren } from '@angular/core';
-import { IClientEntity, IMonthlyEntity, StepType } from '../../../../../electron/src/interfaces';
+import { hasAccess, IClientEntity, IMonthlyEntity, Permission, StepType } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -26,6 +26,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { EditInfoColumnsOverlayComponent } from '../../components/edit-info-columns-overlay/edit-info-columns-overlay.component';
 import { NominativeDatePipe } from '../../utils/nominative-date.pipe';
 import { SettingsDataService } from '../../service/settings-data.service';
+import { UserDataService } from '../../service/user-data.service';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel'];
 
@@ -59,9 +60,12 @@ export class HomeComponent {
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   lastColumn!: string;
   isRecreating: boolean = false;
+  hasAccess = hasAccess;
+  Permission = Permission;
 
   constructor(private monthlyDataService: MonthlyDataService,
     private settingsDataService: SettingsDataService,
+    private userService: UserDataService,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private overlay: Overlay
@@ -95,6 +99,10 @@ export class HomeComponent {
     this.sort.active = this.columns[0];
     this.sort.direction = 'asc';
     this.tableData.sort = this.sort;
+  }
+
+  get user() {
+    return this.userService.user;
   }
 
   get columns() {
@@ -208,7 +216,7 @@ export class HomeComponent {
   async restoreInfoColumns() {
     let data = await this.settingsDataService.getSettings('infoColumns');
     if (data) {
-      
+
       this.infoColumns = JSON.parse(data);
     }
   }

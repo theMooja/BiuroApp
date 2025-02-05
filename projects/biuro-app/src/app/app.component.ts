@@ -6,7 +6,7 @@ import { pl } from 'date-fns/locale';
 import { setDefaultOptions } from 'date-fns';
 import { DateAdapter } from '@angular/material/core';
 import { UserDataService } from './service/user-data.service';
-import { Permission } from '../../../electron/src/interfaces';
+import { Permission, hasAccess } from '../../../electron/src/interfaces';
 
 
 @Component({
@@ -18,6 +18,7 @@ import { Permission } from '../../../electron/src/interfaces';
 })
 export class AppComponent {
   Permission = Permission;
+  hasAccess = hasAccess;
   title = 'BiuroApp';
   isLogin: boolean = true;
   isMinimized: boolean = true;

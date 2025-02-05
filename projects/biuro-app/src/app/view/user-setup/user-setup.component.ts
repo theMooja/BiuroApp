@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './user-setup.component.scss'
 })
 export class UserSetupComponent {
-  roles: string[] = [Permission.FULL, Permission.PARTIAL];
+  roles: string[] = [Permission.FULL, Permission.SUPER, Permission.USER];
   userForm: FormGroup;
 
   constructor(private fb: FormBuilder,

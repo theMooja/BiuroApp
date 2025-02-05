@@ -1,5 +1,8 @@
 <ng-container>
+    @if(hasAccess(user, Permission.SUPER)){
     <button mat-raised-button (click)="onInfo()" class="dev-button">DevTools</button>
+    }
+
     <div class="info">
         <div class="plan-container">
             <mat-card appearance="outlined">
@@ -9,6 +12,10 @@
             </mat-card>
         </div>
         <div class="news-container">
+            <mat-card appearance="outlined">
+                <mat-card-header>0.1.6</mat-card-header>
+                <mat-card-content>Porządki w uprawnieniach</mat-card-content>
+            </mat-card>
             <mat-card appearance="outlined">
                 <mat-card-header>0.1.5</mat-card-header>
                 <mat-card-content>Widok z informacjami o aktualizacjach</mat-card-content>
@@ -32,6 +39,6 @@
                 <mat-card-content>pamiętaj wybrane info kolumny</mat-card-content>
             </mat-card>
         </div>
-        
+
     </div>
 </ng-container>

@@ -7,7 +7,7 @@ import { StopperEntity } from './entity/Stopper';
 import { InvoiceEntity } from './entity/Invoice';
 import { InvoiceLineEntity } from './entity/InvoiceLine';
 import { ListValueEntity } from './entity/ListValue';
-import { ListValueTargets, StepType } from './interfaces';
+import { ListValueTargets, Permission, StepType } from './interfaces';
 
 
 const clearDB = async function () {
@@ -31,11 +31,17 @@ const createUsers = async function (data: any) {
     data.user1 = await repo.save({
         name: 'U1',
         password: 'p1',
-        
+        permission: Permission.SUPER
     });
     data.user2 = await repo.save({
         name: 'U2',
-        password: 'p2'
+        password: 'p2',
+        permission: Permission.FULL
+    });
+    data.user3 = await repo.save({
+        name: 'U3',
+        password: 'p2',
+        permission: Permission.USER
     });
 }
 
