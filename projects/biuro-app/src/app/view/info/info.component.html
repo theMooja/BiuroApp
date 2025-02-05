@@ -1,3 +1,37 @@
 <ng-container>
-    <button mat-raised-button (click)="onInfo()">DevTools</button>
+    <button mat-raised-button (click)="onInfo()" class="dev-button">DevTools</button>
+    <div class="info">
+        <div class="plan-container">
+            <mat-card appearance="outlined">
+                <mat-card-header>Najliższe plany</mat-card-header>
+                <mat-card-content>Wyszukiwarka na głównym widoku</mat-card-content>
+                <mat-card-content>Zbiorcze operacje na fakturach</mat-card-content>
+            </mat-card>
+        </div>
+        <div class="news-container">
+            <mat-card appearance="outlined">
+                <mat-card-header>0.1.5</mat-card-header>
+                <mat-card-content>Widok z informacjami o aktualizacjach</mat-card-content>
+                <mat-card-content>poprawka zapisywania faktur</mat-card-content>
+            </mat-card>
+            <mat-card appearance="outlined">
+                <mat-card-header>0.1.4</mat-card-header>
+                <mat-card-content>nie pokazuj cudzych notek</mat-card-content>
+                <mat-card-content>notki nie psują stopera</mat-card-content>
+            </mat-card>
+            <mat-card appearance="outlined">
+                <mat-card-header>0.1.3</mat-card-header>
+                <mat-card-content>poprawa pamięci użytkownika</mat-card-content>
+                <mat-card-content>skroll na widoku głównym</mat-card-content>
+                <mat-card-content>zmiana marszu nie resetuje stopera</mat-card-content>
+            </mat-card>
+            <mat-card appearance="outlined">
+                <mat-card-header>0.1.2</mat-card-header>
+                <mat-card-content>marsz z datami</mat-card-content>
+                <mat-card-content>więcej zielonego</mat-card-content>
+                <mat-card-content>pamiętaj wybrane info kolumny</mat-card-content>
+            </mat-card>
+        </div>
+        
+    </div>
 </ng-container>

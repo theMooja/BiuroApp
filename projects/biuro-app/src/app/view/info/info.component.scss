@@ -1,0 +1,27 @@
+@import './../../variables.scss';
+
+.dev-button {
+    position: absolute;
+    bottom: 1em;
+    left: calc(50% - 50px);
+    width: 100px;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;    
+    align-items: stretch;
+    
+    .mdc-card {
+        margin: 1em;
+    }
+}
+
+.plan-container {
+    flex: 1;
+    background-color: $tetiary-green;
+}
+
+.news-container {
+    flex: 1;
+}
