@@ -58,10 +58,12 @@ export class HomeComponent {
   currentDate: Date = new Date('1-1-2025');
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
+
   lastColumn!: string;
   isRecreating: boolean = false;
   hasAccess = hasAccess;
   Permission = Permission;
+  searchValue: string;
 
   constructor(private monthlyDataService: MonthlyDataService,
     private settingsDataService: SettingsDataService,
@@ -99,6 +101,10 @@ export class HomeComponent {
     this.sort.active = this.columns[0];
     this.sort.direction = 'asc';
     this.tableData.sort = this.sort;
+
+    // this.tableData.filterPredicate = (row: IMonthlyEntity, filter: string) => {
+    //   return row.client.name.toLowerCase().includes(filter);
+    // }
   }
 
   get user() {
@@ -121,6 +127,26 @@ export class HomeComponent {
     }
 
     return Array.from(uniqueStepNames);
+  }
+
+  onSearch(search: string) {
+    document.querySelectorAll('.highlighted-row').forEach(row => {
+      row.classList.remove('highlighted-row');
+    });
+
+    if (!search.trim()) return; // Ignore empty search
+
+    setTimeout(() => {
+      const tableRows = document.querySelectorAll('mat-row');
+  
+      for (let row of Array.from(tableRows)) {
+        if (row.textContent?.toLowerCase().includes(search.toLowerCase())) {
+          row.classList.add('highlighted-row'); // Add highlight class
+          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          break;
+        }
+      }
+    }, 100);
   }
 
   onMarchFilterChange(name?: string) {

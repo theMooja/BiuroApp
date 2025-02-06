@@ -17,6 +17,15 @@
       </mat-menu>
     </ng-container>
 
+    <mat-form-field appearance="outline">
+      <input matInput type="text" id="searchInput" placeholder="Wyszukaj" (ngModelChange)="onSearch($event)" [(ngModel)]="searchValue">
+      @if (searchValue) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''; onSearch('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
     <span class="spacer"></span>
 
     <button mat-icon-button (click)="toggleSelectionMode(); $event.stopPropagation()" type="button"

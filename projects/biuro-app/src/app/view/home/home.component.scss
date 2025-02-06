@@ -27,6 +27,10 @@
         // border-right: .1px dotted $tetiary-black;
         // cursor: pointer;
     }
+
+    .highlighted-row {
+        background-color: $primary-green;
+    }
 }
 
 .expanded-detail {
