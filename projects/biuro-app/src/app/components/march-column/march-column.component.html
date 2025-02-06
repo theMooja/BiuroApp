@@ -76,7 +76,7 @@
             <div class="steps-container">
                 @for(val of steps; track val) {
                 <div mat-menu-item (mouseup)="onStepSelected(val)">
-                    <div class="round-gradient" [ngClass]="getStepValueClass(val.value)">
+                    <div class="menu-step" [ngClass]="getStepValueClass(val.value)">
                         <div class="content"> {{val.name}}</div>
                     </div>
                 </div>

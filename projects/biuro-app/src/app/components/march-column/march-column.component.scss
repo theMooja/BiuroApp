@@ -21,11 +21,11 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        border: 1px solid $primary-white;
     }
 
     .status-bar {
         width: 100%;
-        
     }
 }
 
@@ -49,8 +49,9 @@
 
 
 .round-gradient {
-    //width: 2em;
+    width: 2em;
     height: 2em;
+    margin-left: -4px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -58,9 +59,9 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-$green: #0b9b0b;
-$yellow: #d0db34;
-$red: #b12121;
+$green: $app-green;
+$yellow: $app-yellow;
+$red: $app-red;
 
 .step-desc-2 {
     background: radial-gradient(circle, $yellow, rgba($yellow, 0.3), rgba($yellow, 0.01));
@@ -75,15 +76,21 @@ $red: #b12121;
 }
 
 .step-value-2 {
-    color: $yellow;
+    background-color: $yellow;
 }
 
 .step-value-1 {
-    color: $green;
+    background-color: $green;
 }
 
 .step-value-0 {
-    color: $red;
+    background-color: $red;
+}
+
+.menu-step {
+    border: 1px solid $primary-white;
+    text-align: center;
+    border-radius: 6px;
 }
 
 .content {
