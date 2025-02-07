@@ -72,7 +72,7 @@ export class MarchColumnComponent {
   startStopper() {
     this.startTime = new Date();
     this.isRunning = true;
-    this.marchDataService.startMarch(this.currentStep);
+    this.marchDataService.startMarch(this.currentStep, this.monthly.client.name);
 
     this.intervalId = setInterval(() => {
       this.cdr.detectChanges();

@@ -74,6 +74,7 @@ const setAppHandlers = () => {
   ipcMain.handle('app:maximize', () => maximize());
   ipcMain.handle('app:close', () => close());
   ipcMain.handle('app:toggleDevTools', () => toggleDevTools());
+  ipcMain.handle('app:setTitle', (e, title: string) => setTitle(title));
 
   ipcMain.handle('app:getLastUserName', () => settings.getSync('lastUserName'));
   ipcMain.handle('app:getAppSettings', (e, key: string) => getSettings(key));
@@ -144,4 +145,8 @@ function toggleDevTools() {
   } else {
     mainWindow.webContents.openDevTools();
   }
+}
+
+function setTitle(title: string) {
+  mainWindow.setTitle(title);
 }

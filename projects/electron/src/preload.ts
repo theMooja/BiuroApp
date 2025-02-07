@@ -11,6 +11,7 @@ const contextBridgeApi = {
   getAppSettings: (key: string) => ipcRenderer.invoke('app:getAppSettings', key),
   setAppSettings: (key: string, value: string) => ipcRenderer.invoke('app:setAppSettings', key, value),
   toggleDevTools: () => ipcRenderer.invoke('app:toggleDevTools'),
+  setTitle: (title: string) => ipcRenderer.invoke('app:setTitle', title),
 
   getListValues: (target: string) => ipcRenderer.invoke('db:listValues', target),
 

@@ -12,8 +12,10 @@ export class MarchDataService {
 
   constructor() { }
 
-  async startMarch(march: IMarchEntity) {
+  async startMarch(march: IMarchEntity, clientName: string) {
     this.runningMarch.next(march);
+    console.log(march);
+    window.electron.setTitle('▶ ' + clientName);
   }
 
   async updateMarchValue(march: IMarchEntity) {
@@ -21,6 +23,7 @@ export class MarchDataService {
   }
 
   async addStopper(march: IMarchEntity, time: number, from: Date) : Promise<IStopperEntity> {
+    window.electron.setTitle('BiuroApp');
     return await window.electron.addStopper(march, time, from);
   }
 }
