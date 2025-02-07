@@ -129,24 +129,48 @@ export class HomeComponent {
     return Array.from(uniqueStepNames);
   }
 
+  searchResults: Element[] = []; // Store matched rows
+  currentIndex: number = -1; // Track current highlighted row index
+
   onSearch(search: string) {
+    // Remove previous highlights
     document.querySelectorAll('.highlighted-row').forEach(row => {
       row.classList.remove('highlighted-row');
     });
-
+  
+    this.searchResults = []; // Reset search results
+    this.currentIndex = -1; // Reset index
+  
     if (!search.trim()) return; // Ignore empty search
-
+  
     setTimeout(() => {
       const tableRows = document.querySelectorAll('mat-row');
   
       for (let row of Array.from(tableRows)) {
         if (row.textContent?.toLowerCase().includes(search.toLowerCase())) {
-          row.classList.add('highlighted-row'); // Add highlight class
-          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          break;
+          this.searchResults.push(row); // Store matched rows
         }
       }
+  
+      this.highlightNextResult(); // Highlight the first result immediately
     }, 100);
+  }
+
+  highlightNextResult() {
+    if (this.searchResults.length === 0) return;
+
+    // Remove highlight from previous result
+    if (this.currentIndex >= 0 && this.currentIndex < this.searchResults.length) {
+      this.searchResults[this.currentIndex].classList.remove('highlighted-row');
+    }
+
+    // Move to next result
+    this.currentIndex = (this.currentIndex + 1) % this.searchResults.length;
+    const nextRow = this.searchResults[this.currentIndex];
+
+    // Add highlight and scroll into view
+    nextRow.classList.add('highlighted-row');
+    nextRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   onMarchFilterChange(name?: string) {

@@ -18,7 +18,7 @@
     </ng-container>
 
     <mat-form-field appearance="outline">
-      <input matInput type="text" id="searchInput" placeholder="Wyszukaj" (ngModelChange)="onSearch($event)" [(ngModel)]="searchValue">
+      <input matInput type="text" id="searchInput" placeholder="Wyszukaj" (keyup.enter)="highlightNextResult()" (ngModelChange)="onSearch($event)" [(ngModel)]="searchValue">
       @if (searchValue) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''; onSearch('')">
           <mat-icon>close</mat-icon>
