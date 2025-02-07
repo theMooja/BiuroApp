@@ -9,16 +9,18 @@
 
 .info {
     display: flex;
-    flex-direction: row;    
+    flex-direction: row;
     align-items: stretch;
     height: 100%;
-    
+
     .mdc-card {
         margin: 1em;
+        background-color: $tetiary-black;
     }
 }
 
-.plan-container, .news-container {
+.plan-container,
+.news-container {
     flex: 1;
     height: 100%;
     overflow: auto;
@@ -26,4 +28,17 @@
 
 .plan-container {
     background-color: $tetiary-green;
+}
+
+.title {
+    text-align: center;
+    font-size: 2em;
+    line-height: 2em;
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    background-color: $secondary-green;
+    border: 1px solid $primary-black;
+    margin-inline: 1em;
+    border-radius: 0em 0em 1em 1em;
 }
