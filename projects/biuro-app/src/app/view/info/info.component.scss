@@ -11,17 +11,19 @@
     display: flex;
     flex-direction: row;    
     align-items: stretch;
+    height: 100%;
     
     .mdc-card {
         margin: 1em;
     }
 }
 
-.plan-container {
+.plan-container, .news-container {
     flex: 1;
-    background-color: $tetiary-green;
+    height: 100%;
+    overflow: auto;
 }
 
-.news-container {
-    flex: 1;
+.plan-container {
+    background-color: $tetiary-green;
 }
