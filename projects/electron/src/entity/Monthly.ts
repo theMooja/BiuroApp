@@ -1,7 +1,6 @@
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ClientEntity } from "./Client";
 import { MarchEntity } from "./March";
-import { AppDataSource } from "../datasource";
 import { InvoiceEntity } from "./Invoice";
 import { NoteEntity } from "./Note";
 
@@ -34,6 +33,7 @@ export class MonthlyEntity extends BaseEntity {
         program: string,
         forma: string,
         wlasciciel: string,
+        place: string
     }
 
     @OneToMany(() => MarchEntity, march => march.monthly, {

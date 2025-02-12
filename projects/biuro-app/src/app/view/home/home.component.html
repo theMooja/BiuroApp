@@ -118,6 +118,12 @@
       <mat-cell *matCellDef="let element"> {{element.info.wlasciciel}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="place">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+        (contextmenu)="onInfoColumnRightClick('place')"> płace </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.info.place}} </mat-cell>
+    </ng-container>
+
     <!-- /info columns -->
 
     <ng-container matColumnDef="invoices">

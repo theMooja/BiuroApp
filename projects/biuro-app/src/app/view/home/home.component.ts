@@ -28,7 +28,7 @@ import { NominativeDatePipe } from '../../utils/nominative-date.pipe';
 import { SettingsDataService } from '../../service/settings-data.service';
 import { UserDataService } from '../../service/user-data.service';
 
-export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel'];
+export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel', 'place'];
 
 @Component({
   selector: 'app-home',
@@ -94,6 +94,7 @@ export class HomeComponent {
         case 'ZUS': return item.info.ZUS;
         case 'wlasciciel': return item.info.wlasciciel;
         case 'skladki': return item.info.skladki;
+        case 'place': return item.info.place;
         case 'marchValues': return item.currentStep;
         default: return item[property];
       }
