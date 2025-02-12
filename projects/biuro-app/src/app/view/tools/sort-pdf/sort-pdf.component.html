@@ -1,1 +1,16 @@
-<p>Sort PDF works!</p>
+<div class="input-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Prefix</mat-label>
+    <input matInput [(ngModel)]="prefix">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Suffix</mat-label>
+    <input matInput [(ngModel)]="suffix">
+  </mat-form-field>
+  <div class="file-input-container">
+    <button type="button" mat-raised-button (click)="fileInput.click()">Wybierz plik</button>
+    <input hidden id="file-input" type="file" accept=".pdf" (change)="onFileSelected($event)" #fileInput>
+    <mat-label>{{selectedFile?.path}}</mat-label>
+  </div>
+  <button type="button" mat-raised-button (click)="onSort()">Sortuj</button>
+</div>

@@ -5,9 +5,9 @@
   "description": "biurowy mikro kombajn",
   "author": "Łukasz Bulak",
   "repository": {
-  "type": "git",
-  "url": "https://github.com/theMooja/BiuroApp.git"
-},
+    "type": "git",
+    "url": "https://github.com/theMooja/BiuroApp.git"
+  },
   "scripts": {
     "build-electron": "tsc --project projects/electron/tsconfig.json && npm run copy-files",
     "ng": "ng",
@@ -40,6 +40,8 @@
     "electron-settings": "^4.0.4",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^6.3.9",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.10.38",
     "pg": "^8.13.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0",
