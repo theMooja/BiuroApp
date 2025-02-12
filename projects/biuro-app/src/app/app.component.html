@@ -6,6 +6,11 @@
                 <mat-icon>home</mat-icon>
             </button>
         </div>
+        <div class="button-container">
+            <button mat-fab aria-label="home" routerLink="/tools">
+                <mat-icon>build</mat-icon>
+            </button>
+        </div>
         @if(hasAccess(user, Permission.FULL)) {
         <div class="button-container">
             <button mat-fab aria-label="reports" routerLink="/reports">

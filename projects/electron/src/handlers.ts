@@ -202,6 +202,7 @@ export const MonthlyController = {
           program: '',
           forma: '',
           wlasciciel: '',
+          place: '',
         };
         monthly.marches = [MarchEntity.create({
           name: '1',

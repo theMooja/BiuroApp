@@ -10,6 +10,8 @@ import { appVersionResolver, lastUserNameResolver } from './service/local-storag
 import { ReportsComponent } from './view/reports/reports.component';
 import { ClientSetupComponent } from './view/client-setup/client-setup.component';
 import { InfoComponent } from './view/info/info.component';
+import { ToolsComponent } from './view/tools/tools.component';
+import { SortPdfComponent } from './view/tools/sort-pdf/sort-pdf.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -19,6 +21,10 @@ export const routes: Routes = [
     { path: 'userSetup', component: UserSetupComponent },
     { path: 'reports', component: ReportsComponent },
     { path: 'clientSetup', component: ClientSetupComponent },
+    {
+        path: 'tools', component: ToolsComponent, children: [
+            { path: 'sort-pdf', component: SortPdfComponent }]
+    },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     {
         path: 'login', component: LoginComponent, resolve: {
