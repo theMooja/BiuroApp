@@ -96,16 +96,13 @@ export class HomeComponent {
         case 'skladki': return item.info.skladki;
         case 'place': return item.info.place;
         case 'marchValues': return item.currentStep;
+        case 'invoices': return item.invoices[0].sendDate;
         default: return item[property];
       }
     }
     this.sort.active = this.columns[0];
     this.sort.direction = 'asc';
     this.tableData.sort = this.sort;
-
-    // this.tableData.filterPredicate = (row: IMonthlyEntity, filter: string) => {
-    //   return row.client.name.toLowerCase().includes(filter);
-    // }
   }
 
   get user() {
@@ -138,23 +135,21 @@ export class HomeComponent {
     document.querySelectorAll('.highlighted-row').forEach(row => {
       row.classList.remove('highlighted-row');
     });
-  
+
     this.searchResults = []; // Reset search results
     this.currentIndex = -1; // Reset index
-  
+
     if (!search.trim()) return; // Ignore empty search
-  
-    setTimeout(() => {
-      const tableRows = document.querySelectorAll('mat-row');
-  
-      for (let row of Array.from(tableRows)) {
-        if (row.textContent?.toLowerCase().includes(search.toLowerCase())) {
-          this.searchResults.push(row); // Store matched rows
-        }
+
+    const tableRows = document.querySelectorAll('mat-row');
+
+    for (let row of Array.from(tableRows)) {
+      if (row.textContent?.toLowerCase().includes(search.toLowerCase())) {
+        this.searchResults.push(row); // Store matched rows
       }
-  
-      this.highlightNextResult(); // Highlight the first result immediately
-    }, 100);
+    }
+
+    this.highlightNextResult(); // Highlight first result
   }
 
   highlightNextResult() {
