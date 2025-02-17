@@ -18,7 +18,7 @@ export class InvoiceLineEntity extends BaseEntity {
     @Column()
     qtty: number;
 
-    @Column()
+    @Column('decimal', { precision: 12, scale: 2, nullable: true })
     price: number;
 }
 

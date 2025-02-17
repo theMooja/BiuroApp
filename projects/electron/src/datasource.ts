@@ -22,7 +22,21 @@ export const initializeDatabase = async (options: any) => {
     database: "biuro",
     synchronize: true,
     logging: true,
-    entities: [UserEntity, ClientEntity, MonthlyEntity, MarchEntity, StopperEntity, InvoiceEntity, InvoiceLineEntity, ListValueEntity, NoteEntity, ReportEntity],
+    entities: [
+      UserEntity, 
+      ClientEntity, 
+      MonthlyEntity, 
+      MarchEntity, 
+      StopperEntity, 
+      InvoiceEntity, 
+      InvoiceLineEntity, 
+      ListValueEntity, 
+      NoteEntity, 
+      ReportEntity
+    ],
+    migrations: [
+      __dirname + '/migration/**/*.ts'
+    ],
   }
   let config = { ...configDefault, ...options };
   console.log(config);
