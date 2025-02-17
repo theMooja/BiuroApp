@@ -35,6 +35,7 @@ const contextBridgeApi = {
   addStopper: (march: IMarchEntity, time: number, from: Date) => ipcRenderer.invoke('db:March:addStopper', march, time, from),
 
   saveInvoice: (invoice: IInvoiceEntity) => ipcRenderer.invoke('db:Invoice:saveInvoice', invoice),
+  saveInvoiceDates: (invoices: IInvoiceEntity[]) => ipcRenderer.invoke('db:Invoice:saveInvoiceDates', invoices),
 
   generateReport: (type: string, name: string, data: any) => ipcRenderer.invoke('db:Report:generate', type, name, data),
   getHeaders: () => ipcRenderer.invoke('db:Report:getHeaders'),

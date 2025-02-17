@@ -37,6 +37,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Monthly:updateInfo', (e, data) => MonthlyController.updateInfo(data));
 
   ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
+  ipcMain.handle('db:Invoice:saveInvoiceDates', (e, invoices) => InvoiceController.saveInvoiceDates(invoices));
 
   ipcMain.handle('db:Report:generate', (e, type, name, data) => ReportController.generateReport(type, name, data));
   ipcMain.handle('db:Report:getReport', (e, header) => ReportController.getReport(header));
@@ -380,6 +381,19 @@ export const InvoiceController = {
 
     invoice.lines = updatedLines;
     await invoiceRepo.save(invoice);
+  },
+
+  saveInvoiceDates(invoices: IInvoiceEntity[]) {
+    const repo = AppDataSource.getRepository(InvoiceEntity);
+
+    invoices.forEach(async (invoice) => {
+      const entity = await repo.findOneBy({ id: invoice?.id });
+      if (!entity) return;
+
+      entity.sendDate = invoice.sendDate;
+      entity.paidDate = invoice.paidDate;
+      await entity.save();
+    });
   }
 }
 

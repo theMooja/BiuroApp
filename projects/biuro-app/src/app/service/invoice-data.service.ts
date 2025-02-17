@@ -11,4 +11,8 @@ export class InvoiceDataService {
   async saveInvoice(invoice: IInvoiceEntity) {
     await window.electron.saveInvoice(invoice);
   }
+
+  async saveInvoiceDates(invoices: IInvoiceEntity[]) {
+    await window.electron.saveInvoiceDates(invoices);
+  }
 }

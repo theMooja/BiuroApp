@@ -18,11 +18,12 @@
     </ng-container>
 
     <mat-form-field appearance="outline">
-      <input matInput type="text" id="searchInput" placeholder="Wyszukaj" (keyup.enter)="highlightNextResult()" (ngModelChange)="onSearch($event)" [(ngModel)]="searchValue">
+      <input matInput type="text" id="searchInput" placeholder="Wyszukaj" (keyup.enter)="highlightNextResult()"
+        (ngModelChange)="onSearch($event)" [(ngModel)]="searchValue">
       @if (searchValue) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''; onSearch('')">
-          <mat-icon>close</mat-icon>
-        </button>
+      <button matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''; onSearch('')">
+        <mat-icon>close</mat-icon>
+      </button>
       }
     </mat-form-field>
 
@@ -40,13 +41,18 @@
     <button mat-icon-button [matMenuTriggerFor]="hiddenMenu">
       <mat-icon>menu</mat-icon>
     </button>
-    <mat-menu #hiddenMenu="matMenu">
+    <mat-menu #hiddenMenu="matMenu" >
       @if(hasAccess(user, Permission.SUPER)){
-      <button mat-raised-button (click)="onRecreateMonthlies($event)" [class.danger]="isRecreating"
-        class="recreate-button">
+      <button mat-menu-item (click)="onRecreateMonthlies($event)" [class.danger]="isRecreating">
         RECREATE
       </button>
       }
+      <button mat-menu-item (click)="onSetInvoiceSendDates()" [disabled]="selection.selected.length === 0">
+        Data wysyłki
+      </button>
+      <button mat-menu-item (click)="onSetInvoicePaidDates()" [disabled]="selection.selected.length === 0">
+        Data zapłaty
+      </button>
 
     </mat-menu>
   </mat-toolbar>
