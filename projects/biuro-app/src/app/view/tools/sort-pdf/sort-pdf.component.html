@@ -12,5 +12,5 @@
     <input hidden id="file-input" type="file" accept=".pdf" (change)="onFileSelected($event)" #fileInput>
     <mat-label>{{selectedFile?.path}}</mat-label>
   </div>
-  <button type="button" mat-raised-button (click)="onSort()">Sortuj</button>
+  <button type="button" [disabled]="isSorting" mat-raised-button (click)="onSort()">Sortuj</button>
 </div>

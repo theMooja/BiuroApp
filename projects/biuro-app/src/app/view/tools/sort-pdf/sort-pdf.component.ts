@@ -22,6 +22,7 @@ export class SortPdfComponent {
   prefix: string = '';
   suffix: string = '';
   selectedFile: File | null = null;
+  isSorting = false;
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -51,6 +52,7 @@ export class SortPdfComponent {
     }
 
     try {
+      this.isSorting = true;
       // Extract text content for sorting
       const pageTexts = await this.extractTextFromPDF(this.selectedFile);
 
@@ -92,5 +94,6 @@ export class SortPdfComponent {
     } catch (error) {
       console.error('Error:', error);
     }
+    this.isSorting = false;
   }
 }
