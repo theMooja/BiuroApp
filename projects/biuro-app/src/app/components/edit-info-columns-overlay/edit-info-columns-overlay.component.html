@@ -2,7 +2,12 @@
   <div *ngFor="let column of allInfoColumns" class="line">
     <mat-form-field>
       <mat-label>{{column}}</mat-label>
-        <input matInput [placeholder]="column" [formControlName]="column">
+        <input matInput [placeholder]="column" [formControlName]="column" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          @for (option of descriptionValues[column]; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+          }
+      </mat-autocomplete>
     </mat-form-field>
   </div>
   <button mat-raised-button type="submit">Zapisz</button>

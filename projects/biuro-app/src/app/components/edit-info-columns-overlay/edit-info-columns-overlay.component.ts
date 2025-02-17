@@ -9,11 +9,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
 import { MonthlyDataService } from '../../service/monthly-data.service';
 import { MatButtonModule } from '@angular/material/button';
+import { ListValuesService } from '../../service/list-values.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-edit-info-columns-overlay',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatAutocompleteModule],
   templateUrl: './edit-info-columns-overlay.component.html',
   styleUrl: './edit-info-columns-overlay.component.scss'
 })
@@ -21,18 +23,26 @@ export class EditInfoColumnsOverlayComponent {
   monthly: IMonthlyEntity;
   form: FormGroup;
   allInfoColumns: string[] = allInfoColumns;
+  descriptionValues: { [key: string]: string[] } = {};
 
   constructor(@Inject(DATA_INJECTION_TOKEN) private data: { entity: IMonthlyEntity, overlayRef: OverlayRef },
-    private formBuilder: FormBuilder, private monthlyDataService: MonthlyDataService) {
+    private formBuilder: FormBuilder, private monthlyDataService: MonthlyDataService, private listValuesService: ListValuesService) {
 
     this.monthly = this.data.entity;
 
     const fields: { [key: string]: any } = {};
     allInfoColumns.forEach(x => {
+      this.descriptionValues[x] = [];
       fields[x] = this.formBuilder.control(this.monthly.info[x]);
     });
 
     this.form = this.formBuilder.group(fields);
+  }
+
+  async ngOnInit() {
+    allInfoColumns.forEach(async val => {
+      this.descriptionValues[val] = await this.listValuesService.get(`info-${val}`);
+    });
   }
 
   onSubmit() {

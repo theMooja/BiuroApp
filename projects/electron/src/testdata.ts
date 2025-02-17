@@ -305,6 +305,18 @@ const createListValues = async function (data: any) {
         text: 'klienci',
         target: ListValueTargets.REPORT,
     });
+    await repo.save({
+        text: 'VM',
+        target: 'info-ZUS',
+    });
+    await repo.save({
+        text: 'VK',
+        target: 'info-ZUS',
+    });
+    await repo.save({
+        text: 'cit',
+        target: 'info-forma',
+    });
 }
 
 export default {
