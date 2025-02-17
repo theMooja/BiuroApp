@@ -334,6 +334,10 @@ export const InvoiceController = {
         where: { id: data.id },
         relations: ['lines'],
       });
+
+      invoice.sendDate = data.sendDate;
+      invoice.paidDate = data.paidDate;
+      invoice.no = data.no;
     }
 
     if (!invoice) {

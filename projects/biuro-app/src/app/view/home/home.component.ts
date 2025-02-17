@@ -96,7 +96,7 @@ export class HomeComponent {
         case 'skladki': return item.info.skladki;
         case 'place': return item.info.place;
         case 'marchValues': return item.currentStep;
-        case 'invoices': return item.invoices[0].sendDate;
+        case 'invoices': return item.invoices[0]?.sendDate;
         default: return item[property];
       }
     }
