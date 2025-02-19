@@ -55,6 +55,7 @@ export const MonthlyController = {
       .leftJoinAndSelect('inv.lines', 'lin')
       .leftJoinAndSelect('m.marches', 'mar')
       .leftJoinAndSelect('mar.stoppers', 'stop')
+      .leftJoinAndSelect('mar.owner', 'o')
       .leftJoinAndSelect('m.notes', 'not')
       .leftJoinAndSelect('not.user', 'user')
       .where('m.month = :month AND m.year = :year', { month, year })
@@ -138,6 +139,10 @@ export const MonthlyController = {
         existingMarch.sequence = march.sequence;
         existingMarch.weight = march.weight;
         existingMarch.type = march.type;
+        if(march.ownerId && march.ownerId !== existingMarch.owner?.id) {
+          existingMarch.owner = await UserEntity.findOneBy({ id: march.ownerId });
+        }
+        
         updatedMarches.push(existingMarch);
       } else {
         // Create new march
@@ -146,6 +151,7 @@ export const MonthlyController = {
           sequence: march.sequence,
           weight: march.weight,
           type: march.type,
+          owner: await UserEntity.findOneBy({ id: march.ownerId }),
           monthly: monthly
         }));
       }

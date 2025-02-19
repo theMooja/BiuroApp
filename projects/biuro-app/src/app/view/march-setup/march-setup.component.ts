@@ -5,13 +5,14 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
-import { IClientEntity, IMarchEntity, IMonthlyEntity, ListValueTargets, StepType } from './../../../../../electron/src/interfaces';
+import { IClientEntity, IMarchEntity, IMonthlyEntity, IUserEntity, ListValueTargets, StepType } from './../../../../../electron/src/interfaces';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { ClientDataService } from '../../service/client-data.service';
 import { MonthlyDataService } from '../../service/monthly-data.service';
 import { ListValuesService } from '../../service/list-values.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { UserDataService } from '../../service/user-data.service';
 
 @Component({
   selector: 'app-march-setup',
@@ -28,22 +29,25 @@ export class MarchSetupComponent {
   monthly!: IMonthlyEntity;
   clients!: IClientEntity[];
   descriptionValues: string[] = [];
-
+  users: IUserEntity[] = [];
 
   constructor(private formBuilder: FormBuilder,
     private monthlyDataService: MonthlyDataService,
     private clientDataService: ClientDataService,
-    private listValuesService: ListValuesService
+    private listValuesService: ListValuesService,
+    private userDataService: UserDataService
   ) {
     this.marchForm = this.formBuilder.group({
       name: this.formBuilder.control(''),
       steps: this.formBuilder.array([])
     });
+
   }
 
   async ngOnInit() {
     this.monthly = history.state.monthly;
     this.clients = await this.clientDataService.getClients();
+    this.users = await this.userDataService.getUsers();
     this.marchForm.get('name')?.setValue(this.monthly.client.name);
     this.recreateSteps(this.monthly);
 
@@ -69,6 +73,7 @@ export class MarchSetupComponent {
       type: StepType.GYR,
       weight: this.formBuilder.control(1),
       sequence: this.formBuilder.control(0),
+      ownerId: this.formBuilder.control(0),
     });
     group.controls.id.setValue(null);
 
@@ -77,8 +82,9 @@ export class MarchSetupComponent {
       group.controls.name.setValue(step.name);
       group.controls.type.setValue(step.type);
       group.controls.weight.setValue(step.weight);
+      group.controls.ownerId.setValue(step.owner?.id ?? null);
     }
-    
+
     return group;
   }
 

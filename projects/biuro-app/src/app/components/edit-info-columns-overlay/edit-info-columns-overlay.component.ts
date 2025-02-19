@@ -48,7 +48,6 @@ export class EditInfoColumnsOverlayComponent {
   }
 
   onSubmit() {
-    console.log(this.descriptionValues);
     this.monthly.info = this.form.value;
     this.monthlyDataService.updateInfo(this.monthly);
     this.data.overlayRef.dispose();

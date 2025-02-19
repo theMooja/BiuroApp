@@ -47,6 +47,8 @@ export interface IMarchEntity {
     stoppers: IStopperEntity[];
     type: StepType;
     finishedAt: Date;
+    ownerId?: number;
+    owner?: IUserEntity;
 }
 
 

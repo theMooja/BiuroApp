@@ -9,6 +9,7 @@ import { differenceInSeconds } from 'date-fns';
 import { SecondsToMMSSPipe } from '../../utils/seconds-to-mmss.pipe';
 import { CommonModule } from '@angular/common';
 import { MatCalendar, MatDatepicker, MatDatepickerModule, MatDatepickerToggle } from '@angular/material/datepicker';
+import { UserDataService } from '../../service/user-data.service';
 
 @Component({
   selector: 'march-column',
@@ -44,7 +45,13 @@ export class MarchColumnComponent {
     return this.currentStep.type === StepType.DATE;
   }
 
-  constructor(private marchDataService: MarchDataService, private cdr: ChangeDetectorRef) { }
+  get user() {
+    return this.userService.user;
+  }
+
+  constructor(private marchDataService: MarchDataService, private cdr: ChangeDetectorRef,
+    private userService: UserDataService
+  ) { }
 
   ngOnInit() {
     this.onStepSelected(this.findLastStep());

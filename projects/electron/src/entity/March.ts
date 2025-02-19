@@ -6,6 +6,7 @@ import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColum
 import { MonthlyEntity } from "./Monthly";
 import { StopperEntity } from "./Stopper";
 import { StepType } from "./../interfaces";
+import { UserEntity } from "./User";
 
 @Entity({ name: 'marches' })
 export class MarchEntity extends BaseEntity {
@@ -47,6 +48,12 @@ export class MarchEntity extends BaseEntity {
 
     @Column({ nullable: true })
     finishedAt: Date;
+
+    @ManyToOne(() => UserEntity, (user) => user.marches, {
+        onDelete: 'SET NULL',
+        nullable: true
+    })
+    owner: UserEntity;
 }
 
 

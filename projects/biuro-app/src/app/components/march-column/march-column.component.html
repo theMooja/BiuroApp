@@ -6,6 +6,9 @@
             <button mat-stroked-button [matMenuTriggerFor]="leftMenu" #leftMenuTrigger="matMenuTrigger"
                 (click)="$event.stopPropagation()" [ngClass]="getStepValueClass(currentStep.value)">
                 {{currentStep.name}}
+                @if (user?.id === currentStep.owner?.id) {
+                <mat-icon>person</mat-icon>
+                }
                 @if (isDateStep) {<div class="status-bar">
                     {{currentDate | date: 'dd-MM-yyyy' : 'pl-PL' }}
                 </div>}

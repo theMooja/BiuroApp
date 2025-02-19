@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "t
 import { StopperEntity } from "./Stopper";
 import { NoteEntity } from "./Note";
 import { Permission } from "../interfaces";
+import { MarchEntity } from "./March";
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
@@ -27,6 +28,9 @@ export class UserEntity extends BaseEntity {
         default: Permission.FULL
     })
     permission: Permission
+
+    @OneToMany(() => MarchEntity, (march) => march.owner)
+    marches: MarchEntity[];
 }
 
 
