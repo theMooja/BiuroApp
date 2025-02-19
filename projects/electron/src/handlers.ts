@@ -139,6 +139,7 @@ export const MonthlyController = {
         existingMarch.sequence = march.sequence;
         existingMarch.weight = march.weight;
         existingMarch.type = march.type;
+        existingMarch.name = march.name;
         if(march.ownerId && march.ownerId !== existingMarch.owner?.id) {
           existingMarch.owner = await UserEntity.findOneBy({ id: march.ownerId });
         }

@@ -195,9 +195,6 @@ export class HomeComponent {
   }
 
   async onRecreateMonthlies(event: MouseEvent) {
-    console.log(this.tableData.data);
-    console.log(this.selection.selected.length);
-    return;
     if (this.isRecreating) {
       this.isRecreating = false;
       await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
@@ -288,6 +285,7 @@ export class HomeComponent {
       }
     });
   }
+
   async onSetInvoicePaidDates() {
     const dialogRef = this.dialog.open(InvoiceDateDialogComponent, {
     });
