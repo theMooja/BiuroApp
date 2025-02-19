@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef } from '@angular/core';
 import { IMonthlyEntity } from '../../../../../electron/src/interfaces';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -26,7 +26,8 @@ export class EditInfoColumnsOverlayComponent {
   descriptionValues: { [key: string]: string[] } = {};
 
   constructor(@Inject(DATA_INJECTION_TOKEN) private data: { entity: IMonthlyEntity, overlayRef: OverlayRef },
-    private formBuilder: FormBuilder, private monthlyDataService: MonthlyDataService, private listValuesService: ListValuesService) {
+    private formBuilder: FormBuilder, private monthlyDataService: MonthlyDataService, private listValuesService: ListValuesService,
+    private cdr: ChangeDetectorRef) {
 
     this.monthly = this.data.entity;
 
@@ -40,12 +41,14 @@ export class EditInfoColumnsOverlayComponent {
   }
 
   async ngOnInit() {
-    allInfoColumns.forEach(async val => {
+    for (const val of allInfoColumns) {
       this.descriptionValues[val] = await this.listValuesService.get(`info-${val}`);
-    });
+    }
+    this.cdr.detectChanges(); // Trigger change detection
   }
 
   onSubmit() {
+    console.log(this.descriptionValues);
     this.monthly.info = this.form.value;
     this.monthlyDataService.updateInfo(this.monthly);
     this.data.overlayRef.dispose();
