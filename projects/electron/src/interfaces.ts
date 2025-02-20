@@ -49,6 +49,7 @@ export interface IMarchEntity {
     finishedAt: Date;
     ownerId?: number;
     owner?: IUserEntity;
+    isReady: boolean;
 }
 
 

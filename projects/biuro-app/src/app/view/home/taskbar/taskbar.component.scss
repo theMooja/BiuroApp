@@ -1,0 +1,11 @@
+@import "../../../variables.scss";
+
+.view {
+    border: 1px solid $secondary-black;
+}
+
+.item {
+    display: inline-block;
+    margin: .5em;
+    background-color: $tetiary-green;
+}

@@ -30,6 +30,7 @@ import { UserDataService } from '../../service/user-data.service';
 import { InvoiceDataService } from '../../service/invoice-data.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { InvoiceDateDialogComponent } from '../../utils/invoice-date-dialog/invoice-date-dialog.component';
+import { TaskbarComponent } from './taskbar/taskbar.component';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel', 'place'];
 
@@ -39,7 +40,7 @@ export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma
   imports: [NotesComponent, MarchColumnComponent, MatSort, MatSortModule, MatRippleModule,
     MatButtonModule, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule,
     MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule,
-    MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle, InvoiceColumnComponent, NominativeDatePipe, MatDialogModule],
+    MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle, InvoiceColumnComponent, NominativeDatePipe, MatDialogModule, TaskbarComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
