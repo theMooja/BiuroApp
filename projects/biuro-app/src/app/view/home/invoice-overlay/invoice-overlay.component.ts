@@ -1,15 +1,15 @@
 import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { IInvoiceEntity, IMonthlyEntity, ListValueTargets } from '../../../../../electron/src/interfaces';
-import { DATA_INJECTION_TOKEN } from '../home/invoice-column/invoice-column.component';
+import { IInvoiceEntity, IMonthlyEntity, ListValueTargets } from '../../../../../../electron/src/interfaces';
+import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { OverlayRef } from '@angular/cdk/overlay';
-import { InvoiceDataService } from '../../service/invoice-data.service';
+import { InvoiceDataService } from '../../../service/invoice-data.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ListValuesService } from '../../service/list-values.service';
+import { ListValuesService } from '../../../service/list-values.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
@@ -70,12 +70,12 @@ export class InvoiceOverlayComponent {
   }
 
   async onSave() {
-    console.log(this.invoiceForm.value);
-    await this.invoiceDataService.saveInvoice({
+    let invoice = await this.invoiceDataService.saveInvoice({
       ...this.invoiceForm.value,
       monthly: this.monthly
     });
-    this.monthly.invoices[0] = this.invoiceForm.value;
+    console.log(invoice);
+    this.monthly.invoices[0] = invoice;
     this.close();
   }
 

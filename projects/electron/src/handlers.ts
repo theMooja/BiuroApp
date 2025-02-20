@@ -330,7 +330,7 @@ export const ClientController = {
 }
 
 export const InvoiceController = {
-  async saveInvoice(data: IInvoiceEntity) {
+  async saveInvoice(data: IInvoiceEntity) : Promise<IInvoiceEntity> {
     let invoiceRepo = AppDataSource.getRepository(InvoiceEntity);
     const lineRepo = AppDataSource.getRepository(InvoiceLineEntity);
     const monthlyRepo = AppDataSource.getRepository(MonthlyEntity);
@@ -387,7 +387,7 @@ export const InvoiceController = {
     });
 
     invoice.lines = updatedLines;
-    await invoiceRepo.save(invoice);
+    return (await invoiceRepo.save(invoice)) as unknown as IInvoiceEntity;
   },
 
   saveInvoiceDates(invoices: IInvoiceEntity[]) {

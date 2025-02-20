@@ -8,8 +8,8 @@ export class InvoiceDataService {
 
   constructor() { }
 
-  async saveInvoice(invoice: IInvoiceEntity) {
-    await window.electron.saveInvoice(invoice);
+  async saveInvoice(invoice: IInvoiceEntity) : Promise<IInvoiceEntity> {
+    return await window.electron.saveInvoice(invoice);
   }
 
   async saveInvoiceDates(invoices: IInvoiceEntity[]) {

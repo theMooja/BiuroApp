@@ -4,7 +4,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { InvoiceOverlayComponent } from '../../invoice-overlay/invoice-overlay.component';
+import { InvoiceOverlayComponent } from '../invoice-overlay/invoice-overlay.component';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 
