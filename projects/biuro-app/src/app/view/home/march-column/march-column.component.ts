@@ -1,15 +1,15 @@
 import { ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
-import { IMonthlyEntity, IMarchEntity, StepType } from '../../../../../electron/src/interfaces';
+import { IMonthlyEntity, IMarchEntity, StepType } from '../../../../../../electron/src/interfaces';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MarchDataService } from '../../service/march-data.service';
+import { MarchDataService } from '../../../service/march-data.service';
 import { differenceInSeconds } from 'date-fns';
-import { SecondsToMMSSPipe } from '../../utils/seconds-to-mmss.pipe';
+import { SecondsToMMSSPipe } from '../../../utils/seconds-to-mmss.pipe';
 import { CommonModule } from '@angular/common';
 import { MatCalendar, MatDatepicker, MatDatepickerModule, MatDatepickerToggle } from '@angular/material/datepicker';
-import { UserDataService } from '../../service/user-data.service';
+import { UserDataService } from '../../../service/user-data.service';
 
 @Component({
   selector: 'march-column',

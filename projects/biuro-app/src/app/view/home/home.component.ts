@@ -16,14 +16,14 @@ import { CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule } from '@angular/cdk/
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MarchColumnComponent } from '../../components/march-column/march-column.component';
-import { NotesComponent } from '../../components/notes/notes.component';
+import { MarchColumnComponent } from './march-column/march-column.component';
+import { NotesComponent } from './notes-column/notes.component';
 import { Router } from '@angular/router';
 import { MonthlyDataService } from '../../service/monthly-data.service';
-import { DATA_INJECTION_TOKEN, InvoiceColumnComponent } from '../../components/invoice-column/invoice-column.component';
+import { DATA_INJECTION_TOKEN, InvoiceColumnComponent } from './invoice-column/invoice-column.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { EditInfoColumnsOverlayComponent } from '../../components/edit-info-columns-overlay/edit-info-columns-overlay.component';
+import { EditInfoColumnsOverlayComponent } from '../edit-info-columns-overlay/edit-info-columns-overlay.component';
 import { NominativeDatePipe } from '../../utils/nominative-date.pipe';
 import { SettingsDataService } from '../../service/settings-data.service';
 import { UserDataService } from '../../service/user-data.service';

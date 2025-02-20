@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { IInvoiceEntity, IMonthlyEntity, ListValueTargets } from '../../../../../electron/src/interfaces';
-import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
+import { DATA_INJECTION_TOKEN } from '../home/invoice-column/invoice-column.component';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { OverlayRef } from '@angular/cdk/overlay';
