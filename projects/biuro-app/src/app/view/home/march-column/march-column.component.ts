@@ -115,7 +115,10 @@ export class MarchColumnComponent {
 
     //unset isReady
     visible.forEach(x => x.isReady = false);
-    if (last) return last;
+    if (last) {
+      last.isReady = true;
+      return last;
+    }
 
     return visible.slice()
       .sort((a, b) => b.sequence - a.sequence)[0];

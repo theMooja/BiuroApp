@@ -41,7 +41,7 @@
     <button mat-icon-button [matMenuTriggerFor]="hiddenMenu">
       <mat-icon>menu</mat-icon>
     </button>
-    <mat-menu #hiddenMenu="matMenu" >
+    <mat-menu #hiddenMenu="matMenu">
       @if(hasAccess(user, Permission.SUPER)){
       <button mat-menu-item (click)="onRecreateMonthlies($event)" [class.danger]="isRecreating">
         RECREATE
@@ -56,7 +56,9 @@
 
     </mat-menu>
   </mat-toolbar>
-  <app-taskbar></app-taskbar>
+  @if(tableData.data.length === 0) {
+  <app-taskbar [monthlies]="tableData.data"></app-taskbar>
+  }
   <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
 
     <ng-container matColumnDef="name">
