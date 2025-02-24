@@ -227,7 +227,8 @@ export const MonthlyController = {
           name: m.name,
           sequence: m.sequence,
           weight: m.weight,
-          type: m.type
+          type: m.type,
+          owner: m.owner,
         }));
         monthly.notes = latest.notes?.filter(n => n.persists).map(n => ({ ...n, id: undefined } as NoteEntity));
       }
