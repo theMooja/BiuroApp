@@ -57,7 +57,7 @@
     </mat-menu>
   </mat-toolbar>
   @if(tableData.data.length !== 0) {
-  <app-taskbar [monthlies]="tableData.data"></app-taskbar>
+  <app-taskbar [monthlies]="tableData.data" (trigger)="onTaskTrigger($event)"></app-taskbar>
   }
   <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
 
@@ -158,7 +158,8 @@
 
     <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
     <mat-row (click)="selectionMode ? selection.toggle(element): null" *matRowDef="let element; columns: columns"
-      [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element">
+      [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element"
+      [attr.data-id]="element.id">
     </mat-row>
 
     <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>

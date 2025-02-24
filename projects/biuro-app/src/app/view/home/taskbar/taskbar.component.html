@@ -1,7 +1,9 @@
 <div class="view">
     @if(tasks.length !== 0) {
     @for(task of tasks; track task.id) {
-    <div class="item">{{task.name}}</div>
+    <button mat-flat-button class="item" (click)="triggerTask(task)">
+        <div class="button-line">{{task.monthly.client.name}}</div>
+        <div class="button-line">{{task.name}}</div></button>
     }}
 
 </div>

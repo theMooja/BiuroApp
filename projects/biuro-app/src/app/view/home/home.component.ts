@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Injector, ViewChild, ViewChildren } from '@angular/core';
-import { hasAccess, IClientEntity, IMonthlyEntity, Permission, StepType } from '../../../../../electron/src/interfaces';
+import { hasAccess, IClientEntity, IMarchEntity, IMonthlyEntity, Permission, StepType } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -299,5 +299,16 @@ export class HomeComponent {
         await this.invoiceDataService.saveInvoiceDates(this.selection.selected.map(x => x.invoices[0]));
       }
     });
+  }
+
+  onTaskTrigger(march: IMarchEntity) {
+    this.searchValue = '';
+    this.onSearch('');    
+
+    let row = document.querySelector(`mat-row[data-id="${march.monthly.id}"]`);
+    if (row) {
+      this.searchResults = [row as Element];
+    }
+    this.highlightNextResult();
   }
 }
