@@ -108,7 +108,8 @@ export class MarchColumnComponent {
 
   findLastStep(): IMarchEntity {
     let visible = this.monthly.marches
-      .filter(x => x.type !== StepType.HIDDEN);
+      .filter(x => x.type !== StepType.HIDDEN)
+      .sort((a, b) => a.sequence - b.sequence);
 
     let last = visible
       .find(x => x.value !== 1); //1 = done
@@ -121,6 +122,7 @@ export class MarchColumnComponent {
       return last;
     }
     
+    this.marchDataService.marchChanged();
     return visible.slice()
       .sort((a, b) => b.sequence - a.sequence)[0];
   }
