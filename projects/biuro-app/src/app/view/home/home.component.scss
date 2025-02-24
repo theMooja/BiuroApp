@@ -1,7 +1,12 @@
 @import './../../variables.scss';
 
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .client-table {
-  max-height: calc(100% - 64px);
   overflow-y: auto;
   overflow-x: hidden;
 

@@ -122,6 +122,90 @@ const createMonthlies = async function (data: any) {
             skladki: '3'
         }
     });
+
+    data.c4monthly1 = await repo.save({
+        client: data.client4,
+        month: 1,
+        year: 2025,
+        info: {
+            email: 'c3@email.com',
+            firma: 'finka',
+            forma: 'cit',
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
+        }
+    });
+
+    data.c5monthly1 = await repo.save({
+        client: data.client5,
+        month: 1,
+        year: 2025,
+        info: {
+            email: 'c3@email.com',
+            firma: 'finka',
+            forma: 'cit',
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
+        }
+    });
+
+    data.c6monthly1 = await repo.save({
+        client: data.client6,
+        month: 1,
+        year: 2025,
+        info: {
+            email: 'c3@email.com',
+            firma: 'finka',
+            forma: 'cit',
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
+        }
+    });
+
+    data.c7monthly1 = await repo.save({
+        client: data.client7,
+        month: 1,
+        year: 2025,
+        info: {
+            email: 'c3@email.com',
+            firma: 'finka',
+            forma: 'cit',
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
+        }
+    });
+
+    data.c8monthly1 = await repo.save({
+        client: data.client8,
+        month: 1,
+        year: 2025,
+        info: {
+            email: 'c3@email.com',
+            firma: 'finka',
+            forma: 'cit',
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
+        }
+    });
+
+    data.c9monthly1 = await repo.save({
+        client: data.client9,
+        month: 1,
+        year: 2025,
+        info: {
+            email: 'c3@email.com',
+            firma: 'finka',
+            forma: 'cit',
+            ZUS: '666',
+            VAT: '777',
+            skladki: '3'
+        }
+    });
 }
 
 const createMarches = async function (data: any) {
@@ -207,7 +291,151 @@ const createMarches = async function (data: any) {
         sequence: 3,
         weight: 1,
         value: 0
-    })
+    });
+
+    data.c4m1march1 = await repo.save({
+        monthly: data.c4monthly1,
+        name: 's1',
+        sequence: 1,
+        weight: 1,
+        value: 0
+    });
+
+    data.c4m1march2 = await repo.save({
+        monthly: data.c4monthly1,
+        name: 's2',
+        sequence: 2,
+        weight: 1,
+        value: 0
+    });
+
+    data.c4m1march3 = await repo.save({
+        monthly: data.c4monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    });
+
+    data.c5m1march1 = await repo.save({
+        monthly: data.c5monthly1,
+        name: 's1',
+        sequence: 1,
+        weight: 1,
+        value: 0
+    });
+
+    data.c5m1march2 = await repo.save({
+        monthly: data.c5monthly1,
+        name: 's2',
+        sequence: 2,
+        weight: 1,
+        value: 0
+    });
+
+    data.c5m1march3 = await repo.save({
+        monthly: data.c5monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    });
+
+    data.c6m1march1 = await repo.save({
+        monthly: data.c6monthly1,
+        name: 's1',
+        sequence: 1,
+        weight: 1,
+        value: 0
+    });
+
+    data.c6m1march2 = await repo.save({
+        monthly: data.c6monthly1,
+        name: 's2',
+        sequence: 2,
+        weight: 1,
+        value: 0
+    });
+
+    data.c6m1march3 = await repo.save({
+        monthly: data.c6monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    });
+
+    data.c7m1march1 = await repo.save({
+        monthly: data.c7monthly1,
+        name: 's1',
+        sequence: 1,
+        weight: 1,
+        value: 0
+    });
+
+    data.c7m1march2 = await repo.save({
+        monthly: data.c7monthly1,
+        name: 's2',
+        sequence: 2,
+        weight: 1,
+        value: 0
+    });
+
+    data.c7m1march3 = await repo.save({
+        monthly: data.c7monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    });
+
+    data.c8m1march1 = await repo.save({
+        monthly: data.c8monthly1,
+        name: 's1',
+        sequence: 1,
+        weight: 1,
+        value: 0
+    });
+
+    data.c8m1march2 = await repo.save({
+        monthly: data.c8monthly1,
+        name: 's2',
+        sequence: 2,
+        weight: 1,
+        value: 0
+    });
+
+    data.c8m1march3 = await repo.save({
+        monthly: data.c8monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    });
+
+    data.c9m1march1 = await repo.save({
+        monthly: data.c9monthly1,
+        name: 's1',
+        sequence: 1,
+        weight: 1,
+        value: 0
+    });
+
+    data.c9m1march2 = await repo.save({
+        monthly: data.c9monthly1,
+        name: 's2',
+        sequence: 2,
+        weight: 1,
+        value: 0
+    });
+
+    data.c9m1march3 = await repo.save({
+        monthly: data.c9monthly1,
+        name: 's3',
+        sequence: 3,
+        weight: 1,
+        value: 0
+    });
 }
 
 const createStoppers = async function (data: any) {
