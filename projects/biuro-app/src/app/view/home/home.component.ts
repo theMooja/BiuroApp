@@ -278,6 +278,7 @@ export class HomeComponent {
     });
 
     dialogRef.afterClosed().subscribe(async (result: Date | null) => {
+      console.log(this.selection.selected);
       if (result) {
         for (let selected of this.selection.selected) {
           selected.invoices[0].sendDate = result;
@@ -292,6 +293,7 @@ export class HomeComponent {
     });
 
     dialogRef.afterClosed().subscribe(async (result: Date | null) => {
+      console.log(this.selection.selected);
       if (result) {
         for (let selected of this.selection.selected) {
           selected.invoices[0].paidDate = result;
@@ -303,7 +305,7 @@ export class HomeComponent {
 
   onTaskTrigger(march: IMarchEntity) {
     this.searchValue = '';
-    this.onSearch('');    
+    this.onSearch('');
 
     let row = document.querySelector(`mat-row[data-id="${march.monthly.id}"]`);
     if (row) {

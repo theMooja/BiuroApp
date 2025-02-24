@@ -1,101 +1,110 @@
 @import './../../variables.scss';
 
 .client-table {
+  max-height: calc(100% - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
 
-    max-height: calc(100% - 64px);
-    overflow-y: auto;
-    overflow-x: hidden;
+  .cdk-header-row {
+    background-color: $primary-green;
+  }
 
-    .cdk-header-row {
-        background-color: $primary-green;
-    }
+  .detail-row {
+    flex-basis: 0;
+    min-height: initial;
+  }
 
-    .detail-row {
-        flex-basis: 0;
-        min-height: initial;
-    }
+  .mat-mdc-row.selected {
+    background: burlywood;
+  }
 
-    .selected {
-        background-color: burlywood;
-    }
+  .mat-mdc-row.highlighted-row {
+    background-color: $primary-green;
+  }
 
-    .cdk-row:not(.detail-row) {
-        height: 120px;
-    }
+  .selected.highlighted-row {
+    /* Apply gradient on the row */
+    background: linear-gradient(90deg, $primary-green, burlywood) !important;
+  }
 
-    .mat-mdc-row .mat-mdc-cell {
-        // border-right: .1px dotted $tetiary-black;
-        // cursor: pointer;
-    }
+  .cdk-row:not(.detail-row) {
+    height: 120px;
+  }
 
-    .highlighted-row {
-        background-color: $primary-green;
-    }
+  .mat-mdc-row {
+    display: flex;
+    width: 100%;
+    /* Ensure row background shows */
+    background: inherit;
+  }
+
+  .mat-mdc-row .mat-mdc-cell {
+    flex: 1;
+    background: transparent; // Remove any cell background override
+  }
+
+  
 }
 
 .expanded-detail {
-    button {
-        margin: 1em 1em;
-    }
+  button {
+    margin: 1em 1em;
+  }
 }
 
 .march-filter-button {
-    margin-left: 2em;
+  margin-left: 2em;
 }
 
 .march-menu-container {
-    background-color: indianred;
+  background-color: indianred;
 
-    .march-menu-item {
-        width: 5em;
-        height: 2em;
-        display: block;
-    }
+  .march-menu-item {
+    width: 5em;
+    height: 2em;
+    display: block;
+  }
 
-    .march-green {
-        background-color: aquamarine;
-    }
+  .march-green {
+    background-color: aquamarine;
+  }
 
-    .march-yellow {
-        background-color: darkkhaki;
-    }
+  .march-yellow {
+    background-color: darkkhaki;
+  }
 }
 
 .toolbar {
 
+  .calendar-button {
+    margin-right: 5px;
+  }
 
-    .calendar-button {
-        margin-right: 5px;
-    }
-
-    .spacer {
-        flex: 1 1 auto;
-    }
-
-
+  .spacer {
+    flex: 1 1 auto;
+  }
 }
 
 .danger {
-    color: $primary-red !important;
+  color: $primary-red !important;
 }
 
 .column-menu {
-    background-color: $secondary-black;
-    display: flex;
-    flex-direction: column;
-    padding: 1em;
-    border: solid 1px $primary-black;
+  background-color: $secondary-black;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  border: solid 1px $primary-black;
 }
 
-
 .mat-column-marchValues {
-    min-width: 200px;
+  min-width: 200px;
 }
 
 .mat-column-notes {
-    min-width: 200px;
+  min-width: 200px;
 }
 
 .mat-column-invoices {
-    min-width: 200px;
+  min-width: 200px;
 }
