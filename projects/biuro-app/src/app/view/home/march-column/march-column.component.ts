@@ -56,7 +56,7 @@ export class MarchColumnComponent {
   ngOnInit() {
     this.onStepSelected(this.findLastStep());
 
-    this.marchDataService.runningMarch$.subscribe(x => this.marchStarted(x))
+    this.marchDataService.runningMarch$.subscribe(x => this.marchStarted(x));
   }
 
   marchStarted(march: IMarchEntity) {
@@ -117,9 +117,10 @@ export class MarchColumnComponent {
     visible.forEach(x => x.isReady = false);
     if (last) {
       last.isReady = true;
+      this.marchDataService.marchChanged();
       return last;
     }
-
+    
     return visible.slice()
       .sort((a, b) => b.sequence - a.sequence)[0];
   }

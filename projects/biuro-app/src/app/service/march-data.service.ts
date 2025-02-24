@@ -10,7 +10,14 @@ export class MarchDataService {
   private runningMarch: Subject<IMarchEntity> = new Subject();
   public runningMarch$ = this.runningMarch.asObservable();
 
+  private marchChange: Subject<void> = new Subject();
+  public marchChange$ = this.marchChange.asObservable();
+
   constructor() { }
+
+  async marchChanged() {
+    this.marchChange.next();
+  }
 
   async startMarch(march: IMarchEntity, clientName: string) {
     this.runningMarch.next(march);
@@ -22,7 +29,7 @@ export class MarchDataService {
     await window.electron.updateMarchValue(march);
   }
 
-  async addStopper(march: IMarchEntity, time: number, from: Date) : Promise<IStopperEntity> {
+  async addStopper(march: IMarchEntity, time: number, from: Date): Promise<IStopperEntity> {
     window.electron.setTitle('BiuroApp');
     return await window.electron.addStopper(march, time, from);
   }

@@ -56,7 +56,7 @@
 
     </mat-menu>
   </mat-toolbar>
-  @if(tableData.data.length === 0) {
+  @if(tableData.data.length !== 0) {
   <app-taskbar [monthlies]="tableData.data"></app-taskbar>
   }
   <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
