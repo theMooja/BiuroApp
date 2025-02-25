@@ -33,6 +33,13 @@
         </div> -->
 
         <div class="spacer"></div>
+        @if(hasAccess(user, Permission.SUPER)) {
+        <div class="button-container ">
+            <button mat-fab aria-label="info" (click)="onTest()">
+                <mat-icon>info</mat-icon>
+            </button>
+        </div>
+        }
         <div class="button-container ">
             <button mat-fab aria-label="info" routerLink="/info">
                 <mat-icon>info</mat-icon>
@@ -55,3 +62,4 @@
     </div>
 
 </div>
+<simple-notifications></simple-notifications>

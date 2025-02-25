@@ -7,12 +7,13 @@ import { setDefaultOptions } from 'date-fns';
 import { DateAdapter } from '@angular/material/core';
 import { UserDataService } from './service/user-data.service';
 import { Permission, hasAccess } from '../../../electron/src/interfaces';
+import { NotificationsService, SimpleNotificationsModule } from 'angular2-notifications';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatButtonModule, MatIconModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatButtonModule, MatIconModule, SimpleNotificationsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -32,7 +33,8 @@ export class AppComponent {
 
   constructor(private readonly dateAdapter: DateAdapter<any>,
     private router: Router,
-    private userService: UserDataService
+    private userService: UserDataService,
+    private notificationService: NotificationsService 
   ) {
     setDefaultOptions({ locale: pl });
     dateAdapter.setLocale(pl);
@@ -55,6 +57,10 @@ export class AppComponent {
 
   onClose() {
     window.electron.close();
+  }
+
+  onTest() {
+    this.notificationService.success('Test', 'Test');
   }
 }
 

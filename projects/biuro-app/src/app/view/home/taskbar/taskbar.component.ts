@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { IMarchEntity, IMonthlyEntity } from '../../../../../../electron/src/interfaces';
 import { UserDataService } from '../../../service/user-data.service';
 import { MarchDataService } from '../../../service/march-data.service';
