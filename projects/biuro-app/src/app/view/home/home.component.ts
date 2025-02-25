@@ -232,6 +232,8 @@ export class HomeComponent {
     this.tableData.data = await this.monthlyDataService
       .getMonthlies(this.currentMonthly.month, this.currentMonthly.year);
 
+    this.selection.clear();
+
     console.log('tableData', this.tableData.data);
   }
 
