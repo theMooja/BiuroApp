@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 import { IClientEntity, IMarchEntity, IMonthlyEntity, INoteEntity } from '../../../../electron/src/interfaces';
+import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MonthlyDataService {
 
+  monthlies: IMonthlyEntity[] = [];
+
   constructor() { }
 
   async getMonthlies(month: number, year: number): Promise<IMonthlyEntity[]> {
     let monthlies = await window.electron.getMonthlies(year, month);
+    this.monthlies = monthlies;
     return monthlies;
   }
 
   async getMonthly(id: number): Promise<IMonthlyEntity> {
     let monthly = await window.electron.getMonthly(id);
+    let index = this.monthlies.findIndex(m => m.id === id);
+    this.monthlies[index] = monthly;
     return monthly;
   }
 

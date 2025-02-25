@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [MatButtonModule],
   templateUrl: './taskbar.component.html',
   styleUrl: './taskbar.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskbarComponent {
   @Input() monthlies: IMonthlyEntity[];
@@ -18,6 +18,10 @@ export class TaskbarComponent {
   @Output() trigger = new EventEmitter<IMarchEntity>();
 
   constructor(private userDataService: UserDataService, private cdr: ChangeDetectorRef, private marchDataService: MarchDataService) {
+  }
+
+  ngOnInit() {
+    this.updateTasks();
     this.marchDataService.marchChange$.subscribe(() => this.updateTasks());
   }
 
@@ -36,12 +40,12 @@ export class TaskbarComponent {
         })
         .flat()
         .filter(x => x.isReady && x.owner?.id === this.user?.id)]
-      this.cdr.markForCheck();
     }
+    this.cdr.markForCheck();
+    this.cdr.detectChanges();
   }
 
   triggerTask(march: IMarchEntity) {
-    console.log(march);
     this.trigger.emit(march);
   }
 }

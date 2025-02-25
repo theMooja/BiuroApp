@@ -62,6 +62,7 @@ export class HomeComponent {
   currentDate: Date = new Date('1-1-2025');
   @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  monthlies: IMonthlyEntity[] = [];
 
   lastColumn!: string;
   isRecreating: boolean = false;
@@ -229,10 +230,10 @@ export class HomeComponent {
   }
 
   async refreshData() {
-    this.tableData.data = await this.monthlyDataService
-      .getMonthlies(this.currentMonthly.month, this.currentMonthly.year);
-
     this.selection.clear();
+    this.monthlies = await this.monthlyDataService
+      .getMonthlies(this.currentMonthly.month, this.currentMonthly.year);
+    this.tableData.data = this.monthlies;
 
     console.log('tableData', this.tableData.data);
   }

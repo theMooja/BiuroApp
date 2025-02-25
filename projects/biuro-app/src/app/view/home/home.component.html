@@ -56,9 +56,7 @@
 
     </mat-menu>
   </mat-toolbar>
-  @if(tableData.data.length !== 0) {
-  <app-taskbar [monthlies]="tableData.data" (trigger)="onTaskTrigger($event)"></app-taskbar>
-  }
+  <app-taskbar [monthlies]="monthlies" (trigger)="onTaskTrigger($event)"></app-taskbar>
   <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
 
     <ng-container matColumnDef="name">
