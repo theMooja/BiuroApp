@@ -59,6 +59,10 @@ export class AppComponent {
     window.electron.close();
   }
 
+  onResize() {
+    window.electron.resize();
+  }
+
   onTest() {
     this.notificationService.success('Test', 'Test');
   }

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, screen } from "electron";
 import path from 'path';
 import testdata from './testdata';
 import * as settings from 'electron-settings';
@@ -29,6 +29,7 @@ const createWindow = (): void => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     frame: false,
+    resizable: true,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
@@ -73,6 +74,7 @@ const setAppHandlers = () => {
   ipcMain.handle('app:minimize', () => minimize());
   ipcMain.handle('app:maximize', () => maximize());
   ipcMain.handle('app:close', () => close());
+  ipcMain.handle('app:resize', () => resize());
   ipcMain.handle('app:toggleDevTools', () => toggleDevTools());
   ipcMain.handle('app:setTitle', (e, title: string) => setTitle(title));
 
@@ -131,6 +133,19 @@ function close() {
   mainWindow.close();
 }
 
+function resize() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width, height } = primaryDisplay.workAreaSize;
+
+  if (!mainWindow.isMaximized()) {
+    mainWindow.maximize();
+  } else {
+    mainWindow.unmaximize();
+    mainWindow.setSize(width - 100, height - 100, true);
+    mainWindow.center();
+  }
+}
+
 async function getSettings(key: string) {
   return await settings.get(key);
 }
@@ -140,7 +155,7 @@ async function setSettings(key: string, value: string) {
 }
 
 function toggleDevTools() {
-  if(mainWindow.webContents.isDevToolsOpened()) {
+  if (mainWindow.webContents.isDevToolsOpened()) {
     mainWindow.webContents.closeDevTools();
   } else {
     mainWindow.webContents.openDevTools();

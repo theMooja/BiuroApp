@@ -6,6 +6,7 @@ const contextBridgeApi = {
   minimize: () => ipcRenderer.invoke('app:minimize'),
   maximize: () => ipcRenderer.invoke('app:maximize'),
   close: () => ipcRenderer.invoke('app:close'),
+  resize: () => ipcRenderer.invoke('app:resize'),
   getLastUserName: () => ipcRenderer.invoke('app:getLastUserName'),
   getVersion: () => ipcRenderer.invoke('app:getVersion'),
   getAppSettings: (key: string) => ipcRenderer.invoke('app:getAppSettings', key),
