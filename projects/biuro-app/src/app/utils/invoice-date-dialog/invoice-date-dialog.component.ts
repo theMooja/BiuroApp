@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
   selector: 'app-invoice-date-dialog',
   standalone: true,
@@ -17,6 +18,10 @@ export class InvoiceDateDialogComponent {
   selectedDate: Date | null = null;
 
   constructor(public dialogRef: MatDialogRef<InvoiceDateDialogComponent>) {}
+
+  ngOnInit() {
+    this.selectedDate = new Date();
+  }
 
   onSave(): void {
     this.dialogRef.close(this.selectedDate);
