@@ -20,6 +20,9 @@ export class InvoiceLineEntity extends BaseEntity {
 
     @Column('decimal', { precision: 12, scale: 2, nullable: true })
     price: number;
+
+    @Column('text', { nullable: true })
+    category: string;
 }
 
 

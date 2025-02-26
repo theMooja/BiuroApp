@@ -27,6 +27,7 @@ export class InvoiceOverlayComponent {
   invoice: IInvoiceEntity;
   monthly: IMonthlyEntity;
   descriptionValues: string[] = [];
+  categoryValues: string[] = [];
 
   constructor(@Inject(DATA_INJECTION_TOKEN) private data: { invoice: IInvoiceEntity, overlayRef: OverlayRef, monthly: IMonthlyEntity },
     private formBuilder: FormBuilder, private invoiceDataService: InvoiceDataService, private listValuesService: ListValuesService) {
@@ -43,13 +44,15 @@ export class InvoiceOverlayComponent {
         id: this.formBuilder.control(x.id),
         description: this.formBuilder.control(x.description),
         price: this.formBuilder.control(x.price),
-        qtty: this.formBuilder.control(x.qtty)
+        qtty: this.formBuilder.control(x.qtty),
+        category: this.formBuilder.control(x.category)
       })))
     });
   }
 
   async ngOnInit() {
     this.descriptionValues = await this.listValuesService.get(ListValueTargets.INVOICE_DESC);
+    this.categoryValues = await this.listValuesService.get(ListValueTargets.INVOICE_CATEGORY);
   }
 
   get lines() {
@@ -61,7 +64,8 @@ export class InvoiceOverlayComponent {
       id: this.formBuilder.control(undefined),
       description: this.formBuilder.control(''),
       price: this.formBuilder.control(0),
-      qtty: this.formBuilder.control(1)
+      qtty: this.formBuilder.control(1),
+      category: this.formBuilder.control('')
     }));
   }
 

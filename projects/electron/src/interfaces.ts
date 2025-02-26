@@ -27,7 +27,8 @@ export function hasAccess(user: IUserEntity | undefined, permission: Permission)
 export enum ListValueTargets {
     INVOICE_DESC = 'invoice_description',
     STEP_DESC = 'step_description',
-    REPORT = 'report'
+    REPORT = 'report',
+    INVOICE_CATEGORY = 'invoice_category'
 }
 
 export interface IClientEntity {
@@ -114,6 +115,7 @@ export interface IInvoiceLineEntity {
     description: string,
     qtty: number,
     price: number,
+    category?: string
 }
 
 export interface IListValue {

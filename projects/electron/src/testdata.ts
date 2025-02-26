@@ -529,6 +529,14 @@ const createListValues = async function (data: any) {
         target: ListValueTargets.INVOICE_DESC,
     });
     await repo.save({
+        text: 'księgowość',
+        target: ListValueTargets.INVOICE_CATEGORY,
+    });
+    await repo.save({
+        text: 'kadry',
+        target: ListValueTargets.INVOICE_CATEGORY,
+    });
+    await repo.save({
         text: 'wprowadzanie',
         target: ListValueTargets.STEP_DESC,
     });

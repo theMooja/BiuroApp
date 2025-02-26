@@ -27,15 +27,24 @@
                     <mat-label>Cena</mat-label>
                     <input matInput placeholder="Kwota" formControlName="price" type="number">
                 </mat-form-field>
-                <mat-form-field>
+                <mat-form-field class="qtty-field">
                     <mat-label>Ilość</mat-label>
-                    <input matInput placeholder="Ilość" formControlName="qtty">
+                    <input matInput placeholder="Ilość" formControlName="qtty" type="number">
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Opis</mat-label>
-                    <input matInput placeholder="Opis" formControlName="description" [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete">
+                    <input matInput placeholder="Opis" formControlName="description" [matAutocomplete]="autoDesc">
+                    <mat-autocomplete #autoDesc="matAutocomplete">
                         @for (option of descriptionValues; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Kategoria</mat-label>
+                    <input matInput placeholder="Kategoria" formControlName="category" [matAutocomplete]="autoCat">
+                    <mat-autocomplete #autoCat="matAutocomplete">
+                        @for (option of categoryValues; track option) {
                         <mat-option [value]="option">{{option}}</mat-option>
                         }
                     </mat-autocomplete>

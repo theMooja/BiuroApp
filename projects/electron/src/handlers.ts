@@ -376,6 +376,7 @@ export const InvoiceController = {
           existingLine.description = line.description;
           existingLine.price = line.price;
           existingLine.qtty = line.qtty;
+          existingLine.category = line.category;
           return existingLine;
         }
       }
@@ -384,6 +385,7 @@ export const InvoiceController = {
       newLine.description = line.description;
       newLine.price = line.price;
       newLine.qtty = line.qtty;
+      newLine.category = line.category;
       return newLine;
     });
 
