@@ -12,11 +12,11 @@ export class ReportEntity extends BaseEntity {
     @Column()
     name: string;
 
-    @Column('text')
-    input: string;
+    @Column('json', { default: {} })
+    input: any;
 
-    @Column('text')
-    output: string;
+    @Column('json', { default: {} })
+    output: any;
 
     @CreateDateColumn()
     createdAt: Date;

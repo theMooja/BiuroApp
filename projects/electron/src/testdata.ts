@@ -8,6 +8,7 @@ import { InvoiceEntity } from './entity/Invoice';
 import { InvoiceLineEntity } from './entity/InvoiceLine';
 import { ListValueEntity } from './entity/ListValue';
 import { ListValueTargets, Permission, StepType } from './interfaces';
+import { ReportEntity } from './entity/Report';
 
 
 const clearDB = async function () {
@@ -505,6 +506,16 @@ const createInvoices = async function (data: any) {
 
 }
 
+const createReports = async function (data: any) {
+    console.log('-----------creating reports');
+    let repo = AppDataSource.getRepository(ReportEntity);
+
+    await repo.save({
+        type: 'clientProfitability',
+        name: 'rentowność klientów 01 2025',
+    });
+}
+
 const createListValues = async function (data: any) {
     console.log('-----------creating list values');
     let repo = AppDataSource.getRepository(ListValueEntity);
@@ -526,7 +537,7 @@ const createListValues = async function (data: any) {
         target: ListValueTargets.STEP_DESC,
     });
     await repo.save({
-        text: 'pracownicy',
+        text: 'clientProfitability',
         target: ListValueTargets.REPORT,
     });
     await repo.save({
@@ -560,5 +571,6 @@ export default {
         await createStoppers(data);
         await createInvoices(data);
         await createListValues(data);
+        await createReports(data);
     }
 }

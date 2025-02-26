@@ -12,11 +12,8 @@
         <mat-nav-list>
             @for(val of reportHeaders; track val){
             @if(val) {
-            <a mat-list-item (mouseup)="onOpen(val)" [disabled]="!!val.isLoading">
-                <span>{{val.name}}</span>
-                <button mat-icon-button (click)="onRemove(val)" style="float: right;">
-                    <mat-icon>delete</mat-icon>
-                </button>
+            <a mat-list-item (mouseup)="onOpen(val)" >
+                <span class="report-name">{{val.name}}</span>
             </a>}
             }
         </mat-nav-list>
@@ -26,8 +23,8 @@
         @if (!activeReport) {
         Wybierz raport
         }
-        @else if (activeReport.type === 'pracownicy') {
-        <app-employees-report [report]="activeReport"></app-employees-report>
+        @else if (activeReport.type === 'clientProfitability') {
+        <app-client-profitability [report]="activeReport"></app-client-profitability>
         }
     </mat-sidenav-content>
 </mat-sidenav-container>

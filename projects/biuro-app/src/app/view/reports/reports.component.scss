@@ -11,11 +11,8 @@
 }
 
 .sidenav-nav {
-    width: 150px;
-}
-
-.center-flex {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    .report-name {
+        min-width: 150px;
+        max-width: 150px;
+    }
 }

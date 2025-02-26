@@ -125,8 +125,7 @@ export interface IListValue {
 export interface IReportHeader {
     id?: number,
     type: string,
-    name: string,
-    isLoading?: number
+    name?: string
 }
 
 export interface IReport extends IReportHeader {

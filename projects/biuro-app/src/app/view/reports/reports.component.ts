@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ListValuesService } from '../../service/list-values.service';
 import { IReport, IReportHeader, ListValueTargets } from '../../../../../electron/src/interfaces';
@@ -8,27 +8,27 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { EmployeesReportDialogComponent } from '../../report/employees/employees-dialog/employees-report-dialog.component';
-import { EmployeesReportComponent } from '../../report/employees/employees-report/employees-report.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmationDialogComponent } from '../../utils/confirmation-dialog/confirmation-dialog.component';
-import { ClientReportDialogComponent } from '../../report/clients/client-dialog/client-report-dialog.component';
+import { ClientProfitabilityComponent } from './client-profitability/client-profitability.component';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [MatSidenavModule, MatIconModule, MatMenuModule, MatListModule, CommonModule, EmployeesReportComponent, MatButtonModule],
+  imports: [MatSidenavModule, MatIconModule, MatMenuModule, MatListModule, CommonModule, MatButtonModule, ClientProfitabilityComponent],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
 export class ReportsComponent {
   reportNames: string[];
-  activeReport: IReport;
+  activeReport: IReportHeader;
   reportHeaders: IReportHeader[];
   loadingIdx: number = 0;
 
-  constructor(private dialog: MatDialog, private listValuesService: ListValuesService, private reportService: ReportsService, private matDialog: MatDialog) {
+  private listValuesService = inject(ListValuesService);
+  private reportService = inject(ReportsService);
 
+  constructor(private dialog: MatDialog) {
   }
 
   async ngOnInit() {
@@ -37,46 +37,22 @@ export class ReportsComponent {
   }
 
   onAdd(reportType: string) {
+    let header: IReportHeader;
 
     switch (reportType) {
-      case 'pracownicy':
-        const empDialogRef = this.matDialog.open(EmployeesReportDialogComponent, {
-
-        });
-        empDialogRef.afterClosed().subscribe(result => {
-          result && this.onGenerate(reportType, result);
-        });
+      case 'clientProfitability':
+        header = {
+          type: reportType,
+          name: 'rentowność klientów ' + (new Date().getMonth() + 1) + ' ' + new Date().getFullYear(),
+        }
+        this.reportHeaders.push(header);
+        this.onOpen(header);
         break;
-      case 'klienci':
-        const cliDialogRef = this.matDialog.open(ClientReportDialogComponent, {
-
-        });
-        cliDialogRef.afterClosed().subscribe(result => {
-          result && this.onGenerate(reportType, result);
-        });
     }
   }
 
-  onGenerate(reportType: string, data: any) {
-    let loadingIdx = this.loadingIdx++;
-
-    this.reportService.generateReport(reportType, data.name, data).then((res) => {
-
-      let idx = this.reportHeaders.findIndex(x => x.isLoading === loadingIdx);
-      if (idx !== -1) this.reportHeaders[idx] = res;
-    });
-
-    let header: IReportHeader = {
-      name: data.name,
-      type: reportType,
-      isLoading: loadingIdx
-    };
-
-    this.reportHeaders.push(header);
-  }
-
-  async onOpen(report: IReportHeader) {
-    this.activeReport = await this.reportService.getReport(report);
+  async onOpen(header: IReportHeader) {
+    this.activeReport = header;
   }
 
   async onRemove(report: IReportHeader) {
