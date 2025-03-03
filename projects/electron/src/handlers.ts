@@ -191,6 +191,7 @@ export const MonthlyController = {
         .createQueryBuilder('m')
         .leftJoinAndSelect('m.client', 'client')
         .leftJoinAndSelect('m.marches', 'mar')
+        .leftJoinAndSelect('m.owner', 'o')
         .leftJoinAndSelect('m.notes', 'n')
         .leftJoinAndSelect('n.user', 'user')
         .where('(m.year < :year OR (m.year = :year AND m.month < :month))', { year: year, month: month })

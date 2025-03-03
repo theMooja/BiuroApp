@@ -1,6 +1,5 @@
-<mat-sidenav-container class="sidenav-container">
-
-    <mat-sidenav class="sidenav-nav" mode="side" disableClose="false" opened fixedInViewport="true">
+<div class="view">
+    <div class="menu-container">
         <button mat-raised-button class="open-button" [matMenuTriggerFor]="leftMenu">dodaj</button>
         <mat-menu #leftMenu="matMenu">
             @for(val of reportNames; track val){
@@ -12,19 +11,18 @@
         <mat-nav-list>
             @for(val of reportHeaders; track val){
             @if(val) {
-            <a mat-list-item (mouseup)="onOpen(val)" >
+            <a mat-list-item (mouseup)="onOpen(val)">
                 <span class="report-name">{{val.name}}</span>
             </a>}
             }
         </mat-nav-list>
-    </mat-sidenav>
-
-    <mat-sidenav-content class="sidenav-content">
+    </div>
+    <div class="content">
         @if (!activeReport) {
         Wybierz raport
         }
         @else if (activeReport.type === 'clientProfitability') {
         <app-client-profitability [report]="activeReport"></app-client-profitability>
         }
-    </mat-sidenav-content>
-</mat-sidenav-container>
+    </div>
+</div>

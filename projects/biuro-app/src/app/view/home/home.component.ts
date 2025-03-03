@@ -24,13 +24,13 @@ import { DATA_INJECTION_TOKEN, InvoiceColumnComponent } from './invoice-column/i
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { EditInfoColumnsOverlayComponent } from '../edit-info-columns-overlay/edit-info-columns-overlay.component';
-import { NominativeDatePipe } from '../../utils/nominative-date.pipe';
 import { SettingsDataService } from '../../service/settings-data.service';
 import { UserDataService } from '../../service/user-data.service';
 import { InvoiceDataService } from '../../service/invoice-data.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { InvoiceDateDialogComponent } from '../../utils/invoice-date-dialog/invoice-date-dialog.component';
 import { TaskbarComponent } from './taskbar/taskbar.component';
+import { MonthlyPickerComponent } from '../../utils/monthly-picker/monthly-picker.component';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel', 'place'];
 
@@ -40,7 +40,7 @@ export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma
   imports: [NotesComponent, MarchColumnComponent, MatSort, MatSortModule, MatRippleModule,
     MatButtonModule, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule,
     MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule,
-    MatDatepicker, MatCalendar, MatMenuModule, MatDatepickerToggle, InvoiceColumnComponent, NominativeDatePipe, MatDialogModule, TaskbarComponent],
+    MatDatepicker, MatMenuModule, InvoiceColumnComponent, MatDialogModule, TaskbarComponent, MonthlyPickerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -59,8 +59,8 @@ export class HomeComponent {
   selectionMode: boolean = false;
   infoColumns = ['email', 'firma', 'forma'];
   allInfoColumns = allInfoColumns;
-  currentDate: Date = new Date('1-1-2025');
-  @ViewChild(MatCalendar) calendar!: MatCalendar<Date>;
+  currentDate: Date = new Date(new Date().setMonth(new Date().getMonth() - 1));
+
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   monthlies: IMonthlyEntity[] = [];
 
@@ -74,7 +74,6 @@ export class HomeComponent {
     private settingsDataService: SettingsDataService,
     private userService: UserDataService,
     private invoiceDataService: InvoiceDataService,
-    private cdr: ChangeDetectorRef,
     private router: Router,
     private overlay: Overlay,
     private dialog: MatDialog
@@ -245,19 +244,10 @@ export class HomeComponent {
     }
   }
 
-  async onDateSelected(normalizedMonthAndYear: Date, trigger: MatMenuTrigger) {
-    this.currentDate = normalizedMonthAndYear;
-    sessionStorage.setItem('currentDate', JSON.stringify(this.currentDate));
-    this.cdr.detach();
+  async onDateChange(date: Date) {
+    this.currentDate = date;
     this.tableData.data = [];
     await this.refreshData();
-
-    trigger.closeMenu();
-  }
-
-  viewChangedHandler(event: any) {
-    this.calendar.currentView = 'year';
-    this.cdr.reattach();
   }
 
   toggleSelectionMode() {

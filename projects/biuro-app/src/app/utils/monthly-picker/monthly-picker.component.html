@@ -1,0 +1,17 @@
+<ng-container>
+    <button mat-raised-button [matMenuTriggerFor]="myMenu" #calTrigger="matMenuTrigger" class="calendar-button">
+        <mat-icon>calendar_today</mat-icon>
+        @if(!onlyIcon) {
+            {{date | nominativeDate : 'MMMM' : 'pl-PL'}}
+        }
+    </button>
+    <mat-menu #myMenu="matMenu">
+        <div (click)="$event.stopPropagation();">
+            <mat-calendar startView="year" style="width:15rem" #calendar panelClass="month-picker"
+                [selected]="date" (monthSelected)="onDateSelected($event, calTrigger)"
+                (viewChanged)="viewChangedHandler($event)">
+            </mat-calendar>
+
+        </div>
+    </mat-menu>
+</ng-container>

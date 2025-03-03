@@ -1,18 +1,25 @@
-.sidenav-container {
-    height: 100%;
+@import "./../../variables.scss";
+
+.view {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: $primary-green;
 }
 
-.sidenav-content {
-    margin-left: 150px !important;
+.menu-container {
+    width: 200px;
+    height: 100vh;
+}
+
+.content {
+    flex: 1;
+    height: 100vh;
+    background-color: $primary-white;
 }
 
 .open-button {
     width: 100%;
-}
-
-.sidenav-nav {
-    .report-name {
-        min-width: 150px;
-        max-width: 150px;
-    }
 }

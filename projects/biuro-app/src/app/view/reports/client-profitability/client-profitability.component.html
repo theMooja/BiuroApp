@@ -1,5 +1,15 @@
-<app-report-toolbar (generate)="onGenerate()"> </app-report-toolbar>
-<mat-drawer-container class="example-container">
-    <mat-drawer mode="side" opened>Drawer content</mat-drawer>
-    <mat-drawer-content>Main content</mat-drawer-content>
-</mat-drawer-container>
+<div class="view">
+    <app-report-toolbar class="toolbar" (generate)="onGenerate()" > </app-report-toolbar>
+    <mat-drawer-container class="container">
+        <mat-drawer #drawer mode="over" opened class="drawer">
+
+            
+
+        </mat-drawer>
+        <mat-drawer-content class="content">
+            <button mat-raised-button (click)="drawer.toggle()">
+                
+            </button>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

@@ -2,20 +2,7 @@
 
   <mat-toolbar class="toolbar">
 
-    <ng-container>
-      <button mat-raised-button [matMenuTriggerFor]="myMenu" #calTrigger="matMenuTrigger" class="calendar-button">
-        <mat-icon>calendar_today</mat-icon>{{currentDate | nominativeDate : 'MMMM' : 'pl-PL'}}
-      </button>
-      <mat-menu #myMenu="matMenu">
-        <div (click)="$event.stopPropagation();">
-          <mat-calendar startView="year" style="width:15rem" #calendar panelClass="month-picker"
-            [selected]="currentDate" (monthSelected)="onDateSelected($event, calTrigger)"
-            (viewChanged)="viewChangedHandler($event)">
-          </mat-calendar>
-
-        </div>
-      </mat-menu>
-    </ng-container>
+    <app-monthly-picker [date]="currentDate" (dateChange)="onDateChange($event)"></app-monthly-picker>
 
     <mat-form-field appearance="outline">
       <input matInput type="text" id="searchInput" placeholder="Wyszukaj" (keyup.enter)="highlightNextResult()"
