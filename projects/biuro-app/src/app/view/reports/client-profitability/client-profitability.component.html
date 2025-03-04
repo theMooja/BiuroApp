@@ -1,9 +1,8 @@
 <div class="view">
-    <app-report-toolbar class="toolbar" (generate)="onGenerate()" > </app-report-toolbar>
     <mat-drawer-container class="container">
         <mat-drawer #drawer mode="over" opened class="drawer">
 
-            
+            <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)"></app-monthly-picker>
 
         </mat-drawer>
         <mat-drawer-content class="content">

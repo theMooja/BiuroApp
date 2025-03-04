@@ -147,5 +147,15 @@ export interface IEmployeesReportOutput {
     }
 }
 
+export interface ISummaryReportOutput {
+    sumInvoice: {
+        [cat: string]: {
+            [form: string]: {
+                sum: number
+            }
+        }
+    }
+}
+
 export interface IClientsReportOutput {
 }

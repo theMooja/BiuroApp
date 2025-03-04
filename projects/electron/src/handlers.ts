@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, IUserEntity, StepType } from "./interfaces";
+import { IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IInvoiceLineEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, ISummaryReportOutput, IUserEntity, StepType } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
@@ -39,7 +39,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
   ipcMain.handle('db:Invoice:saveInvoiceDates', (e, invoices) => InvoiceController.saveInvoiceDates(invoices));
 
-  ipcMain.handle('db:Report:generate', (e, type, name, data) => ReportController.generateReport(type, name, data));
+  ipcMain.handle('db:Report:generate', (e, header, data) => ReportController.generateReport(header, data));
   ipcMain.handle('db:Report:getReport', (e, header) => ReportController.getReport(header));
   ipcMain.handle('db:Report:getHeaders', (e) => ReportController.getHeaders());
   ipcMain.handle('db:Report:removeReport', (e, report) => ReportController.removeReport(report));
@@ -140,10 +140,10 @@ export const MonthlyController = {
         existingMarch.weight = march.weight;
         existingMarch.type = march.type;
         existingMarch.name = march.name;
-        if(march.ownerId && march.ownerId !== existingMarch.owner?.id) {
+        if (march.ownerId && march.ownerId !== existingMarch.owner?.id) {
           existingMarch.owner = await UserEntity.findOneBy({ id: march.ownerId });
         }
-        
+
         updatedMarches.push(existingMarch);
       } else {
         // Create new march
@@ -191,7 +191,7 @@ export const MonthlyController = {
         .createQueryBuilder('m')
         .leftJoinAndSelect('m.client', 'client')
         .leftJoinAndSelect('m.marches', 'mar')
-        .leftJoinAndSelect('m.owner', 'o')
+        .leftJoinAndSelect('mar.owner', 'o')
         .leftJoinAndSelect('m.notes', 'n')
         .leftJoinAndSelect('n.user', 'user')
         .where('(m.year < :year OR (m.year = :year AND m.month < :month))', { year: year, month: month })
@@ -332,7 +332,7 @@ export const ClientController = {
 }
 
 export const InvoiceController = {
-  async saveInvoice(data: IInvoiceEntity) : Promise<IInvoiceEntity> {
+  async saveInvoice(data: IInvoiceEntity): Promise<IInvoiceEntity> {
     let invoiceRepo = AppDataSource.getRepository(InvoiceEntity);
     const lineRepo = AppDataSource.getRepository(InvoiceLineEntity);
     const monthlyRepo = AppDataSource.getRepository(MonthlyEntity);
@@ -421,17 +421,16 @@ export const ListValuesController = {
 }
 
 export const ReportController = {
-  async generateReport(type: string, name: string, data: any): Promise<IReportHeader> {
+  async generateReport(header: IReportHeader, data: any): Promise<IReport> {
+    let report: IReport = {
+      id: header.id,
+      name: header.name,
+      type: header.type,
+      input: JSON.stringify(data),
+      output: await this.generateReportOutput(header.type, data);
+    };
 
-    let repo = AppDataSource.getRepository(ReportEntity);
-    let report = new ReportEntity();
-    report.name = name;
-    report.type = type;
-    report.input = JSON.stringify(data);
-    let output = await this.generateReportOutput(type, data);
-    report.output = JSON.stringify(output);
-
-    return await repo.save(report);
+    return await this.saveReport(report);
   },
 
   async getReport(report: IReportHeader): Promise<IReport> {
@@ -445,6 +444,21 @@ export const ReportController = {
     return await repo.find();
   },
 
+  async saveReport(report: IReport): Promise<IReport> {
+    let repo = AppDataSource.getRepository(ReportEntity);
+    let entity = await repo.findOneBy({ id: report.id });
+
+    if (!entity) {
+      entity = new ReportEntity();
+    }
+    entity.name = report.name;
+    entity.type = report.type;
+    entity.input = report.input;
+    entity.output = report.output;
+
+    return await repo.save(entity);
+  },
+
   async removeReport(report: IReportHeader) {
     let repo = AppDataSource.getRepository(ReportEntity);
     let entity = await repo.findOneBy({ id: report.id });
@@ -455,13 +469,40 @@ export const ReportController = {
 
   async generateReportOutput(reportType: string, input: any): Promise<string> {
     switch (reportType) {
-      case 'pracownicy':
-        return await this.generateEmployeesReportOutput(input);
+      case 'summary':
+        return await this.generateSummaryReportOutput(input);
 
       default:
         return '';
     }
 
+  },
+
+  async generateSummaryReportOutput(input: any): Promise<ISummaryReportOutput> {
+    let invoices = await AppDataSource.getRepository(InvoiceEntity).createQueryBuilder('i')
+      .leftJoinAndSelect('i.lines', 'l')
+      .leftJoinAndSelect('i.monthly', 'm')
+      .leftJoinAndSelect('m.client', 'c')
+      .where('m.month = :month', { month: input.month })
+      .andWhere('m.year = :year', { year: input.year })
+      .getMany();
+
+    let output = invoices.reduce((acc, inv) => {
+      let forma = inv.monthly.info.forma;
+      inv.lines.forEach(line => {
+
+        if (!acc.sumInvoice[line.category]) {
+          acc.sumInvoice[line.category] = {};
+        }
+        if (!acc.sumInvoice[line.category][forma]) {
+          acc.sumInvoice[line.category][forma] = { sum: 0 };
+        }
+        acc.sumInvoice[line.category][forma].sum += (line.price * line.qtty);
+      });
+      return acc;
+    }, { sumInvoice: {} } as ISummaryReportOutput);
+
+    return output;
   },
 
   async generateEmployeesReportOutput(input: any): Promise<IEmployeesReportOutput> {

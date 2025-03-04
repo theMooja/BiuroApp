@@ -1,0 +1,20 @@
+<div class="view">
+    <mat-tab-group mat-stretch-tabs="true">
+        <mat-tab label="Dane">
+            <div class="input-tab">
+                <mat-form-field class="mgap">
+                    <mat-label>Nazwa raportu</mat-label>
+                    <input matInput placeholder="nazwa" [(ngModel)]="header.name">
+                </mat-form-field>
+                <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)" class="mgap"></app-monthly-picker>
+            </div>
+        </mat-tab>
+        <mat-tab label="Wynik" [disabled]="report">
+            <div class="output-tab">
+                @if(report){
+                    
+                }
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

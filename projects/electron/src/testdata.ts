@@ -23,6 +23,7 @@ const clearDB = async function () {
     await entityManager.query('DELETE FROM invoices');
     await entityManager.query('DELETE FROM invoicelines');
     await entityManager.query('DELETE FROM listvalues');
+    await entityManager.query('DELETE FROM reports');
 }
 
 const createUsers = async function (data: any) {
@@ -89,7 +90,7 @@ const createMonthlies = async function (data: any) {
         info: {
             email: 'c1@email.com',
             firma: 'finka',
-            forma: 'vat',
+            forma: 'cit',
             ZUS: '666',
             VAT: '777',
             skladki: '3'
@@ -103,7 +104,7 @@ const createMonthlies = async function (data: any) {
         info: {
             email: 'c2@email.com',
             firma: 'fintax',
-            forma: 'vat',
+            forma: 'cit',
             ZUS: '666',
             VAT: '777',
             skladki: '3'
@@ -117,7 +118,7 @@ const createMonthlies = async function (data: any) {
         info: {
             email: 'c3@email.com',
             firma: 'finka',
-            forma: 'cit',
+            forma: 'skala',
             ZUS: '666',
             VAT: '777',
             skladki: '3'
@@ -498,12 +499,61 @@ const createInvoices = async function (data: any) {
 
     data.inv1l1 = await lrepo.save({
         invoice: data.inv1,
-        description: 's1',
+        description: 'kadry',
         price: 100,
-        qtty: 1
+        qtty: 1,
+        category: 'kadry'
     });
 
+    data.inv1l2 = await lrepo.save({
+        invoice: data.inv1,
+        description: 'kpir',
+        price: 100,
+        qtty: 2,
+        category: 'księgowość'
+    });
 
+    data.inv2 = await irepo.save({
+        no: 'inv2',
+        monthly: data.c2monthly1,
+    });
+
+    data.inv2l1 = await lrepo.save({
+        invoice: data.inv2,
+        description: 'kadry',
+        price: 60,
+        qtty: 1,
+        category: 'kadry'
+    });
+
+    data.inv2l2 = await lrepo.save({
+        invoice: data.inv2,
+        description: 'kpir',
+        price: 60,
+        qtty: 2,
+        category: 'księgowość'
+    });
+
+    data.inv3 = await irepo.save({
+        no: 'inv3',
+        monthly: data.c3monthly1,
+    });
+
+    data.inv3l1 = await lrepo.save({
+        invoice: data.inv3,
+        description: 'kadry',
+        price: 60,
+        qtty: 1,
+        category: 'kadry'
+    });
+
+    data.inv3l2 = await lrepo.save({
+        invoice: data.inv3,
+        description: 'kpir',
+        price: 60,
+        qtty: 2,
+        category: 'księgowość'
+    });
 }
 
 const createReports = async function (data: any) {
@@ -550,6 +600,10 @@ const createListValues = async function (data: any) {
     });
     await repo.save({
         text: 'klienci',
+        target: ListValueTargets.REPORT,
+    });
+    await repo.save({
+        text: 'summary',
         target: ListValueTargets.REPORT,
     });
     await repo.save({

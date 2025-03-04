@@ -16,8 +16,8 @@ export class ReportsService {
     return window.electron.getHeaders();
   }
 
-  async generateReport(reportType: string, reportName: string, data: any): Promise<IReportHeader> {
-    return await window.electron.generateReport(reportType, reportName, data);
+  async generateReport(header: IReportHeader, input: any): Promise<IReport> {
+    return await window.electron.generateReport(header, input);
   }
 
   async removeReport(report: IReportHeader) {
