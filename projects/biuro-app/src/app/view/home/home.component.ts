@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Injector, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { hasAccess, IClientEntity, IMarchEntity, IMonthlyEntity, Permission, StepType } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -62,6 +62,7 @@ export class HomeComponent {
   currentDate: Date = new Date(new Date().setMonth(new Date().getMonth() - 1));
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChildren(NotesComponent) notesColumns!: QueryList<NotesComponent>;
   monthlies: IMonthlyEntity[] = [];
 
   lastColumn!: string;
@@ -305,5 +306,15 @@ export class HomeComponent {
       this.searchResults = [row as Element];
     }
     this.highlightNextResult();
+  }
+
+  onAddNote(element: IMonthlyEntity) {
+    const targetNotesColumn = this.notesColumns.find(nc => nc.monthly === element);
+
+    if (targetNotesColumn) {
+      targetNotesColumn.onAdd();
+    } else {
+      console.error("Matching notes-column not found for", element);
+    }
   }
 }

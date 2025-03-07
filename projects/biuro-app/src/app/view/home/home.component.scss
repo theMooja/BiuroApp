@@ -111,3 +111,9 @@
 .mat-column-invoices {
   min-width: 200px;
 }
+
+notes-column {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+}

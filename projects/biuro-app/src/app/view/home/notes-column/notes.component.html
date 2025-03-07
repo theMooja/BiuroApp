@@ -1,7 +1,4 @@
 <div class="view">
-    <button mat-mini-fab (click)="onAdd()" type="button" class="add-button">
-        <mat-icon>add</mat-icon>
-    </button>
     <div class="note-container">
         @for(note of notes; track note) {
         @if(isForMe(note)){
