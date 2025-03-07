@@ -82,7 +82,7 @@ export const MonthlyController = {
   async updateInfo(data: IMonthlyEntity) {
     let repo = AppDataSource.getRepository(MonthlyEntity);
     let monthly = await repo.findOneBy({ id: data.id });
-    if (monthly) {
+    if (monthly && data.id) {
       monthly.info = data.info;
       await monthly.save();
     }
@@ -101,7 +101,8 @@ export const MonthlyController = {
   },
 
   async deleteNote(note: INoteEntity) {
-    await NoteEntity.getRepository().delete({ id: note.id });
+    if (note.id)
+      await NoteEntity.getRepository().delete({ id: note.id });
   },
 
   async getLatestMonthly(client: IClientEntity): Promise<IMonthlyEntity> {
