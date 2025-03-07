@@ -12,6 +12,18 @@
     background-color: $primary-green;
 }
 
-.open-button {
-    width: 100%;
+.toolbar {
+    gap: 1em;
+
+    .report-select {
+        width: 40%;
+    }
+
+    .warning {
+        color: $primary-red;
+    }
+
+    .spacer {
+        flex: 1
+    }
 }

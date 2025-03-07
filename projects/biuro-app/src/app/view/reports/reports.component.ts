@@ -1,15 +1,13 @@
-import { Component, ComponentFactoryResolver, ComponentRef, inject, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, inject, Type, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ListValuesService } from '../../service/list-values.service';
-import { IReport, IReportHeader, ListValueTargets } from '../../../../../electron/src/interfaces';
+import { IReportHeader, ListValueTargets } from '../../../../../electron/src/interfaces';
 import { ReportsService } from '../../service/reports.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { ConfirmationDialogComponent } from '../../utils/confirmation-dialog/confirmation-dialog.component';
 import { ClientProfitabilityComponent } from './client-profitability/client-profitability.component';
 import { SummaryReportComponent } from './summary-report/summary-report.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -27,9 +25,10 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class ReportsComponent {
   reportNames: string[];
-  activeReport: IReportHeader;
+  activeReport: IReportHeader | null;
   reportHeaders: IReportHeader[];
   loadingIdx: number = 0;
+  isDeleting = false;
 
   @ViewChild('reportContainer', { read: ViewContainerRef }) reportContainer: ViewContainerRef;
 
@@ -37,15 +36,14 @@ export class ReportsComponent {
   private reportService = inject(ReportsService);
   componentRef: ComponentRef<any>;
 
-  constructor(private dialog: MatDialog) {
-  }
+  constructor() { }
 
   async ngOnInit() {
     this.reportNames = await this.listValuesService.get(ListValueTargets.REPORT);
     this.reportHeaders = await this.reportService.getHeaders();
   }
 
-  onAdd(reportType: string) {
+  async onAdd(reportType: string) {
     let header: IReportHeader;
 
     switch (reportType) {
@@ -54,23 +52,47 @@ export class ReportsComponent {
           type: reportType,
           name: 'rentowność klientów ' + (new Date().getMonth() + 1) + ' ' + new Date().getFullYear(),
         }
-        this.reportHeaders.push(header);
-        this.onOpen(header);
         break;
       case 'summary':
         header = {
           type: reportType,
           name: 'sumy ' + (new Date().getMonth() + 1) + ' ' + new Date().getFullYear(),
         }
-        this.reportHeaders.push(header);
-        this.onOpen(header);
         break;
+      default:
+        throw 'bad report type';
+    }
+
+
+    header = await this.reportService.saveReport({ ...header, input: "{}", output: "{}" });
+    this.reportHeaders = [...this.reportHeaders, header];
+    this.onOpen(header);
+  }
+
+  async onDelete() {
+    if (!this.isDeleting) {
+      this.isDeleting = true;
+      return;
+    }
+
+    this.isDeleting = false;
+
+    this.activeReport && await this.reportService.removeReport(this.activeReport);
+    this.reportHeaders = this.reportHeaders.filter(report => report !== this.activeReport);
+    this.activeReport = null;
+    if (this.reportContainer) {
+      this.reportContainer.clear();
     }
   }
 
   async onOpen(header: IReportHeader) {
     this.activeReport = header;
+
     this.loadReportComponent();
+
+    if (this.componentRef && this.componentRef.instance && this.componentRef.instance.onSave) {
+      this.componentRef.instance.onOpen(header);
+    }
   }
 
   loadReportComponent(): void {
@@ -78,25 +100,10 @@ export class ReportsComponent {
       this.reportContainer.clear();
     }
 
-    const componentType = reportComponentMapping[this.activeReport.type];
+    const componentType = this.activeReport && reportComponentMapping[this.activeReport.type];
     if (componentType) {
       this.componentRef = this.reportContainer.createComponent(componentType);
-      this.componentRef.instance.header = this.activeReport;
     }
-  }
-
-  async onRemove(report: IReportHeader) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '250px',
-      data: { title: 'Wiesz co robisz?', message: 'Usunąć ten raport?' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.reportService.removeReport(report);
-        this.reportHeaders.splice(this.reportHeaders.indexOf(report), 1);
-      }
-    });
   }
 
   onGenerate() {
@@ -106,7 +113,9 @@ export class ReportsComponent {
   }
 
   onSave() {
-
+    if (this.componentRef && this.componentRef.instance && this.componentRef.instance.onSave) {
+      this.componentRef.instance.onSave();
+    }
   }
 }
 

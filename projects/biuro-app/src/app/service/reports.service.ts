@@ -9,7 +9,8 @@ export class ReportsService {
   constructor() { }
 
   async getReport(report: IReportHeader): Promise<IReport> {
-    return await window.electron.getReport(report);
+    let result = await window.electron.getReport(report);
+    return result;
   }
 
   getHeaders(): Promise<IReportHeader[]> {
@@ -22,5 +23,9 @@ export class ReportsService {
 
   async removeReport(report: IReportHeader) {
     return await window.electron.removeReport(report);
+  }
+
+  async saveReport(report: IReport): Promise<IReport> {
+    return await window.electron.saveReport(report);
   }
 }

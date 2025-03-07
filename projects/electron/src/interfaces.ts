@@ -157,5 +157,7 @@ export interface ISummaryReportOutput {
     }
 }
 
-export interface IClientsReportOutput {
+export interface ISummaryReportInput {
+    month: number,
+    year: number
 }

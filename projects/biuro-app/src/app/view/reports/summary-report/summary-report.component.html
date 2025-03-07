@@ -1,5 +1,5 @@
 <div class="view">
-    <mat-tab-group mat-stretch-tabs="true">
+    <mat-tab-group mat-stretch-tabs="true" [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event">
         <mat-tab label="Dane">
             <div class="input-tab">
                 <mat-form-field class="mgap">
@@ -9,10 +9,20 @@
                 <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)" class="mgap"></app-monthly-picker>
             </div>
         </mat-tab>
-        <mat-tab label="Wynik" [disabled]="report">
+        <mat-tab label="Wynik" [disabled]="!hasOutput">
             <div class="output-tab">
                 @if(report){
-                    
+                <div class="sum-invoice">
+                    @for(cat of reportCategories; track cat) {
+                    <div class="suminvoice-category">
+                        {{cat}} - {{sum(output.sumInvoice[cat])}}
+                    </div>
+                    @for(forma of reportFormas; track forma) {
+                    <div class="suminvoice-forma">
+                        {{forma}} - {{sum(output.sumInvoice[cat][forma])}}
+                    </div>
+                    }}
+                </div>
                 }
             </div>
         </mat-tab>

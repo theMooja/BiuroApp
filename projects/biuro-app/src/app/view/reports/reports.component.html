@@ -1,8 +1,10 @@
 <div class="view">
 
     <mat-toolbar class="toolbar">
-        <button mat-raised-button class="open-button" [matMenuTriggerFor]="leftMenu">dodaj</button>
-        <mat-form-field>
+        <button mat-fab [matMenuTriggerFor]="leftMenu" type="menu">
+            <mat-icon>add</mat-icon>
+        </button>
+        <mat-form-field class="report-select">
             <mat-label>Wybierz raport</mat-label>
             <mat-select [(value)]="activeReport" (selectionChange)="onOpen($event.value)">
                 <mat-option *ngFor="let report of reportHeaders" [value]="report">
@@ -19,6 +21,11 @@
             }
 
         </mat-menu>
+        <div class="spacer"></div>
+        <button mat-icon-button type="menu" (click)="onDelete()"
+            [ngClass]="{ 'warning': isDeleting }">
+            <mat-icon>delete</mat-icon>
+        </button>
     </mat-toolbar>
     <div class="content">
         <ng-container #reportContainer></ng-container>

@@ -43,6 +43,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Report:getReport', (e, header) => ReportController.getReport(header));
   ipcMain.handle('db:Report:getHeaders', (e) => ReportController.getHeaders());
   ipcMain.handle('db:Report:removeReport', (e, report) => ReportController.removeReport(report));
+  ipcMain.handle('db:Report:saveReport', (e, report) => ReportController.saveReport(report));
 }
 
 export const MonthlyController = {
@@ -427,7 +428,7 @@ export const ReportController = {
       name: header.name,
       type: header.type,
       input: JSON.stringify(data),
-      output: await this.generateReportOutput(header.type, data);
+      output: JSON.stringify(await this.generateReportOutput(header.type, data))
     };
 
     return await this.saveReport(report);
@@ -446,10 +447,12 @@ export const ReportController = {
 
   async saveReport(report: IReport): Promise<IReport> {
     let repo = AppDataSource.getRepository(ReportEntity);
-    let entity = await repo.findOneBy({ id: report.id });
+    let entity: IReport;
 
-    if (!entity) {
+    if (!report.id) {
       entity = new ReportEntity();
+    } else {
+      entity = await repo.findOneBy({ id: report.id });
     }
     entity.name = report.name;
     entity.type = report.type;
@@ -462,7 +465,7 @@ export const ReportController = {
   async removeReport(report: IReportHeader) {
     let repo = AppDataSource.getRepository(ReportEntity);
     let entity = await repo.findOneBy({ id: report.id });
-    if (entity) {
+    if (entity && report.id) {
       await repo.remove(entity);
     }
   },
