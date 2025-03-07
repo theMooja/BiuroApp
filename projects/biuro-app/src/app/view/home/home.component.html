@@ -51,8 +51,7 @@
 
         Nazwa
       </mat-header-cell>
-      <mat-cell *matCellDef="let element"
-        (dblclick)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+      <mat-cell *matCellDef="let element">
         {{element.client.name}} </mat-cell>
     </ng-container>
     <!-- info columns -->
@@ -145,7 +144,8 @@
     <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
     <mat-row (click)="selectionMode ? selection.toggle(element): null" *matRowDef="let element; columns: columns"
       [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element"
-      [attr.data-id]="element.id">
+      [attr.data-id]="element.id"
+      (dblclick)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
     </mat-row>
 
     <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
