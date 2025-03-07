@@ -1,6 +1,6 @@
 {
   "name": "biuro-app",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "main": "dist/main.js",
   "description": "biurowy mikro kombajn",
   "author": "Łukasz Bulak",
