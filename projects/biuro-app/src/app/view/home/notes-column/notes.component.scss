@@ -15,15 +15,32 @@
     width: 100%;
     overflow: hidden;
 
+    .note-button {
+        width: 100%;
+        max-width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        overflow: hidden;
+    }
+
+    .mdc-button__label {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .note-button-text {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
 }
 
-.note-button {
-    width: 100%;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+
+
 
 .add-button {
     width: 32px;
