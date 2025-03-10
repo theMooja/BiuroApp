@@ -14,10 +14,14 @@
     </div>
 
     <div class="lines-container">
-        <div *ngIf="monthly.invoices[0].lines[0]" class="line">{{monthly.invoices[0].lines[0].description}}(
-            {{monthly.invoices[0].lines[0].price}})</div>
-        <div *ngIf="monthly.invoices[0].lines[1]" class="line">{{monthly.invoices[0].lines[1].description}}(
-            {{monthly.invoices[0].lines[1].price}})</div>
+        <mat-form-field>
+            <mat-label>Księgowość</mat-label>
+            <input matInput [(ngModel)]="sumCat1" readonly>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Kadry</mat-label>
+            <input matInput [(ngModel)]="sumCat2" readonly>
+        </mat-form-field>
     </div>
 
 

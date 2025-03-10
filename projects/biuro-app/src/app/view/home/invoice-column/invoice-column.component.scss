@@ -6,13 +6,16 @@
     justify-content: center;
     gap: 1em;
 
-    .line {
-        width: 160px;
-        margin: 1em 0px;
-    }
-
     .icon-container {
         height: 24px;
         margin: 1em 0px;
+    }
+
+    .lines-container {
+        flex: 1;
+
+        mat-form-field {
+            max-width: 150px;
+        }
     }
 }
