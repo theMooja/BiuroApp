@@ -24,7 +24,9 @@ import { MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datep
 })
 export class InvoiceOverlayComponent {
   invoiceForm: FormGroup;
+  previousForm: FormGroup;
   invoice: IInvoiceEntity;
+  previousInvoice: IInvoiceEntity;
   monthly: IMonthlyEntity;
   descriptionValues: string[] = [];
   categoryValues: string[] = [];
@@ -59,6 +61,10 @@ export class InvoiceOverlayComponent {
     return this.invoiceForm.get('lines') as FormArray;
   }
 
+  get previousLines() {
+    return this.previousForm.get('lines') as FormArray;
+  }
+
   addInvoiceLine() {
     this.lines.push(this.formBuilder.group({
       id: this.formBuilder.control(undefined),
@@ -85,5 +91,30 @@ export class InvoiceOverlayComponent {
 
   close() {
     this.data.overlayRef.dispose();
+  }
+
+  createPreviousForm(invoice: IInvoiceEntity) {
+    this.previousForm = this.formBuilder.group({
+      no: this.formBuilder.control(invoice.no),
+      id: this.formBuilder.control(invoice.id),
+      sendDate: this.formBuilder.control(invoice.sendDate),
+      paidDate: this.formBuilder.control(invoice.paidDate),
+      lines: this.formBuilder.array(invoice.lines.map(x => this.formBuilder.group({
+        id: this.formBuilder.control(x.id),
+        description: this.formBuilder.control(x.description),
+        price: this.formBuilder.control(x.price),
+        qtty: this.formBuilder.control(x.qtty),
+        category: this.formBuilder.control(x.category)
+      })))
+    });
+  }
+
+  onPrevious() {
+    this.invoiceDataService.getInvoices(this.monthly.client.id, this.monthly.year, this.monthly.month - 1).then(invoices => {
+      this.previousInvoice = invoices[0];
+      this.createPreviousForm(this.previousInvoice);
+    });
+
+
   }
 }

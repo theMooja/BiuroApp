@@ -54,8 +54,57 @@
         </div>
         <div class="button-container">
             <button mat-fab color="primary" (click)="addInvoiceLine()" type="button"> <mat-icon>add</mat-icon> </button>
+            <button mat-raised-button (click)="onPrevious()">Poprzednia</button>
             <button mat-raised-button (click)="onSave()">Zapisz</button>
         </div>
 
     </form>
+
+
+    @if (previousInvoice) {
+    <div class="divider"></div>
+    <form id="previousForm" [formGroup]="previousForm" class="previous-form">
+        <div class="header flex-gap">
+            <mat-form-field>
+                <mat-label>Numer</mat-label>
+                <input matInput placeholder="numer" formControlName="no">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Data wystawienia</mat-label>
+                <input matInput [matDatepicker]="sendDatePicker" placeholder="Data wystawienia"
+                    formControlName="sendDate">
+                <mat-datepicker-toggle matSuffix [for]="sendDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #sendDatePicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Data zapłaty</mat-label>
+                <input matInput [matDatepicker]="paidDatePicker" placeholder="Data zapłaty" formControlName="paidDate">
+                <mat-datepicker-toggle matSuffix [for]="paidDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #paidDatePicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="divider"></div>
+        <div formArrayName="lines" class="flex-gap lines-container">
+            <div *ngFor="let line of previousLines.controls; let i = index" [formGroupName]="i" class="flex-gap">
+                <input formControlName="id" type="hidden" />
+                <mat-form-field>
+                    <mat-label>Cena</mat-label>
+                    <input matInput placeholder="Kwota" formControlName="price" type="number" readonly>
+                </mat-form-field>
+                <mat-form-field class="qtty-field">
+                    <mat-label>Ilość</mat-label>
+                    <input matInput placeholder="Ilość" formControlName="qtty" type="number" readonly>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Opis</mat-label>
+                    <input matInput placeholder="Opis" formControlName="description" readonly>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Kategoria</mat-label>
+                    <input matInput placeholder="Kategoria" formControlName="category" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    }
 </div>

@@ -15,4 +15,8 @@ export class InvoiceDataService {
   async saveInvoiceDates(invoices: IInvoiceEntity[]) {
     await window.electron.saveInvoiceDates(invoices);
   }
+  
+  async getInvoices(clientId: number, year: number, month: number): Promise<IInvoiceEntity[]> {
+    return await window.electron.getInvoices(clientId, year, month);
+  }
 }

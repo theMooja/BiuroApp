@@ -38,6 +38,7 @@ export const setIPCHandlers = () => {
 
   ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
   ipcMain.handle('db:Invoice:saveInvoiceDates', (e, invoices) => InvoiceController.saveInvoiceDates(invoices));
+  ipcMain.handle('db:Invoice:getInvoices', (e, clientId, year, month) => InvoiceController.getInvoices(clientId, year, month));
 
   ipcMain.handle('db:Report:generate', (e, header, data) => ReportController.generateReport(header, data));
   ipcMain.handle('db:Report:getReport', (e, header) => ReportController.getReport(header));
@@ -407,6 +408,17 @@ export const InvoiceController = {
       entity.paidDate = invoice.paidDate;
       await entity.save();
     });
+  },
+
+  async getInvoices(clientId: number, year: number, month: number): Promise<IInvoiceEntity[]> {
+    return await AppDataSource.getRepository(InvoiceEntity)
+      .createQueryBuilder('i')
+      .leftJoinAndSelect('i.lines', 'l')
+      .leftJoinAndSelect('i.monthly', 'm')
+      .where('m.client = :clientId', { clientId })
+      .andWhere('m.year = :year', { year })
+      .andWhere('m.month = :month', { month })
+      .getMany();
   }
 }
 
