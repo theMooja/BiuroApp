@@ -120,6 +120,7 @@ export interface IInvoiceLineEntity {
 
 export interface IListValue {
     text: string,
+    value: string,
     target: string,
     sequence: number
 }

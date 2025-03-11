@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { IInvoiceEntity, IMonthlyEntity, ListValueTargets } from '../../../../../../electron/src/interfaces';
+import { IInvoiceEntity, IListValue, IMonthlyEntity, ListValueTargets } from '../../../../../../electron/src/interfaces';
 import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -28,8 +28,8 @@ export class InvoiceOverlayComponent {
   invoice: IInvoiceEntity;
   previousInvoice: IInvoiceEntity;
   monthly: IMonthlyEntity;
-  descriptionValues: string[] = [];
-  categoryValues: string[] = [];
+  descriptionValues: IListValue[] = [];
+  categoryValues: IListValue[] = [];
 
   constructor(@Inject(DATA_INJECTION_TOKEN) private data: { invoice: IInvoiceEntity, overlayRef: OverlayRef, monthly: IMonthlyEntity },
     private formBuilder: FormBuilder, private invoiceDataService: InvoiceDataService, private listValuesService: ListValuesService) {

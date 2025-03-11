@@ -1,5 +1,5 @@
 import { Component, Inject, ChangeDetectorRef } from '@angular/core';
-import { IMonthlyEntity } from '../../../../../electron/src/interfaces';
+import { IListValue, IMonthlyEntity } from '../../../../../electron/src/interfaces';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { allInfoColumns } from '../home/home.component';
@@ -23,7 +23,7 @@ export class EditInfoColumnsOverlayComponent {
   monthly: IMonthlyEntity;
   form: FormGroup;
   allInfoColumns: string[] = allInfoColumns;
-  descriptionValues: { [key: string]: string[] } = {};
+  descriptionValues: { [key: string]: IListValue[] } = {};
 
   constructor(@Inject(DATA_INJECTION_TOKEN) private data: { entity: IMonthlyEntity, overlayRef: OverlayRef },
     private formBuilder: FormBuilder, private monthlyDataService: MonthlyDataService, private listValuesService: ListValuesService,

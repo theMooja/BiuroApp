@@ -26,7 +26,7 @@
                     <input matInput formControlName="name" [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete">
                         @for (option of descriptionValues; track option) {
-                        <mat-option [value]="option">{{option}}</mat-option>
+                        <mat-option [value]="option.text">{{option.text}}</mat-option>
                         }
                     </mat-autocomplete>
                 </mat-form-field>

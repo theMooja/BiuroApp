@@ -595,15 +595,18 @@ const createListValues = async function (data: any) {
         target: ListValueTargets.STEP_DESC,
     });
     await repo.save({
-        text: 'clientProfitability',
+        value: 'clientProfitability',
+        text: 'rentowność klientów',
         target: ListValueTargets.REPORT,
     });
     await repo.save({
-        text: 'klienci',
+        value: 'budget',
+        text: 'budżet',
         target: ListValueTargets.REPORT,
     });
     await repo.save({
-        text: 'summary',
+        value: 'summary',
+        text: 'sumy',
         target: ListValueTargets.REPORT,
     });
     await repo.save({

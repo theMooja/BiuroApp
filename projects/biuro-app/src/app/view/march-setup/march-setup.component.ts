@@ -5,7 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
-import { IClientEntity, IMarchEntity, IMonthlyEntity, IUserEntity, ListValueTargets, StepType } from './../../../../../electron/src/interfaces';
+import { IClientEntity, IListValue, IMarchEntity, IMonthlyEntity, IUserEntity, ListValueTargets, StepType } from './../../../../../electron/src/interfaces';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { ClientDataService } from '../../service/client-data.service';
@@ -28,7 +28,7 @@ export class MarchSetupComponent {
   stepTypes = Object.values(StepType);
   monthly!: IMonthlyEntity;
   clients!: IClientEntity[];
-  descriptionValues: string[] = [];
+  descriptionValues: IListValue[] = [];
   users: IUserEntity[] = [];
 
   constructor(private formBuilder: FormBuilder,

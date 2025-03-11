@@ -1,7 +1,7 @@
 import { Component, ComponentRef, inject, Type, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ListValuesService } from '../../service/list-values.service';
-import { IReportHeader, ListValueTargets } from '../../../../../electron/src/interfaces';
+import { IListValue, IReportHeader, ListValueTargets } from '../../../../../electron/src/interfaces';
 import { ReportsService } from '../../service/reports.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -24,7 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './reports.component.scss'
 })
 export class ReportsComponent {
-  reportNames: string[];
+  reportNames: IListValue[];
   activeReport: IReportHeader | null;
   reportHeaders: IReportHeader[];
   loadingIdx: number = 0;

@@ -36,7 +36,7 @@
                     <input matInput placeholder="Opis" formControlName="description" [matAutocomplete]="autoDesc">
                     <mat-autocomplete #autoDesc="matAutocomplete">
                         @for (option of descriptionValues; track option) {
-                        <mat-option [value]="option">{{option}}</mat-option>
+                        <mat-option [value]="option.text">{{option.text}}</mat-option>
                         }
                     </mat-autocomplete>
                 </mat-form-field>
@@ -45,7 +45,7 @@
                     <input matInput placeholder="Kategoria" formControlName="category" [matAutocomplete]="autoCat">
                     <mat-autocomplete #autoCat="matAutocomplete">
                         @for (option of categoryValues; track option) {
-                        <mat-option [value]="option">{{option}}</mat-option>
+                        <mat-option [value]="option.text">{{option.text}}</mat-option>
                         }
                     </mat-autocomplete>
                 </mat-form-field>

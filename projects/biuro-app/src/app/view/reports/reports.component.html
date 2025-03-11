@@ -17,7 +17,7 @@
 
         <mat-menu #leftMenu="matMenu">
             @for(val of reportNames; track val){
-            <div mat-menu-item (mouseup)="onAdd(val)">{{val}}</div>
+            <div mat-menu-item (mouseup)="onAdd(val.value)">{{val.text}}</div>
             }
 
         </mat-menu>
