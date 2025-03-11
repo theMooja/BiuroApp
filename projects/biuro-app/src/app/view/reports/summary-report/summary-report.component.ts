@@ -44,18 +44,17 @@ export class SummaryReportComponent extends ReportComponent<ISummaryReportInput,
       this.date = new Date(this.input.year, this.input.month - 1);
   }
 
-  async onGenerate() {
-    let input = {
-      month: this.date.getMonth() + 1,
-      year: this.date.getFullYear()
-    }
-
-    this.report = await this.reportService.generateReport(this.header, input);
-    this.init();
+  override async onGenerate() {
+    await super.onGenerate();
     this.tabIndex = 1;
   }
 
-  
+  getInput(): ISummaryReportInput {
+    return {
+      month: this.date.getMonth() + 1,
+      year: this.date.getFullYear()
+    };
+  }
 
   async onSave() {
     this.report.name = this.header.name;

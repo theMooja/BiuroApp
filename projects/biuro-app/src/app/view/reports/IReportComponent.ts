@@ -3,8 +3,8 @@ import { IReport, IReportHeader } from "../../../../../electron/src/interfaces";
 import { ReportsService } from "../../service/reports.service";
 
 export abstract class ReportComponent<TInput, TOutput> {
-    abstract onGenerate(): void;
     abstract onSave(): void;
+    abstract getInput(): TInput;
 
     header: IReportHeader;
     input: TInput;
@@ -25,6 +25,12 @@ export abstract class ReportComponent<TInput, TOutput> {
     async onOpen(header: IReportHeader) {
         this.header = header;
         this.report = await this.reportService.getReport(header);
+        this.init();
+    }
+
+    async onGenerate() {
+        let input = this.getInput();
+        this.report = await this.reportService.generateReport(this.header, input);
         this.init();
     }
 }

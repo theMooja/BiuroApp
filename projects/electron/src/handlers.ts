@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IInvoiceLineEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, ISummaryReportOutput, IUserEntity, StepType } from "./interfaces";
+import { IBudgetReportInput, IBudgetReportOutput, IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IInvoiceLineEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, ISummaryReportOutput, IUserEntity, StepType } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
@@ -487,6 +487,8 @@ export const ReportController = {
     switch (reportType) {
       case 'summary':
         return await this.generateSummaryReportOutput(input);
+      case 'budget':
+        return await this.generateBudgetReportOutput(input);
 
       default:
         return '';
@@ -596,7 +598,13 @@ export const ReportController = {
     }, {} as IEmployeesReportOutput);
 
     return output;
+  },
+
+  async generateBudgetReportOutput(input: IBudgetReportInput): Promise<IBudgetReportOutput> {
+    return {
+      cost: [
+        { description: 'test', value: 100, category: 'test', share: 0.1 },
+      ]
+    }
   }
-
-
 }

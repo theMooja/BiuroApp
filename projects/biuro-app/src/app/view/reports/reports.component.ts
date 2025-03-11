@@ -13,6 +13,7 @@ import { SummaryReportComponent } from './summary-report/summary-report.componen
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { BudgetReportComponent } from './budget-report/budget-report.component';
 
 
 @Component({
@@ -57,6 +58,12 @@ export class ReportsComponent {
         header = {
           type: reportType,
           name: 'sumy ' + (new Date().getMonth() + 1) + ' ' + new Date().getFullYear(),
+        }
+        break;
+      case 'budget':
+        header = {
+          type: reportType,
+          name: 'budżet ' + (new Date().getMonth() + 1) + ' ' + new Date().getFullYear(),
         }
         break;
       default:
@@ -122,6 +129,7 @@ export class ReportsComponent {
 export const reportComponentMapping: { [key: string]: Type<any> } = {
   clientProfitability: ClientProfitabilityComponent,
   summary: SummaryReportComponent,
+  budget: BudgetReportComponent
 };
 
 

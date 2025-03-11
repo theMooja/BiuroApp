@@ -1,1 +1,48 @@
-<p>budget-report works!</p>
+<div class="view">
+    <mat-tab-group mat-stretch-tabs="true" [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event">
+        <mat-tab label="Dane">
+            <div class="input-tab">
+                
+                <mat-form-field class="mgap">
+                    <mat-label>Nazwa raportu</mat-label>
+                    <input matInput placeholder="nazwa" [(ngModel)]="header.name">
+                </mat-form-field>
+
+                <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)" class="mgap"></app-monthly-picker>
+                
+                @if(costInputForm){
+
+                <button mat-fab color="primary" (click)="addCostLine()"><mat-icon>add</mat-icon></button>
+
+                <form id="costInputForm" [formGroup]="costInputForm">
+                    <div formArrayName="cost" class="flex-gap lines-container">
+                        <div *ngFor="let line of costInputLines.controls; let i = index" [formGroupName]="i">
+                            <mat-form-field>
+                                <mat-label>Opis</mat-label>
+                                <input matInput placeholder="Opis" formControlName="description" type="text">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Kwota</mat-label>
+                                <input matInput placeholder="Opis" formControlName="value">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Kategoria</mat-label>
+                                <input matInput placeholder="Opis" formControlName="category">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+                }
+
+
+                
+            </div>
+        </mat-tab>
+        <mat-tab label="Wynik" [disabled]="!hasOutput">
+            <div class="output-tab">
+                @if(report){
+                }
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

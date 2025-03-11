@@ -167,19 +167,17 @@ export interface IBudgetReportInput {
     month: number,
     year: number,
     cost: {
-        [description: string]: {
-            value: number,
-            category: string
-        }
-    }
+        description: string,
+        value: number,
+        category: string
+    }[]
 }
 
 export interface IBudgetReportOutput {
     cost: {
-        [description: string]: {
-            value: number,
-            category: string,
-            share: number
-        }
-    }
+        description: string,
+        value: number,
+        category: string,
+        share: number
+    }[]
 }
