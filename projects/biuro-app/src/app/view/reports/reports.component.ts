@@ -1,7 +1,7 @@
-import { Component, ComponentRef, inject, Type, ViewChild, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ComponentRef, inject, Type, ViewChild, ViewContainerRef, ChangeDetectorRef, output, Injectable, Directive } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ListValuesService } from '../../service/list-values.service';
-import { IListValue, IReportHeader, ListValueTargets } from '../../../../../electron/src/interfaces';
+import { IListValue, IReport, IReportHeader, ListValueTargets } from '../../../../../electron/src/interfaces';
 import { ReportsService } from '../../service/reports.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -123,3 +123,5 @@ export const reportComponentMapping: { [key: string]: Type<any> } = {
   clientProfitability: ClientProfitabilityComponent,
   summary: SummaryReportComponent,
 };
+
+

@@ -1,12 +1,13 @@
-import { Component, inject, Input } from '@angular/core';
-import { IReport, IReportHeader, ISummaryReportInput, ISummaryReportOutput } from '../../../../../../electron/src/interfaces';
+import { Component, inject } from '@angular/core';
+import { IReportHeader, ISummaryReportInput, ISummaryReportOutput } from '../../../../../../electron/src/interfaces';
 import { MonthlyPickerComponent } from '../../../utils/monthly-picker/monthly-picker.component';
-import { ReportsService } from '../../../service/reports.service';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ReportComponent } from '../IReportComponent';
+import { ReportsService } from '../../../service/reports.service';
 
 @Component({
   selector: 'app-summary-report',
@@ -15,24 +16,16 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './summary-report.component.html',
   styleUrl: './summary-report.component.scss'
 })
-export class SummaryReportComponent {
-  header: IReportHeader;
+export class SummaryReportComponent extends ReportComponent<ISummaryReportInput, ISummaryReportOutput> {
   date: Date = new Date();
-  report: IReport;
   tabIndex: number = 0;
   reportCategories: string[];
   reportFormas: string[];
-  output: ISummaryReportOutput;
-  input: ISummaryReportInput;
 
-  reportService = inject(ReportsService);
-
-  init() {
+  override init() {
+    super.init();
     this.reportCategories = [];
     this.reportFormas = [];
-
-    this.input = this.isEmptyObject(this.report.input) ? {} : JSON.parse(this.report.input);
-    this.output = this.isEmptyObject(this.report.output) ? {} : JSON.parse(this.report.output);
 
     let sumInvoice = this.output.sumInvoice;
 
@@ -62,16 +55,12 @@ export class SummaryReportComponent {
     this.tabIndex = 1;
   }
 
+  
+
   async onSave() {
     this.report.name = this.header.name;
     this.report.input = JSON.stringify(this.input);
     await this.reportService.saveReport(this.report);
-  }
-
-  async onOpen(header: IReportHeader) {
-    this.header = header;
-    this.report = await this.reportService.getReport(header);
-    this.init();
   }
 
   onDateChange(date: Date) {
@@ -93,9 +82,5 @@ export class SummaryReportComponent {
 
   get hasOutput(): boolean {
     return !this.isEmptyObject(this.output);
-  }
-
-  isEmptyObject(obj: unknown): boolean {
-    return !!obj && Object.keys(obj).length === 0;
   }
 }

@@ -13,7 +13,7 @@ export enum Permission {
 }
 
 export function hasAccess(user: IUserEntity | undefined, permission: Permission) {
-    if(!user) return false;
+    if (!user) return false;
     if (permission === Permission.SUPER) {
         return user.permission === Permission.SUPER;
     }
@@ -161,4 +161,25 @@ export interface ISummaryReportOutput {
 export interface ISummaryReportInput {
     month: number,
     year: number
+}
+
+export interface IBudgetReportInput {
+    month: number,
+    year: number,
+    cost: {
+        [description: string]: {
+            value: number,
+            category: string
+        }
+    }
+}
+
+export interface IBudgetReportOutput {
+    cost: {
+        [description: string]: {
+            value: number,
+            category: string,
+            share: number
+        }
+    }
 }
