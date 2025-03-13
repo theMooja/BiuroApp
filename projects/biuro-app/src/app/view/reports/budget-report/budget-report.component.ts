@@ -31,6 +31,11 @@ export class BudgetReportComponent extends ReportComponent<IBudgetReportInput, I
     return this.costInputForm.get('cost') as FormArray;
   }
 
+
+  get categoryCostLines() {
+    return this.costOutputForm.get('categoryCost') as FormArray;
+  }
+
   override init() {
     super.init();
 
@@ -68,6 +73,19 @@ export class BudgetReportComponent extends ReportComponent<IBudgetReportInput, I
 
     if (this.input?.year)
       this.date = new Date(this.input.year, this.input.month - 1);
+
+    if (this.hasOutput) {
+      this.costOutputForm = this.formBuilder.group({
+        sumIncome: this.formBuilder.control(this.output.sumIncome),
+        profit: this.formBuilder.control(this.output.profit),
+        profitShare: this.formBuilder.control(this.output.profitShare),
+        categoryCost: this.formBuilder.array(this.output.categoryCost.map(x => this.formBuilder.group({
+          category: this.formBuilder.control(x.category),
+          sum: this.formBuilder.control(x.sum),
+          share: this.formBuilder.control(x.share)
+        })))
+      });
+    }
   }
 
   getInput(): IBudgetReportInput {
@@ -88,6 +106,7 @@ export class BudgetReportComponent extends ReportComponent<IBudgetReportInput, I
   async onSave() {
     this.report.name = this.header.name;
     this.report.input = JSON.stringify(this.getInput());
+    console.log('save', this.report);
     await this.reportService.saveReport(this.report);
   }
 

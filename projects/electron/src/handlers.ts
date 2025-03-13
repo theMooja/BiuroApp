@@ -601,10 +601,63 @@ export const ReportController = {
   },
 
   async generateBudgetReportOutput(input: IBudgetReportInput): Promise<IBudgetReportOutput> {
-    return {
-      cost: [
-        { description: 'test', value: 100, category: 'test', share: 0.1 },
-      ]
-    }
+    let marches = await AppDataSource.getRepository(MarchEntity).createQueryBuilder('m')
+      .leftJoinAndSelect('m.monthly', 'o')
+      .leftJoinAndSelect('o.invoices', 'i')
+      .leftJoinAndSelect('i.lines', 'l')
+      .leftJoinAndSelect('m.stoppers', 's')
+      .leftJoinAndSelect('o.client', 'c')
+      .where('o.month = :month', { month: input.month })
+      .andWhere('o.year = :year', { year: input.year })
+      .getMany();
+
+    let invoices = await AppDataSource.getRepository(InvoiceEntity).createQueryBuilder('i')
+      .leftJoinAndSelect('i.lines', 'l')
+      .leftJoinAndSelect('i.monthly', 'm')
+      .leftJoinAndSelect('m.client', 'c')
+      .where('m.month = :month', { month: input.month })
+      .andWhere('m.year = :year', { year: input.year })
+      .getMany();
+
+    let output: IBudgetReportOutput = {
+      income: [],
+      profit: 0,
+      sumIncome: 0,
+      categoryCost: [],
+      profitShare: 0
+    };
+
+    invoices.forEach(inv => {
+      inv.lines.forEach(line => {
+        if (!output.income.find(i => i.category == line.category)) {
+          output.income.push({
+            category: line.category,
+            value: 0
+          });
+        }
+        output.income.find(i => i.category == line.category).value += line.price * line.qtty;
+        output.sumIncome += line.price * line.qtty;
+      });
+    });
+    output.profit = output.sumIncome;
+
+    input.cost.forEach(cost => {
+      if (!output.categoryCost.find(c => c.category == cost.category)) {
+        output.categoryCost.push({
+          category: cost.category,
+          sum: 0
+        });
+      }
+      output.categoryCost.find(c => c.category == cost.category).sum += Number(cost.value);
+    });
+
+    output.categoryCost.forEach(cat => {
+      cat.share = cat.sum / output.sumIncome;
+      output.profit -= cat.sum;
+    });
+
+    output.profitShare = output.profit / output.sumIncome;
+
+    return output;
   }
 }

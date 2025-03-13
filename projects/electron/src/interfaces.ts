@@ -174,10 +174,16 @@ export interface IBudgetReportInput {
 }
 
 export interface IBudgetReportOutput {
-    cost: {
-        description: string,
-        value: number,
+    income: {
         category: string,
-        share: number
+        value: number
+    }[],
+    sumIncome: number,
+    profit: number,
+    profitShare: number,
+    categoryCost: {
+        sum: number,
+        share?: number,
+        category: string
     }[]
 }

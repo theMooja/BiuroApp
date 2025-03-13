@@ -31,6 +31,7 @@ export abstract class ReportComponent<TInput, TOutput> {
     async onGenerate() {
         let input = this.getInput();
         this.report = await this.reportService.generateReport(this.header, input);
+        console.log(JSON.parse(this.report.output));
         this.init();
     }
 }

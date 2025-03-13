@@ -16,7 +16,7 @@ export class ListValueEntity extends BaseEntity {
     text: string;
     
     @Column({ nullable: true })
-    sequence: string;
+    sequence: number;
     
 }
 

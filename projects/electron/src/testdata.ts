@@ -605,6 +605,11 @@ const createListValues = async function (data: any) {
         target: ListValueTargets.REPORT,
     });
     await repo.save({
+        value: 'global',
+        text: 'ogólne',
+        target: ListValueTargets.INVOICE_CATEGORY,
+    });
+    await repo.save({
         value: 'summary',
         text: 'sumy',
         target: ListValueTargets.REPORT,
