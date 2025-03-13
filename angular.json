@@ -102,7 +102,6 @@
             "tsConfig": "projects/biuro-app/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/biuro-app/src/favicon.ico",
               "projects/biuro-app/src/assets"
             ],
             "styles": [
