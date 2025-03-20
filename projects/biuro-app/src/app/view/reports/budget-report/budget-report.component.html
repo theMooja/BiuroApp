@@ -27,7 +27,13 @@
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Kategoria</mat-label>
-                                <input matInput placeholder="Opis" formControlName="category">
+                                <input matInput placeholder="Opis" formControlName="category"
+                                    [matAutocomplete]="autoCat">
+                                <mat-autocomplete #autoCat="matAutocomplete">
+                                    @for (option of categoriesList; track option.value) {
+                                    <mat-option [value]="option.value">{{option.text}}</mat-option>
+                                    }
+                                </mat-autocomplete>
                             </mat-form-field>
                         </div>
                     </div>
@@ -42,28 +48,48 @@
             <div class="output-tab">
                 @if(costOutputForm){
                 <form id="costOutputForm" [formGroup]="costOutputForm">
-                    <mat-form-field>
-                        <mat-label>Suma przychodów</mat-label>
-                        <input matInput formControlName="sumIncome" type="text" readonly>
-                    </mat-form-field>
-                    <div formArrayName="categoryCost" class="">
-                        <div *ngFor="let line of categoryCostLines.controls; let i = index" [formGroupName]="i">
-                            <mat-form-field>
-                                <mat-label>Kategoria</mat-label>
-                                <input matInput formControlName="category" type="text" readonly>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <mat-label>Suma</mat-label>
-                                <input matInput formControlName="sum" type="number" readonly>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <mat-label>Udział w przychodzie</mat-label>
-                                <input matInput [value]="line.get('share')?.value | percent:'1.2-2'"
-                                     type="text" readonly>
-                            </mat-form-field>
+                    <div class="form-section">
+                        <div class="section-title">Przychody</div>
+                        <mat-form-field>
+                            <mat-label>Suma przychodów</mat-label>
+                            <input matInput formControlName="sumIncome" type="text" readonly>
+                        </mat-form-field>
+
+                        <div formArrayName="divisionIncome" class="">
+                            <div *ngFor="let line of divisionIncomeLines.controls; let i = index" [formGroupName]="i">
+                                <mat-form-field>
+                                    <mat-label>Wydział</mat-label>
+                                    <input matInput formControlName="division" type="text" readonly>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Suma</mat-label>
+                                    <input matInput formControlName="value" type="number" readonly>
+                                </mat-form-field>
+                            </div>
                         </div>
                     </div>
-                    <div class="profit-container">
+                    <div class="form-section">
+                        <div class="section-title">Koszty</div>
+                        <div formArrayName="categoryCost" class="">
+                            <div *ngFor="let line of categoryCostLines.controls; let i = index" [formGroupName]="i">
+                                <mat-form-field>
+                                    <mat-label>Kategoria</mat-label>
+                                    <input matInput formControlName="category" type="text" readonly>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Suma</mat-label>
+                                    <input matInput formControlName="sum" type="number" readonly>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Udział w przychodzie</mat-label>
+                                    <input matInput [value]="line.get('share')?.value | percent:'1.2-2'" type="text"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <div class="section-title">Dochód</div>
                         <mat-form-field>
                             <mat-label>Profit</mat-label>
                             <input matInput formControlName="profit" type="text" readonly>
@@ -72,7 +98,7 @@
                         <mat-form-field>
                             <mat-label>%</mat-label>
                             <input matInput [value]="costOutputForm.get('profitShare')?.value | percent:'1.2-2'"
-                                 type="text" readonly>
+                                type="text" readonly>
                         </mat-form-field>
                     </div>
 

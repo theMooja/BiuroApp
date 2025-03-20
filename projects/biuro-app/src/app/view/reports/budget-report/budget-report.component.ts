@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ReportComponent } from '../IReportComponent';
-import { IBudgetReportInput, IBudgetReportOutput, IReport, IReportHeader } from '../../../../../../electron/src/interfaces';
+import { IBudgetReportInput, IBudgetReportOutput, IListValue, IReport, IReportHeader, ListValueTargets } from '../../../../../../electron/src/interfaces';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MonthlyPickerComponent } from '../../../utils/monthly-picker/monthly-picker.component';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,12 +8,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { ListValuesService } from '../../../service/list-values.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-budget-report',
   standalone: true,
   imports: [MatTabsModule, MonthlyPickerComponent, MatInputModule, FormsModule,
-    ReactiveFormsModule, CommonModule, MatButtonModule, MatIconModule],
+    ReactiveFormsModule, CommonModule, MatButtonModule, MatIconModule, MatAutocompleteModule],
   templateUrl: './budget-report.component.html',
   styleUrl: './budget-report.component.scss'
 })
@@ -25,15 +27,26 @@ export class BudgetReportComponent extends ReportComponent<IBudgetReportInput, I
   costInputForm: FormGroup;
   costOutputForm: FormGroup;
   formBuilder = inject(FormBuilder);
+  listValuesService = inject(ListValuesService);
 
+
+  categoryIncome: { category: string, sum: number, share: number }[] = [];
+  categoriesList: IListValue[];
 
   get costInputLines() {
     return this.costInputForm.get('cost') as FormArray;
   }
 
-
   get categoryCostLines() {
     return this.costOutputForm.get('categoryCost') as FormArray;
+  }
+
+  get divisionIncomeLines() {
+    return this.costOutputForm.get('divisionIncome') as FormArray;
+  }
+
+  async ngOnInit() {
+    this.categoriesList = await this.listValuesService.get(ListValueTargets.INVOICE_CATEGORY);
   }
 
   override init() {
@@ -83,7 +96,11 @@ export class BudgetReportComponent extends ReportComponent<IBudgetReportInput, I
           category: this.formBuilder.control(x.category),
           sum: this.formBuilder.control(x.sum),
           share: this.formBuilder.control(x.share)
-        })))
+        }))),
+        divisionIncome: this.formBuilder.array(this.output.divisionIncome.map(x => this.formBuilder.group({
+          division: this.formBuilder.control(x.division),
+          value: this.formBuilder.control(x.value)
+        }))),
       });
     }
   }

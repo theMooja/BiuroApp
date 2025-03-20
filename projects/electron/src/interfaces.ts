@@ -65,6 +65,7 @@ export interface IMonthlyEntity {
         forma: string,
         wlasciciel: string,
         place: string,
+        firma: string,
         [key: string]: string;
     };
     client: IClientEntity,
@@ -177,6 +178,10 @@ export interface IBudgetReportOutput {
     income: {
         category: string,
         value: number
+    }[],
+    divisionIncome: {
+        value: number,
+        division: string
     }[],
     sumIncome: number,
     profit: number,

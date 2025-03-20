@@ -1,5 +1,17 @@
-.profit-container {
+.form-section {
     display: flex;
-    gap: 10px;
-    align-items: center;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 4px;
+    margin: 1em;
+    padding: 1em;
+
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    border: 1px solid black;
 }

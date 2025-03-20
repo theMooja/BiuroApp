@@ -215,6 +215,7 @@ export const MonthlyController = {
           forma: '',
           wlasciciel: '',
           place: '',
+          firma: ''
         };
         monthly.marches = [MarchEntity.create({
           name: '1',
@@ -624,7 +625,8 @@ export const ReportController = {
       profit: 0,
       sumIncome: 0,
       categoryCost: [],
-      profitShare: 0
+      profitShare: 0,
+      divisionIncome: []
     };
 
     invoices.forEach(inv => {
@@ -632,11 +634,21 @@ export const ReportController = {
         if (!output.income.find(i => i.category == line.category)) {
           output.income.push({
             category: line.category,
-            value: 0
+            value: 0,
           });
         }
         output.income.find(i => i.category == line.category).value += line.price * line.qtty;
         output.sumIncome += line.price * line.qtty;
+
+        if (!output.divisionIncome.find(i => i.division == inv.monthly.info.firma)) {
+          output.divisionIncome.push({
+            division: inv.monthly.info.firma,
+            value: 0
+          });
+        }
+
+        output.divisionIncome.find(i => i.division == inv.monthly.info.firma)
+          .value += line.price * line.qtty;
       });
     });
     output.profit = output.sumIncome;
