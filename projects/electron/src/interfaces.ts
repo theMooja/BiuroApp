@@ -192,3 +192,19 @@ export interface IBudgetReportOutput {
         category: string
     }[]
 }
+
+export interface IProfitabilityReportInput {
+    month: number;
+    year: number;
+    costShare: number;
+    employees: {
+        user: { id: number, name: string },
+        cost: number,
+        part: number
+    }[]
+}
+
+export interface IProfitabilityReportOutput {
+    [client: string]: {}
+
+}

@@ -1,14 +1,55 @@
 <div class="view">
-    <mat-drawer-container class="container">
-        <mat-drawer #drawer mode="over" opened class="drawer">
+    <mat-tab-group mat-stretch-tabs="true" [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event">
+        <mat-tab label="Dane">
+            <div class="input-tab">
+                <mat-form-field class="mgap">
+                    <mat-label>Nazwa raportu</mat-label>
+                    <input matInput placeholder="nazwa" [(ngModel)]="header.name">
+                </mat-form-field>
+                <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)" class="mgap"></app-monthly-picker>
 
-            <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)"></app-monthly-picker>
+                @if(inputForm){
+                <button mat-fab color="primary" (click)="addEmployeeLine()"><mat-icon>add</mat-icon></button>
 
-        </mat-drawer>
-        <mat-drawer-content class="content">
-            <button mat-raised-button (click)="drawer.toggle()">
-                
-            </button>
-        </mat-drawer-content>
-    </mat-drawer-container>
+                <form id="inputForm" [formGroup]="inputForm">
+                    <div formArrayName="employees" class="">
+                        <div *ngFor="let line of employeeLines.controls; let i = index" [formGroupName]="i">
+                            <div formGroupName="user">
+                                <mat-form-field>
+                                    <mat-label>Pracownik</mat-label>
+                                    <input matInput placeholder="Pracownik" formControlName="name" type="text"
+                                        [matAutocomplete]="autoUser">
+                                    <mat-autocomplete #autoUser="matAutocomplete">
+                                        <mat-option *ngFor="let option of users" [value]="option.name"
+                                            (click)="line.get('user')?.get('id')?.setValue(option.id)">
+                                            {{option.name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <mat-form-field style="display: none;">
+                                    <input matInput placeholder="user.id" formControlName="id" type="text">
+                                </mat-form-field>
+                            </div>
+                            <mat-form-field>
+                                <mat-label>Wynagrodzenie</mat-label>
+                                <input matInput placeholder="Wynagrodzenie" formControlName="cost">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Etat%</mat-label>
+                                <input matInput placeholder="Etat" formControlName="part">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+                }
+            </div>
+        </mat-tab>
+        <mat-tab label="Wynik" [disabled]="!hasOutput">
+            <div class="output-tab">
+                @if(outputForm){
+
+                }
+            </div>
+        </mat-tab>
+    </mat-tab-group>
 </div>
