@@ -196,15 +196,30 @@ export interface IBudgetReportOutput {
 export interface IProfitabilityReportInput {
     month: number;
     year: number;
-    costShare: number;
+    costSharePercent: number;
     employees: {
         user: { id: number, name: string },
-        cost: number,
-        part: number
+        cost: number
     }[]
 }
 
 export interface IProfitabilityReportOutput {
-    [client: string]: {}
-
+    clients: {
+        client: string,
+        invoice: number,
+        cost: number,
+        seconds: number,
+        records: {
+            user: string,
+            seconds: number,
+            cost: number
+        }[]
+    }[],
+    employees: {
+        userName: string,
+        userId: number,
+        cost: number,
+        seconds: number,
+        rate: number
+    }[]
 }

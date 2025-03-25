@@ -34,8 +34,12 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
 
   users: IUserEntity[] = [];
 
-  get employeeLines() {
+  get employeeInputLines() {
     return this.inputForm.get('employees') as FormArray;
+  }
+
+  get employeeOutputLines() {
+    return this.outputForm.get('employees') as FormArray;
   }
 
   async ngOnInit() {
@@ -52,22 +56,42 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
       this.input = {
         month: this.date.getMonth() + 1,
         year: this.date.getFullYear(),
-        costShare: 0,
+        costSharePercent: 0,
         employees: []
       } as IProfitabilityReportInput;
     }
 
     this.inputForm = this.formBuilder.group({
-      costShare: this.formBuilder.control(this.input.costShare),
+      costSharePercent: this.formBuilder.control(this.input.costSharePercent),
       employees: this.formBuilder.array(this.input.employees.map(x => this.formBuilder.group({
         user: this.formBuilder.group({
           name: this.formBuilder.control(x.user?.name || ''),
           id: this.formBuilder.control(x.user?.id || 0),
         }),
-        cost: this.formBuilder.control(x.cost),
-        part: this.formBuilder.control(x.part || 0)
+        cost: this.formBuilder.control(x.cost)
       }))),
     });
+
+    if(this.hasOutput) {
+      this.outputForm = this.formBuilder.group({
+        employees: this.formBuilder.array(this.output.employees.map(x => this.formBuilder.group({
+          userName: this.formBuilder.control(x.userName),
+          cost: this.formBuilder.control(x.cost),
+          seconds: this.formBuilder.control(x.seconds),
+          rate: this.formBuilder.control(x.rate),
+        }))),
+        clients: this.formBuilder.array(this.output.clients.map(x => this.formBuilder.group({
+          client: this.formBuilder.control(x.client),
+          cost: this.formBuilder.control(x.cost),
+          seconds: this.formBuilder.control(x.seconds),
+          records: this.formBuilder.array(x.records.map(y => this.formBuilder.group({
+            user: this.formBuilder.control(y.user),
+            seconds: this.formBuilder.control(y.seconds),
+            cost: this.formBuilder.control(y.cost),
+          })))
+        }))),
+      });
+    }
   }
 
   async onSave() {
@@ -81,7 +105,7 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
     return {
       month: this.date.getMonth() + 1,
       year: this.date.getFullYear(),
-      costShare: this.inputForm?.get('costShare')?.value,
+      costSharePercent: this.inputForm?.get('costSharePercent')?.value,
       employees: this.inputForm?.get('employees')?.value
     }
   }
@@ -97,7 +121,7 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
   }
 
   addEmployeeLine() {
-    this.employeeLines.push(this.formBuilder.group({
+    this.employeeInputLines.push(this.formBuilder.group({
       user: this.formBuilder.group({
         name: this.formBuilder.control(''),
         id: this.formBuilder.control(0),
@@ -105,5 +129,14 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
       cost: this.formBuilder.control(0),
       part: this.formBuilder.control(100)
     }));
+  }
+
+  override async onGenerate() {
+    await super.onGenerate();
+    this.tabIndex = 1;
+  }
+
+  secondsToTime(index: number) {
+    return 'asd';
   }
 }

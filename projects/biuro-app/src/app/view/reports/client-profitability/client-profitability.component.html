@@ -13,7 +13,7 @@
 
                 <form id="inputForm" [formGroup]="inputForm">
                     <div formArrayName="employees" class="">
-                        <div *ngFor="let line of employeeLines.controls; let i = index" [formGroupName]="i">
+                        <div *ngFor="let line of employeeInputLines.controls; let i = index" [formGroupName]="i">
                             <div formGroupName="user">
                                 <mat-form-field>
                                     <mat-label>Pracownik</mat-label>
@@ -31,12 +31,8 @@
                                 </mat-form-field>
                             </div>
                             <mat-form-field>
-                                <mat-label>Wynagrodzenie</mat-label>
+                                <mat-label>Koszt</mat-label>
                                 <input matInput placeholder="Wynagrodzenie" formControlName="cost">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <mat-label>Etat%</mat-label>
-                                <input matInput placeholder="Etat" formControlName="part">
                             </mat-form-field>
                         </div>
                     </div>
@@ -47,7 +43,25 @@
         <mat-tab label="Wynik" [disabled]="!hasOutput">
             <div class="output-tab">
                 @if(outputForm){
-
+                <form id="outputForm" [formGroup]="outputForm">
+                    <div formArrayName="employees" class="">
+                        <div *ngFor="let line of employeeOutputLines.controls; let i = index" [formGroupName]="i">
+                            <mat-form-field>
+                                <mat-label>Pracownik</mat-label>
+                                <input matInput placeholder="Pracownik" formControlName="userName" type="text" readonly>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Koszt</mat-label>
+                                <input matInput placeholder="Wynagrodzenie" formControlName="cost" type="text" readonly>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Czas</mat-label>
+                                <input matInput placeholder="Czas" formControlName="seconds" type="text"
+                                    readonly>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
                 }
             </div>
         </mat-tab>

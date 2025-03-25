@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
-import { IBudgetReportInput, IBudgetReportOutput, IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IInvoiceLineEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, ISummaryReportOutput, IUserEntity, StepType } from "./interfaces";
+import { IBudgetReportInput, IBudgetReportOutput, IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IInvoiceLineEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IProfitabilityReportInput, IProfitabilityReportOutput, IReport, IReportHeader, IStopperEntity, ISummaryReportOutput, IUserEntity, StepType } from "./interfaces";
 import { UserEntity } from "./entity/User";
 import { MarchEntity } from "./entity/March";
 import { StopperEntity } from "./entity/Stopper";
@@ -490,11 +490,110 @@ export const ReportController = {
         return await this.generateSummaryReportOutput(input);
       case 'budget':
         return await this.generateBudgetReportOutput(input);
-
+      case 'clientProfitability':
+        return await this.generateClientProfitabilityReportOutput(input);
       default:
         return '';
     }
 
+  },
+
+  async generateClientProfitabilityReportOutput(input: IProfitabilityReportInput): Promise<IProfitabilityReportOutput> {
+    let output: IProfitabilityReportOutput = {
+      employees: [],
+      clients: []
+    };
+
+    let invoices = await AppDataSource.getRepository(InvoiceEntity).createQueryBuilder('i')
+      .leftJoinAndSelect('i.lines', 'l')
+      .leftJoinAndSelect('i.monthly', 'm')
+      .leftJoinAndSelect('m.client', 'c')
+      .where('m.month = :month', { month: input.month })
+      .andWhere('m.year = :year', { year: input.year })
+      .getMany();
+
+    let profit = invoices.reduce((sum, invoice) => {
+      return sum + invoice.lines.reduce((lineSum, line) => {
+        return lineSum + (line.qtty * line.price);
+      }, 0);
+    }, 0);
+    let costShare = input.costSharePercent === 0 ? 1 : input.costSharePercent / 100;
+    profit = profit * costShare;
+
+    output.employees = input.employees.map(x => {
+      return {
+        userName: x.user.name,
+        userId: x.user.id,
+        cost: x.cost,
+        seconds: 0,
+        rate: 0,
+      };
+    });
+
+    let stoppers = await AppDataSource.getRepository(StopperEntity).createQueryBuilder('s')
+      .leftJoinAndSelect('s.user', 'u')
+      .leftJoinAndSelect('s.march', 'm')
+      .leftJoinAndSelect('m.monthly', 'o')
+      .leftJoinAndSelect('o.client', 'c')
+      .where('o.year = :year', { year: input.year })
+      .andWhere('o.month = :month', { month: input.month })
+      .getMany();
+
+    stoppers.forEach(stopper => {
+      let employee = output.employees.find(x => x.userId === stopper.user.id);
+      if (employee) {
+        employee.seconds += stopper.seconds;
+      }
+    });
+
+    output.employees.forEach(employee => {
+      employee.rate = employee.cost / employee.seconds;
+    });
+
+    let monthlies = await AppDataSource.getRepository(MonthlyEntity).createQueryBuilder('m')
+      .leftJoinAndSelect('m.client', 'c')
+      .where('m.year = :year', { year: input.year })
+      .andWhere('m.month = :month', { month: input.month })
+      .getMany();
+
+    output.clients = monthlies.map(x => {
+      return {
+        client: x.client.name,
+        cost: 0,
+        seconds: 0,
+        invoice: 0,
+        records: []
+      };
+    });
+
+    invoices.forEach(invoice => {
+      let sum = invoice.lines.reduce((sum, line) => {
+        return sum + (line.qtty * line.price);
+      }, 0);
+
+      let oline = output.clients.find(x => x.client === invoice.monthly.client.name);
+      if (oline) {
+        oline.invoice += sum;
+      }
+    });
+
+    stoppers.forEach(stopper => {
+      let client = output.clients.find(x => x.client === stopper.march.monthly.client.name);
+      let user = output.employees.find(x => x.userId === stopper.user.id);
+
+      if (client && user) {
+        client.cost += stopper.seconds * user.rate;
+        client.seconds += stopper.seconds;
+
+        client.records.push({
+          user: stopper.user.name,
+          cost: stopper.seconds * user.rate,
+          seconds: stopper.seconds
+        });
+      }
+    });
+
+    return output;
   },
 
   async generateSummaryReportOutput(input: any): Promise<ISummaryReportOutput> {
