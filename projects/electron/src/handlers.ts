@@ -512,13 +512,7 @@ export const ReportController = {
       .andWhere('m.year = :year', { year: input.year })
       .getMany();
 
-    let profit = invoices.reduce((sum, invoice) => {
-      return sum + invoice.lines.reduce((lineSum, line) => {
-        return lineSum + (line.qtty * line.price);
-      }, 0);
-    }, 0);
     let costShare = input.costSharePercent === 0 ? 1 : input.costSharePercent / 100;
-    profit = profit * costShare;
 
     output.employees = input.employees.map(x => {
       return {
@@ -562,6 +556,7 @@ export const ReportController = {
         cost: 0,
         seconds: 0,
         invoice: 0,
+        share: 0,
         records: []
       };
     });
@@ -591,6 +586,10 @@ export const ReportController = {
           seconds: stopper.seconds
         });
       }
+    });
+
+    output.clients.forEach(client => {
+      client.share = (client.cost / (client.invoice * (1 - costShare))) * 100;
     });
 
     return output;

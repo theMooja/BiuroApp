@@ -6,34 +6,44 @@
                     <mat-label>Nazwa raportu</mat-label>
                     <input matInput placeholder="nazwa" [(ngModel)]="header.name">
                 </mat-form-field>
-                <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)" class="mgap"></app-monthly-picker>
+                <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)"></app-monthly-picker>
 
                 @if(inputForm){
                 <button mat-fab color="primary" (click)="addEmployeeLine()"><mat-icon>add</mat-icon></button>
 
                 <form id="inputForm" [formGroup]="inputForm">
-                    <div formArrayName="employees" class="">
-                        <div *ngFor="let line of employeeInputLines.controls; let i = index" [formGroupName]="i">
-                            <div formGroupName="user">
+                    <mat-form-field>
+                        <mat-label>Udział kosztów ogólnych</mat-label>
+                        <input matInput placeholder="%" formControlName="costSharePercent" type="text">
+                    </mat-form-field>
+                    <div class="form-section">
+                        <div class="section-title">
+                            Pracownicy
+                        </div>
+
+                        <div formArrayName="employees" class="">
+                            <div *ngFor="let line of employeeInputLines.controls; let i = index" [formGroupName]="i">
+                                <div formGroupName="user" class="user-line">
+                                    <mat-form-field>
+                                        <mat-label>Pracownik</mat-label>
+                                        <input matInput placeholder="Pracownik" formControlName="name" type="text"
+                                            [matAutocomplete]="autoUser">
+                                        <mat-autocomplete #autoUser="matAutocomplete">
+                                            <mat-option *ngFor="let option of users" [value]="option.name"
+                                                (click)="line.get('user')?.get('id')?.setValue(option.id)">
+                                                {{option.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                    <mat-form-field style="display: none;">
+                                        <input matInput placeholder="user.id" formControlName="id" type="text">
+                                    </mat-form-field>
+                                </div>
                                 <mat-form-field>
-                                    <mat-label>Pracownik</mat-label>
-                                    <input matInput placeholder="Pracownik" formControlName="name" type="text"
-                                        [matAutocomplete]="autoUser">
-                                    <mat-autocomplete #autoUser="matAutocomplete">
-                                        <mat-option *ngFor="let option of users" [value]="option.name"
-                                            (click)="line.get('user')?.get('id')?.setValue(option.id)">
-                                            {{option.name}}
-                                        </mat-option>
-                                    </mat-autocomplete>
-                                </mat-form-field>
-                                <mat-form-field style="display: none;">
-                                    <input matInput placeholder="user.id" formControlName="id" type="text">
+                                    <mat-label>Koszt</mat-label>
+                                    <input matInput placeholder="Wynagrodzenie" formControlName="cost">
                                 </mat-form-field>
                             </div>
-                            <mat-form-field>
-                                <mat-label>Koszt</mat-label>
-                                <input matInput placeholder="Wynagrodzenie" formControlName="cost">
-                            </mat-form-field>
                         </div>
                     </div>
                 </form>
@@ -44,8 +54,50 @@
             <div class="output-tab">
                 @if(outputForm){
                 <form id="outputForm" [formGroup]="outputForm">
-                    <div formArrayName="employees" class="">
-                        <div *ngFor="let line of employeeOutputLines.controls; let i = index" [formGroupName]="i">
+
+                    <div formArrayName="clients" class="form-section">
+                        <div class="section-title">
+                            Rentowność klientów
+                        </div>
+                        <div *ngFor="let line of clientOutputLines.controls; let i = index" [formGroupName]="i">
+                            <div class="form-line">
+                                <mat-form-field>
+                                    <mat-label>Klient</mat-label>
+                                    <input matInput placeholder="Klient" formControlName="client" type="text" readonly>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Koszt</mat-label>
+                                    <input matInput placeholder="Koszt" formControlName="cost" type="text" readonly>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Czas</mat-label>
+                                    <input matInput placeholder="Czas" formControlName="seconds" type="text" readonly>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Udział</mat-label>
+                                    <input matInput placeholder="Udział" formControlName="share" type="text" readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <mat-expansion-panel hideToggle class="records">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> Zapisy </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <ul>
+                                    <li *ngFor="let entry of line.get('records')?.value">
+                                        {{ entry.user }} | {{ entry.seconds }} | {{ entry.cost }}
+                                    </li>
+                                </ul>
+                            </mat-expansion-panel>
+                        </div>
+                    </div>
+
+                    <div formArrayName="employees" class="form-section">
+                        <div class="section-title">
+                            Pracownicy
+                        </div>
+                        <div *ngFor="let line of employeeOutputLines.controls; let i = index" [formGroupName]="i"
+                            class="form-line">
                             <mat-form-field>
                                 <mat-label>Pracownik</mat-label>
                                 <input matInput placeholder="Pracownik" formControlName="userName" type="text" readonly>
@@ -56,8 +108,7 @@
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Czas</mat-label>
-                                <input matInput placeholder="Czas" formControlName="seconds" type="text"
-                                    readonly>
+                                <input matInput placeholder="Czas" formControlName="seconds" type="text" readonly>
                             </mat-form-field>
                         </div>
                     </div>

@@ -10,6 +10,7 @@
 .content {
     flex: 1;
     background-color: $primary-green;
+    overflow: auto;
 }
 
 .toolbar {
