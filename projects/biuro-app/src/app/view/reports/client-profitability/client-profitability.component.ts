@@ -13,13 +13,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { share } from 'rxjs';
+import { MatListModule } from '@angular/material/list';
+
 
 @Component({
   selector: 'app-client-profitability',
   standalone: true,
   imports: [MatSidenavModule, MonthlyPickerComponent, MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatAutocompleteModule, MatTabsModule, FormsModule, ReactiveFormsModule, MatIconModule, CommonModule, MatExpansionModule],
+    MatAutocompleteModule, MatTabsModule, FormsModule, ReactiveFormsModule, MatIconModule, CommonModule, MatExpansionModule, MatListModule],
   templateUrl: './client-profitability.component.html',
   styleUrl: './client-profitability.component.scss'
 })
@@ -36,16 +37,14 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
 
   users: IUserEntity[] = [];
 
+  clientsOutput: IProfitabilityReportOutput["clients"];
+
   get employeeInputLines() {
     return this.inputForm.get('employees') as FormArray;
   }
 
   get employeeOutputLines() {
     return this.outputForm.get('employees') as FormArray;
-  }
-
-  get clientOutputLines() {
-    return this.outputForm.get('clients') as FormArray;
   }
 
   async ngOnInit() {
@@ -85,19 +84,10 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
           cost: this.formBuilder.control(x.cost),
           seconds: this.formBuilder.control(x.seconds),
           rate: this.formBuilder.control(x.rate),
-        }))),
-        clients: this.formBuilder.array(this.output.clients.map(x => this.formBuilder.group({
-          client: this.formBuilder.control(x.client),
-          cost: this.formBuilder.control(x.cost),
-          seconds: this.formBuilder.control(x.seconds),
-          share: this.formBuilder.control(x.share),
-          records: this.formBuilder.array(x.records.map(y => this.formBuilder.group({
-            user: this.formBuilder.control(y.user),
-            seconds: this.formBuilder.control(y.seconds),
-            cost: this.formBuilder.control(y.cost),
-          })))
-        }))),
+        })))        
       });
+
+      this.clientsOutput = this.output.clients;
     }
   }
 
@@ -145,5 +135,18 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
 
   secondsToTime(index: number) {
     return 'asd';
+  }
+
+  getBarWidth(share: number) {
+    return `${share}%`;
+  }
+
+  getBarColorClass(share: number) {
+    if (share < 30)
+      return 'bar-green';
+    else if (share > 30 && share < 70)
+      return 'bar-yellow';
+    else
+      return 'bar-red';
   }
 }
