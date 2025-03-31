@@ -64,19 +64,22 @@
                     <mat-accordion>
                         <mat-expansion-panel *ngFor="let client of clientsOutput">
                             <mat-expansion-panel-header>
-                                <div class="bar" [style.width]="getBarWidth(client.share)" [ngClass]="getBarColorClass(client.share)"></div>
+                                <div class="bar" [style.width]="getBarWidth(client.share)"
+                                    [ngClass]="getBarColorClass(client.share)"></div>
                                 <mat-panel-title>
                                     {{client.client}}
                                 </mat-panel-title>
                                 <mat-panel-description>
-                                    {{client.cost}}zł / {{client.invoice}}zł | {{client.seconds}}s | {{client.share}}
+                                    {{client.cost | number:'1.2-2'}} zł / {{client.invoice | number:'1.2-2'}} zł {{client.seconds |
+                                    secondsToHHMMSSPipe}} {{client.share | number:'1.2-2'}}
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
                             <mat-list>
                                 @for (record of client.records; track record.user) {
 
                                 <mat-list-item>
-                                    {{record.user}} - {{record.seconds}}s - {{record.cost}}zł
+                                    {{record.user}} {{record.march}} {{record.seconds | secondsToHHMMSSPipe}} {{record.cost |
+                                    number:'1.2-2'}} zł
                                 </mat-list-item>
 
                                 }
@@ -100,8 +103,8 @@
                                 <input matInput placeholder="Pracownik" formControlName="userName" type="text" readonly>
                             </mat-form-field>
                             <mat-form-field>
-                                <mat-label>Koszt</mat-label>
-                                <input matInput placeholder="Wynagrodzenie" formControlName="cost" type="text" readonly>
+                                <mat-label>Stawka</mat-label>
+                                <input matInput placeholder="Stawka" formControlName="rate" type="text" readonly>
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Czas</mat-label>

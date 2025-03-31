@@ -212,6 +212,7 @@ export interface IProfitabilityReportOutput {
         share: number,
         records: {
             user: string,
+            march: string,
             seconds: number,
             cost: number
         }[]

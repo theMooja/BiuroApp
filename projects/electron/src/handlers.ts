@@ -582,6 +582,7 @@ export const ReportController = {
 
         client.records.push({
           user: stopper.user.name,
+          march: stopper.march.name,
           cost: stopper.seconds * user.rate,
           seconds: stopper.seconds
         });

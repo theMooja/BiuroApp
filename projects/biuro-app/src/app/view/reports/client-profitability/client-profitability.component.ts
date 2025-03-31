@@ -14,13 +14,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
+import { SecondsToHHMMSSPipe } from '../../../utils/seconds-to-mmss.pipe';
 
 
 @Component({
   selector: 'app-client-profitability',
   standalone: true,
   imports: [MatSidenavModule, MonthlyPickerComponent, MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatAutocompleteModule, MatTabsModule, FormsModule, ReactiveFormsModule, MatIconModule, CommonModule, MatExpansionModule, MatListModule],
+    MatAutocompleteModule, MatTabsModule, FormsModule, ReactiveFormsModule, MatIconModule, CommonModule, MatExpansionModule, 
+    MatListModule, SecondsToHHMMSSPipe],
   templateUrl: './client-profitability.component.html',
   styleUrl: './client-profitability.component.scss'
 })
@@ -83,7 +85,7 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
           userName: this.formBuilder.control(x.userName),
           cost: this.formBuilder.control(x.cost),
           seconds: this.formBuilder.control(x.seconds),
-          rate: this.formBuilder.control(x.rate),
+          rate: this.formBuilder.control(x.rate * 3600),
         })))        
       });
 
@@ -138,6 +140,7 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
   }
 
   getBarWidth(share: number) {
+    if(!share) return '0%';
     return `${share}%`;
   }
 
