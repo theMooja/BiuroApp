@@ -13,7 +13,7 @@ export class ClientEntity extends BaseEntity {
     @Column({ default: true })
     isActive: boolean;
 
-    @Column()
+    @Column({ nullable: true })
     nip: string;
 
     @OneToMany(() => MonthlyEntity, monthly => monthly.client)

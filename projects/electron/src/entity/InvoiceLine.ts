@@ -23,6 +23,9 @@ export class InvoiceLineEntity extends BaseEntity {
 
     @Column('text', { nullable: true })
     category: string;
+
+    @Column({ default: 0, nullable: true })
+    vat: number;
 }
 
 
