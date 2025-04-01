@@ -13,6 +13,7 @@ import * as settings from 'electron-settings';
 import { NoteEntity } from "./entity/Note";
 import { ReportEntity } from "./entity/Report";
 import { InvoiceLineEntity } from "./entity/InvoiceLine";
+import axios from "axios";
 
 export const setIPCHandlers = () => {
   ipcMain.handle('db:listValues', (e, target) => ListValuesController.get(target));
@@ -39,6 +40,7 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Invoice:saveInvoice', (e, data) => InvoiceController.saveInvoice(data));
   ipcMain.handle('db:Invoice:saveInvoiceDates', (e, invoices) => InvoiceController.saveInvoiceDates(invoices));
   ipcMain.handle('db:Invoice:getInvoices', (e, clientId, year, month) => InvoiceController.getInvoices(clientId, year, month));
+  ipcMain.handle('db:Invoice:integrateInvoice', (e, invoice) => InvoiceController.integrateInvoice(invoice));
 
   ipcMain.handle('db:Report:generate', (e, header, data) => ReportController.generateReport(header, data));
   ipcMain.handle('db:Report:getReport', (e, header) => ReportController.getReport(header));
@@ -420,7 +422,64 @@ export const InvoiceController = {
       .andWhere('m.year = :year', { year })
       .andWhere('m.month = :month', { month })
       .getMany();
-  }
+  },
+
+  async integrateInvoice(invoice: IInvoiceEntity) {
+    let repo = AppDataSource.getRepository(InvoiceEntity);
+    let invoiceEntity = await repo.createQueryBuilder('i')
+      .leftJoinAndSelect('i.lines', 'l')
+      .leftJoinAndSelect('i.monthly', 'm')
+      .leftJoinAndSelect('m.client', 'c')
+      .where('i.id = :id', { id: invoice.id })
+      .getOne();
+
+    if (invoiceEntity.monthly.info.firma.toLowerCase() == 'finka') {
+      let apiKey = await AppDataSource.getRepository(ListValueEntity).findOneBy({
+        target: 'finka-fakturownia'
+      });
+
+      const fakturowniaDomain = 'finka';
+      const apiToken = apiKey.value;
+
+      const invoiceData = {
+        api_token: apiToken,
+        invoice: {
+          kind: "vat",
+          number: null as string | null,
+          sell_date: invoiceEntity.sendDate,
+          issue_date: invoiceEntity.sendDate,
+          //payment_to: "2025-05-01",
+          buyer_name: "Klient1 Sp. z o.o.",
+          buyer_email: invoiceEntity.monthly.info.email,
+          //buyer_tax_no: "6272616681",
+          positions: invoiceEntity.lines.map(e => {
+            return {
+              name: e.description,
+              tax: 23,
+              total_price_gross: e.price * e.qtty,
+              quantity: e.qtty
+            } as any;
+          })
+        }
+      };
+
+      axios.post(`https://${fakturowniaDomain}.fakturownia.pl/invoices.json`, invoiceData, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          console.log('Invoice created:', response.data);
+        })
+        .catch(error => {
+          console.error('Error creating invoice:', error.response?.data || error.message);
+        });
+
+    }
+  },
+
+
 }
 
 export const ListValuesController = {

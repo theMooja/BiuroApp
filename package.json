@@ -36,6 +36,7 @@
     "@angular/router": "^17.3.0",
     "@electron-forge/publisher-github": "^7.6.0",
     "angular2-notifications": "^16.0.1",
+    "axios": "^1.8.4",
     "date-fns": "^3.6.0",
     "electron-log": "^5.2.4",
     "electron-settings": "^4.0.4",

@@ -317,4 +317,8 @@ export class HomeComponent {
       console.error("Matching notes-column not found for", element);
     }
   }
+
+  integrateInvoice(element: IMonthlyEntity) {
+    this.invoiceDataService.integrateInvoice(element.invoices[0]);
+  }
 }

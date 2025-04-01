@@ -19,4 +19,8 @@ export class InvoiceDataService {
   async getInvoices(clientId: number, year: number, month: number): Promise<IInvoiceEntity[]> {
     return await window.electron.getInvoices(clientId, year, month);
   }
+
+  async integrateInvoice(invoice: IInvoiceEntity) : Promise<IInvoiceEntity> {
+    return await window.electron.integrateInvoice(invoice);
+  }
 }

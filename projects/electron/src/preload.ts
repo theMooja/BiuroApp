@@ -1,7 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { IClientEntity, IInvoiceEntity, IMarchEntity, IMonthlyEntity, INoteEntity, IReport, IReportHeader, IStopperEntity, IUserEntity } from "./interfaces";
 
-
 const contextBridgeApi = {
   minimize: () => ipcRenderer.invoke('app:minimize'),
   maximize: () => ipcRenderer.invoke('app:maximize'),
@@ -38,6 +37,7 @@ const contextBridgeApi = {
   saveInvoice: (invoice: IInvoiceEntity) => ipcRenderer.invoke('db:Invoice:saveInvoice', invoice),
   saveInvoiceDates: (invoices: IInvoiceEntity[]) => ipcRenderer.invoke('db:Invoice:saveInvoiceDates', invoices),
   getInvoices: (clientId: number, year: number, month: number) => ipcRenderer.invoke('db:Invoice:getInvoices', clientId, year, month),
+  integrateInvoice: (invoice: IInvoiceEntity) => ipcRenderer.invoke('db:Invoice:integrateInvoice', invoice),
 
   generateReport: (header: IReportHeader, data: any) => ipcRenderer.invoke('db:Report:generate', header, data),
   getHeaders: () => ipcRenderer.invoke('db:Report:getHeaders'),
