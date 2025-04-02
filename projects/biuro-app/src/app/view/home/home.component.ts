@@ -318,7 +318,8 @@ export class HomeComponent {
     }
   }
 
-  integrateInvoice(element: IMonthlyEntity) {
-    this.invoiceDataService.integrateInvoice(element.invoices[0]);
+  async integrateInvoice(element: IMonthlyEntity) {
+    let invoice = await this.invoiceDataService.integrateInvoice(element.invoices[0]);
+    element.invoices[0] = invoice;
   }
 }

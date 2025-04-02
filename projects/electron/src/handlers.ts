@@ -426,7 +426,7 @@ export const InvoiceController = {
       .getMany();
   },
 
-  async integrateInvoice(invoice: IInvoiceEntity) {
+  async integrateInvoice(invoice: IInvoiceEntity): Promise<IInvoiceEntity> {
     let repo = AppDataSource.getRepository(InvoiceEntity);
     let invoiceEntity = await repo.createQueryBuilder('i')
       .leftJoinAndSelect('i.lines', 'l')
@@ -443,45 +443,54 @@ export const InvoiceController = {
       const fakturowniaDomain = 'finka';
       const apiToken = apiKey.value;
 
-      const invoiceData = {
-        api_token: apiToken,
-        invoice: {
-          kind: "vat",
-          number: null as string | null,
-          sell_date: invoiceEntity.sendDate,
-          issue_date: invoiceEntity.sendDate,
-          //payment_to: "2025-05-01",
-          //buyer_name: "Klient1 Sp. z o.o.",
-          //buyer_email: invoiceEntity.monthly.info.email,
-          buyer_tax_no: "6272616681",
-          positions: invoiceEntity.lines.map(e => {
-            return {
-              name: e.description,
-              //tax: 23,
-              total_price_gross: e.price * e.qtty,
-              quantity: e.qtty
-            } as any;
-          })
-        }
-      };
-
-      axios.post(`https://${fakturowniaDomain}.fakturownia.pl/invoices.json`, invoiceData, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          console.log('Invoice created:', response.data);
-        })
-        .catch(error => {
-          console.error('Error creating invoice:', error.response?.data || error.message);
-        });
-
+      const responseData = await this.sendInvoiceToFakturownia(invoiceEntity, fakturowniaDomain, apiToken);
+      invoice.no = responseData.number;
+      return await this.saveInvoice(invoice);
     }
   },
 
+  async sendInvoiceToFakturownia(invoiceEntity: InvoiceEntity, fakturowniaDomain: string, apiToken: string) {
 
+    const invoiceData = {
+      api_token: apiToken,
+      invoice: {
+        kind: "vat",
+        number: null as string | null,
+        sell_date: invoiceEntity.sendDate,
+        issue_date: invoiceEntity.sendDate,
+        //payment_to: "2025-05-01",
+        buyer_name: "Klient1 Sp. z o.o.",
+        //buyer_email: invoiceEntity.monthly.info.email,
+        buyer_tax_no: "6272616681",
+        exempt_tax_kind: "",
+        positions: invoiceEntity.lines.map(e => {
+          return {
+            name: e.description,
+            tax: 'np',
+            total_price_gross: e.price * e.qtty,
+            quantity: e.qtty
+          } as any;
+        })
+      }
+    };
+
+    try {
+      const response = await axios.post(
+        `https://${fakturowniaDomain}.fakturownia.pl/invoices.json`,
+        invoiceData,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      return response.data; // Handle the response as needed
+    } catch (error) {
+      console.error('Error creating invoice:', error);
+      throw error; // Re-throw the error for further handling
+    }
+  }
 }
 
 export const ListValuesController = {
