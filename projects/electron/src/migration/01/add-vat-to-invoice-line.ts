@@ -4,7 +4,8 @@ export class AddVatToInvoiceLine1678901234570 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.addColumn("InvoiceLine", new TableColumn({
             name: "vat",
-            type: "int",
+            type: "varchar",
+            length: "50",
             isNullable: true, // Allow null values initially
         }));
     }

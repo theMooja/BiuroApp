@@ -36,6 +36,7 @@ export interface IClientEntity {
     name: string;
     isActive: boolean;
     monthlies: IMonthlyEntity[];
+    nip: string;
 }
 
 export interface IMarchEntity {
@@ -116,7 +117,8 @@ export interface IInvoiceLineEntity {
     description: string,
     qtty: number,
     price: number,
-    category?: string
+    category?: string,
+    vat: string
 }
 
 export interface IListValue {

@@ -384,6 +384,7 @@ export const InvoiceController = {
           existingLine.price = line.price;
           existingLine.qtty = line.qtty;
           existingLine.category = line.category;
+          existingLine.vat = line.vat;
           return existingLine;
         }
       }
@@ -393,6 +394,7 @@ export const InvoiceController = {
       newLine.price = line.price;
       newLine.qtty = line.qtty;
       newLine.category = line.category;
+      newLine.vat = line.vat;
       return newLine;
     });
 
@@ -449,13 +451,13 @@ export const InvoiceController = {
           sell_date: invoiceEntity.sendDate,
           issue_date: invoiceEntity.sendDate,
           //payment_to: "2025-05-01",
-          buyer_name: "Klient1 Sp. z o.o.",
-          buyer_email: invoiceEntity.monthly.info.email,
-          //buyer_tax_no: "6272616681",
+          //buyer_name: "Klient1 Sp. z o.o.",
+          //buyer_email: invoiceEntity.monthly.info.email,
+          buyer_tax_no: "6272616681",
           positions: invoiceEntity.lines.map(e => {
             return {
               name: e.description,
-              tax: 23,
+              //tax: 23,
               total_price_gross: e.price * e.qtty,
               quantity: e.qtty
             } as any;

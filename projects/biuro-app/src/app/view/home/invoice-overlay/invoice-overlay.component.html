@@ -31,6 +31,17 @@
                     <mat-label>Ilość</mat-label>
                     <input matInput placeholder="Ilość" formControlName="qtty" type="number">
                 </mat-form-field>
+                <mat-form-field class="qtty-field">
+                    <mat-label>Vat</mat-label>
+                    <mat-select matInput placeholder="Vat" formControlName="vat" type="text">
+                        <mat-option [value]="'zw'">zw</mat-option>
+                        <mat-option [value]="23">23</mat-option>
+                        <mat-option [value]="8">8</mat-option>
+                        <mat-option [value]="5">5</mat-option>
+                        <mat-option [value]="0">0</mat-option>
+                        <mat-option [value]="'np'">np</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <mat-form-field>
                     <mat-label>Opis</mat-label>
                     <input matInput placeholder="Opis" formControlName="description" [matAutocomplete]="autoDesc">

@@ -12,13 +12,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { ListValuesService } from '../../../service/list-values.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-invoice-overlay',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule,
-    MatInputModule, MatFormFieldModule, MatIcon, MatButtonModule, MatAutocompleteModule, MatDatepickerModule],
+    MatInputModule, MatFormFieldModule, MatIcon, MatButtonModule, MatAutocompleteModule, MatDatepickerModule, MatSelectModule],
   templateUrl: './invoice-overlay.component.html',
   styleUrl: './invoice-overlay.component.scss'
 })
@@ -47,7 +47,8 @@ export class InvoiceOverlayComponent {
         description: this.formBuilder.control(x.description),
         price: this.formBuilder.control(x.price),
         qtty: this.formBuilder.control(x.qtty),
-        category: this.formBuilder.control(x.category)
+        category: this.formBuilder.control(x.category),
+        vat: this.formBuilder.control(x.vat)
       })))
     });
   }
@@ -71,7 +72,8 @@ export class InvoiceOverlayComponent {
       description: this.formBuilder.control(''),
       price: this.formBuilder.control(0),
       qtty: this.formBuilder.control(1),
-      category: this.formBuilder.control('')
+      category: this.formBuilder.control(''),
+      vat: this.formBuilder.control(this.getDefaultVat())
     }));
   }
 
@@ -104,7 +106,8 @@ export class InvoiceOverlayComponent {
         description: this.formBuilder.control(x.description),
         price: this.formBuilder.control(x.price),
         qtty: this.formBuilder.control(x.qtty),
-        category: this.formBuilder.control(x.category)
+        category: this.formBuilder.control(x.category),
+        vat: this.formBuilder.control(x.vat)
       })))
     });
   }
@@ -114,7 +117,13 @@ export class InvoiceOverlayComponent {
       this.previousInvoice = invoices[0];
       this.createPreviousForm(this.previousInvoice);
     });
+  }
 
-
+  getDefaultVat() {
+    if(this.monthly.info.firma == 'FinKa') {
+      return 'zw';
+    } else {
+      return '23%';
+    }
   }
 }
