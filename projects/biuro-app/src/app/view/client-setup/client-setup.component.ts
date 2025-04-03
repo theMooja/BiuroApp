@@ -24,6 +24,7 @@ export class ClientSetupComponent {
     this.form = this.formBuilder.group({
       id: this.formBuilder.control(null),
       name: this.formBuilder.control(''),
+      nip: this.formBuilder.control(''),
       isActive: this.formBuilder.control(true)
     })
   }
@@ -36,6 +37,7 @@ export class ClientSetupComponent {
     this.form.get('name')?.setValue(client.name);
     this.form.get('id')?.setValue(client.id);
     this.form.get('isActive')?.setValue(client.isActive);
+    this.form.get('nip')?.setValue(client.nip);
   }
 
   onSave() {
