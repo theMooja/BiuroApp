@@ -1,3 +1,5 @@
+@import './../../../variables.scss';
+
 .container {
     height: fit-content;
     display: flex;
@@ -11,11 +13,34 @@
         margin: 1em 0px;
     }
 
-    .lines-container {
-        flex: 1;
-
-        mat-form-field {
-            max-width: 150px;
-        }
+    .cat-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .line {
+        display: flex;
+        justify-content: flex-end;
+        padding: 4px;
+        width: 100%;
+    }
+    
+    .value-block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 100px; 
+    }
+    
+    .value {
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+    
+    .cat {
+        font-size: 0.75rem;
+        color: $tetiary-green;
+        margin-top: 2px;
     }
 }
