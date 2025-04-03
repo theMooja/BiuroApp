@@ -14,6 +14,7 @@ import { NoteEntity } from "./entity/Note";
 import { ReportEntity } from "./entity/Report";
 import { InvoiceLineEntity } from "./entity/InvoiceLine";
 import axios from "axios";
+import { parse, addWeeks, format } from 'date-fns';
 
 export const setIPCHandlers = () => {
   ipcMain.handle('db:listValues', (e, target) => ListValuesController.get(target));
@@ -328,12 +329,6 @@ export const ClientController = {
   async saveClient(client: IClientEntity): Promise<IClientEntity> {
     let repo = AppDataSource.getRepository(ClientEntity);
     return await repo.save(client);
-    // if(client.id) {
-    //   let saved = await repo.update(client.id, client);
-    //   return saved;
-    // } else {
-
-    // }
   }
 }
 
@@ -427,6 +422,18 @@ export const InvoiceController = {
   },
 
   async integrateInvoice(invoice: IInvoiceEntity): Promise<IInvoiceEntity> {
+    /*
+    try {
+      const response = await axios.post(
+        `https://finka.fakturownia.pl/invoices/100.json?api_token=API_TOKEN`
+      );
+      console.log(response.data); // Handle the response as needed
+    } catch (error) {
+      console.error('Error creating invoice:', error);
+      throw error; // Re-throw the error for further handling
+    }
+  */
+
     let repo = AppDataSource.getRepository(InvoiceEntity);
     let invoiceEntity = await repo.createQueryBuilder('i')
       .leftJoinAndSelect('i.lines', 'l')
@@ -443,10 +450,28 @@ export const InvoiceController = {
       const fakturowniaDomain = 'finka';
       const apiToken = apiKey.value;
 
+      if (!invoiceEntity.sendDate) {
+        invoiceEntity.sendDate = new Date();
+      }
+
       const responseData = await this.sendInvoiceToFakturownia(invoiceEntity, fakturowniaDomain, apiToken);
       invoice.no = responseData.number;
+      invoice.sendDate = this.toSafeDate(responseData.issue_date);
+
       return await this.saveInvoice(invoice);
     }
+
+    return invoice;
+  },
+
+  toSafeDate(date: string) {
+    const parsed = parse(date, 'yyyy-MM-dd', new Date());
+
+    return new Date(Date.UTC(
+      parsed.getFullYear(),
+      parsed.getMonth(),
+      parsed.getDate()
+    ));
   },
 
   async sendInvoiceToFakturownia(invoiceEntity: InvoiceEntity, fakturowniaDomain: string, apiToken: string) {
@@ -456,17 +481,17 @@ export const InvoiceController = {
       invoice: {
         kind: "vat",
         number: null as string | null,
-        sell_date: invoiceEntity.sendDate,
-        issue_date: invoiceEntity.sendDate,
-        //payment_to: "2025-05-01",
-        buyer_name: "Klient1 Sp. z o.o.",
-        //buyer_email: invoiceEntity.monthly.info.email,
-        buyer_tax_no: "6272616681",
-        exempt_tax_kind: "",
+        sell_date: format(invoiceEntity.sendDate, 'yyyy-MM-dd'),
+        issue_date: format(invoiceEntity.sendDate, 'yyyy-MM-dd'),
+        payment_to: format(addWeeks(invoiceEntity.sendDate, 1), 'yyyy-MM-dd'),
+        buyer_name: invoiceEntity.monthly.client.name,
+        buyer_email: invoiceEntity.monthly.info.email,
+        buyer_tax_no: invoiceEntity.monthly.client.nip,
+        payment_type: 'transfer',
         positions: invoiceEntity.lines.map(e => {
           return {
             name: e.description,
-            tax: 'np',
+            tax: 'disabled',
             total_price_gross: e.price * e.qtty,
             quantity: e.qtty
           } as any;
