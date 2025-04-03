@@ -144,6 +144,7 @@ export class MarchColumnComponent {
     this.marchDataService.updateMarchValue(this.currentStep);
     this.currentStep = this.findLastStep();
     calendar.closeMenu();
+    this.leftMenuTrigger.closeMenu();
   }
 
   onStepSelected(val: IMarchEntity) {
