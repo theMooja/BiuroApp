@@ -5,6 +5,9 @@ import * as settings from 'electron-settings';
 import "reflect-metadata";
 import { initializeDatabase } from './datasource';
 import { setIPCHandlers } from "./handlers";
+import { DataSource } from "typeorm";
+import { Client } from "pg";
+import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 
 const { updateElectronApp } = require('update-electron-app');
 if (app.isPackaged)
@@ -61,8 +64,9 @@ const setupDatabase = async () => {
     config.logging = false;
   }
 
-  await initializeDatabase(config).then(() => {
+  await initializeDatabase(config).then((ds) => {
     console.log('Connected to Postgres');
+    listenToNotifications(ds);
   })
     .catch(err => console.error('Error:', err));
 
@@ -85,6 +89,26 @@ const setAppHandlers = () => {
   ipcMain.handle('app:getVersion', () => app.getVersion());
 
 }
+
+const listenToNotifications = async (AppDataSource: DataSource) => {
+  const options = AppDataSource.options as PostgresConnectionOptions;
+
+  const rawClient = new Client({
+    host: options.host,
+    port: options.port,
+    user: options.username,
+    password: options.password,
+    database: options.database,
+  });
+  
+  await rawClient.connect();
+  // Listen for notifications
+  rawClient.on('notification', (msg) => {
+    console.log('📣 Notification received:', msg.channel, msg.payload);
+  });
+
+  await rawClient.query('LISTEN monthly_update_channel');
+};
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
