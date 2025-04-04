@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, ViewChild } from '@angular/core';
 import { IMonthlyEntity, IMarchEntity, StepType } from '../../../../../../electron/src/interfaces';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
@@ -10,6 +10,7 @@ import { SecondsToMMSSPipe } from '../../../utils/seconds-to-mmss.pipe';
 import { CommonModule } from '@angular/common';
 import { MatCalendar, MatDatepicker, MatDatepickerModule, MatDatepickerToggle } from '@angular/material/datepicker';
 import { UserDataService } from '../../../service/user-data.service';
+import { StopperService } from '../../../service/stopper.service';
 
 @Component({
   selector: 'march-column',
@@ -22,18 +23,22 @@ export class MarchColumnComponent {
   @Input() monthly!: IMonthlyEntity;
   currentStep!: IMarchEntity;
   @ViewChild('leftMenuTrigger') leftMenuTrigger!: MatMenuTrigger;
-  isRunning!: boolean;
   startTime!: Date;
   intervalId?: any;
+  stopperService = inject(StopperService);
 
   get currentDate() {
     return this.currentStep.finishedAt;
   }
 
   get currentTime() {
-    if (!this.isRunning) return 0;
+    return this.isRunning
+      ? this.stopperService.getElapsedSeconds()
+      : 0;
+  }
 
-    return differenceInSeconds(new Date(), this.startTime);
+  get isRunning() {
+    return this.stopperService.isRunning() && this.stopperService.getRunningStep()?.id === this.currentStep.id;
   }
 
   get totalTime() {
@@ -77,22 +82,17 @@ export class MarchColumnComponent {
   }
 
   startStopper() {
-    this.startTime = new Date();
-    this.isRunning = true;
-    this.marchDataService.startMarch(this.currentStep, this.monthly.client.name);
-
-    this.intervalId = setInterval(() => {
-      this.cdr.detectChanges();
-    }, 1000);
+    this.stopperService.start(this.currentStep, this.monthly.client.name);
   }
-
+  
   async stopStopper() {
     if (!this.isRunning) return;
-    clearInterval(this.intervalId);
-    let seconds = differenceInSeconds(new Date(), this.startTime);
-    let stopper = await this.marchDataService.addStopper(this.currentStep, seconds, this.startTime);
+  
+    let seconds = this.stopperService.getElapsedSeconds();
+    let startedAt = this.stopperService['startTime']();
+    let stopper = await this.marchDataService.addStopper(this.currentStep, seconds, startedAt ?? new Date());
     this.currentStep.stoppers.push(stopper);
-    this.isRunning = false;
+    this.stopperService.stop();
   }
 
   async onFifteen(e: MouseEvent) {
@@ -138,7 +138,6 @@ export class MarchColumnComponent {
 
   onDateSelected(event: any, calendar: MatMenuTrigger) {
     let date = new Date(event);
-    console.log(date);
     this.currentStep.value = 1;
     this.currentStep.finishedAt = date;
     this.marchDataService.updateMarchValue(this.currentStep);
