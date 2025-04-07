@@ -84,14 +84,48 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
         employees: this.formBuilder.array(this.output.employees.map(x => this.formBuilder.group({
           userName: this.formBuilder.control(x.userName),
           cost: this.formBuilder.control(x.cost),
-          seconds: this.formBuilder.control(x.seconds),
+          seconds: this.formBuilder.control(this.formatTime(x.seconds)),
           rate: this.formBuilder.control(x.rate * 3600),
         })))        
       });
 
-      this.clientsOutput = this.output.clients;
+      this.clientsOutput = this.groupRecordsByUserAndMarch(this.output.clients);
     }
   }
+
+  formatTime(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const formattedSeconds = seconds % 60;
+    const formattedTime = `${hours}h ${minutes}m ${formattedSeconds}s`;
+    return formattedTime;
+  }
+
+  groupRecordsByUserAndMarch(data: IProfitabilityReportOutput['clients']): IProfitabilityReportOutput['clients'] {
+    const groupedClients = data.map(client => {
+        const groupedMap = new Map<string, { user: string, march: string, seconds: number, cost: number }>();
+
+        for (const record of client.records) {
+            const key = `${record.user}__${record.march}`;
+            if (!groupedMap.has(key)) {
+                groupedMap.set(key, { ...record });
+            } else {
+                const existing = groupedMap.get(key)!;
+                existing.seconds += record.seconds;
+                existing.cost += record.cost;
+            }
+        }
+
+        const groupedRecords = Array.from(groupedMap.values());
+
+        return {
+            ...client,
+            records: groupedRecords
+        };
+    });
+
+    return groupedClients;
+}
 
   async onSave() {
     this.report.name = this.header.name;
