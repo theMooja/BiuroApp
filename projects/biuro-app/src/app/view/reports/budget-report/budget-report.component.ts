@@ -144,4 +144,8 @@ export class BudgetReportComponent extends ReportComponent<IBudgetReportInput, I
       value: this.formBuilder.control(0)
     }));
   }
+
+  removeCostLine(index: number) {
+    this.costInputLines.removeAt(index);
+  }
 }
