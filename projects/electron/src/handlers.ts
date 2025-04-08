@@ -183,6 +183,12 @@ export const MonthlyController = {
       clients = monthlies.map(m => m.client);
     } else {
       clients = await ClientController.getClients();
+      let monthlies = await AppDataSource
+        .getRepository(MonthlyEntity).find({
+          where: { year, month },
+          relations: ['client']
+        });
+      clients = clients.filter(c => !monthlies.some(m => m.client.id == c.id));
     }
 
     //remove current monthlies

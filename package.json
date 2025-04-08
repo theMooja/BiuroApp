@@ -20,7 +20,8 @@
     "copy-files": "copyfiles app-settings.json dist/",
     "package": "npm run build-electron && npm run build-app && electron-forge package",
     "make": "npm run build-electron && npm run build-app && electron-forge make",
-    "release": "npm run build-electron && npm run build-app && electron-forge publish"
+    "release": "npm run build-electron && npm run build-app && electron-forge publish",
+    "publish": "electron-forge publish"
   },
   "dependencies": {
     "@angular/animations": "^17.3.0",
