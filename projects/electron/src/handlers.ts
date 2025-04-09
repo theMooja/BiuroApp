@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { BrowserWindow, ipcMain } from "electron";
 import { AppDataSource } from "./datasource";
 import { MonthlyEntity } from "./entity/Monthly";
 import { IBudgetReportInput, IBudgetReportOutput, IClientEntity, IEmployeesReportOutput, IInvoiceEntity, IInvoiceLineEntity, IListValue, IMarchEntity, IMonthlyEntity, INoteEntity, IProfitabilityReportInput, IProfitabilityReportOutput, IReport, IReportHeader, IStopperEntity, ISummaryReportOutput, IUserEntity, StepType } from "./interfaces";
@@ -15,8 +15,9 @@ import { ReportEntity } from "./entity/Report";
 import { InvoiceLineEntity } from "./entity/InvoiceLine";
 import axios from "axios";
 import { parse, addWeeks, format } from 'date-fns';
+import { Client } from "pg";
 
-export const setIPCHandlers = () => {
+export const setIPCHandlers = async (window: BrowserWindow, rawClient: Client) => {
   ipcMain.handle('db:listValues', (e, target) => ListValuesController.get(target));
 
   ipcMain.handle('db:User:saveUser', (e, data) => UserController.saveUser(data));
@@ -48,6 +49,21 @@ export const setIPCHandlers = () => {
   ipcMain.handle('db:Report:getHeaders', (e) => ReportController.getHeaders());
   ipcMain.handle('db:Report:removeReport', (e, report) => ReportController.removeReport(report));
   ipcMain.handle('db:Report:saveReport', (e, report) => ReportController.saveReport(report));
+
+  // Listen for notifications
+  rawClient.on('notification', async (msg) => {
+    console.log('📣 Notification received:', msg.channel, msg.payload);
+
+    if (msg.channel === 'monthly_update_channel') {
+      const payload = JSON.parse(msg.payload) as { id: number, operation: string };
+      let monthly = await MonthlyController.getMonthly(payload.id);
+      if (!monthly) monthly = { id: payload.id } as IMonthlyEntity;
+      console.log('📣 Monthly update:', monthly, payload.operation);
+      window.webContents.send('trigger:monthly', monthly, payload.operation);
+    }
+  });
+
+  await rawClient.query('LISTEN monthly_update_channel');
 }
 
 export const MonthlyController = {
@@ -77,6 +93,7 @@ export const MonthlyController = {
       .leftJoinAndSelect('inv.lines', 'lin')
       .leftJoinAndSelect('m.marches', 'mar')
       .leftJoinAndSelect('mar.stoppers', 'stop')
+      .leftJoinAndSelect('mar.owner', 'o')
       .leftJoinAndSelect('m.notes', 'not')
       .leftJoinAndSelect('not.user', 'user')
       .where('m.id = :id', { id })

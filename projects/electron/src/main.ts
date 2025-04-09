@@ -28,7 +28,7 @@ settings.configure({
 });
 
 
-const createWindow = (): void => {
+const createWindow = (): BrowserWindow => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     frame: false,
@@ -49,9 +49,11 @@ const createWindow = (): void => {
   maximize();
   if (!app.isPackaged)
     mainWindow.webContents.openDevTools();
+
+  return mainWindow;
 };
 
-const setupDatabase = async () => {
+const setupDatabase = async () : Promise<DataSource> => {
   let config: any = {};
 
   if (app.isPackaged) {
@@ -64,14 +66,19 @@ const setupDatabase = async () => {
     config.logging = false;
   }
 
-  await initializeDatabase(config).then((ds) => {
+  let dsPromise = initializeDatabase(config);
+  dsPromise.then(() => {
     console.log('Connected to Postgres');
-    listenToNotifications(ds);
   })
     .catch(err => console.error('Error:', err));
 
+  let db = await dsPromise;
+
+
   if (!app.isPackaged)
     await testdata.populate();
+
+  return db
 }
 
 const setAppHandlers = () => {
@@ -90,7 +97,7 @@ const setAppHandlers = () => {
 
 }
 
-const listenToNotifications = async (AppDataSource: DataSource) => {
+const getRawClient = async (AppDataSource: DataSource) => {
   const options = AppDataSource.options as PostgresConnectionOptions;
 
   const rawClient = new Client({
@@ -100,24 +107,22 @@ const listenToNotifications = async (AppDataSource: DataSource) => {
     password: options.password,
     database: options.database,
   });
-  
-  await rawClient.connect();
-  // Listen for notifications
-  rawClient.on('notification', (msg) => {
-    console.log('📣 Notification received:', msg.channel, msg.payload);
-  });
 
-  await rawClient.query('LISTEN monthly_update_channel');
+  await rawClient.connect();
+
+  return rawClient;
+  
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
-  await setupDatabase();
-  createWindow();
+  let ds = await setupDatabase();
+  let window = createWindow();
+  let pgClient = await getRawClient(ds);
   setAppHandlers();
-  setIPCHandlers();
+  await setIPCHandlers(window, pgClient);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

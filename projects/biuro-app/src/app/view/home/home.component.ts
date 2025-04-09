@@ -31,6 +31,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { InvoiceDateDialogComponent } from '../../utils/invoice-date-dialog/invoice-date-dialog.component';
 import { TaskbarComponent } from './taskbar/taskbar.component';
 import { MonthlyPickerComponent } from '../../utils/monthly-picker/monthly-picker.component';
+import { computed, effect, Signal } from '@angular/core';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel', 'place'];
 
@@ -53,7 +54,7 @@ export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma
 })
 export class HomeComponent {
   @ViewChildren(MarchColumnComponent) marchColumns: MarchColumnComponent[];
-  tableData: MatTableDataSource<IMonthlyEntity>;
+  tableData: MatTableDataSource<IMonthlyEntity> = new MatTableDataSource<IMonthlyEntity>();
   expandedElement: IMonthlyEntity | null = null;
   selection = new SelectionModel<IMonthlyEntity>(true);
   selectionMode: boolean = false;
@@ -63,7 +64,7 @@ export class HomeComponent {
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChildren(NotesComponent) notesColumns!: QueryList<NotesComponent>;
-  monthlies: IMonthlyEntity[] = [];
+  monthlies: Signal<IMonthlyEntity[]>;
 
   lastColumn!: string;
   isRecreating: boolean = false;
@@ -79,7 +80,13 @@ export class HomeComponent {
     private overlay: Overlay,
     private dialog: MatDialog
   ) {
-    this.tableData = new MatTableDataSource<IMonthlyEntity>();
+    this.monthlies = computed(() => this.monthlyDataService.monthlies());
+
+    effect(() => {
+      const data = this.monthlies();
+      this.tableData.data = data;
+      this.selection.clear();
+    });
   }
 
   async ngOnInit() {
@@ -87,7 +94,10 @@ export class HomeComponent {
     if (d)
       this.currentDate = new Date(JSON.parse(d));
 
+    await this.monthlyDataService
+      .getMonthlies(this.currentMonthly.month, this.currentMonthly.year);
     this.refreshData();
+    this.tableData.data = this.monthlies();
 
     await this.restoreInfoColumns();
 
@@ -110,6 +120,11 @@ export class HomeComponent {
     this.sort.active = this.columns[0];
     this.sort.direction = 'asc';
     this.tableData.sort = this.sort;
+  }
+
+  async refreshData() {
+    this.selection.clear();
+    console.log('tableData', this.tableData.data);
   }
 
   get user() {
@@ -229,14 +244,6 @@ export class HomeComponent {
     overlayRef.backdropClick().subscribe(() => overlayRef.dispose());
   }
 
-  async refreshData() {
-    this.selection.clear();
-    this.monthlies = await this.monthlyDataService
-      .getMonthlies(this.currentMonthly.month, this.currentMonthly.year);
-    this.tableData.data = this.monthlies;
-
-    console.log('tableData', this.tableData.data);
-  }
 
   get currentMonthly(): { year: number, month: number } {
     return {
@@ -248,6 +255,8 @@ export class HomeComponent {
   async onDateChange(date: Date) {
     this.currentDate = date;
     this.tableData.data = [];
+    await this.monthlyDataService
+      .getMonthlies(this.currentMonthly.month, this.currentMonthly.year);
     await this.refreshData();
   }
 

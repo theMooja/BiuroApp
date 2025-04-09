@@ -12,6 +12,12 @@ export enum Permission {
     USER = "user"
 }
 
+export enum PayloadOperation {
+    INSERT = 'INSERT',
+    UPDATE = 'UPDATE',
+    DELETE = 'DELETE'
+}
+
 export function hasAccess(user: IUserEntity | undefined, permission: Permission) {
     if (!user) return false;
     if (permission === Permission.SUPER) {

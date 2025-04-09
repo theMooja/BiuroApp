@@ -48,7 +48,7 @@ export class StopperService {
   }
 
   getAliveStep(step: IMarchEntity) {
-    let monthlies = this.monthlyDataService.monthlies;
+    let monthlies = this.monthlyDataService.monthlies();
     let monthly = monthlies.find(m => m.id === step.monthly.id);
     if (!monthly) return step;
     let aliveStep = monthly.marches.find(m => m.id === step.id);
