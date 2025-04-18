@@ -9,6 +9,7 @@ import { InvoiceLineEntity } from './entity/InvoiceLine';
 import { ListValueEntity } from './entity/ListValue';
 import { NoteEntity } from './entity/Note';
 import { ReportEntity } from './entity/Report';
+import { MonthlyUpdateEntity } from './entity/MonthlyUpdate';
 
 export let AppDataSource: DataSource;
 
@@ -32,14 +33,14 @@ export const initializeDatabase = async (options: any) => {
       InvoiceLineEntity, 
       ListValueEntity, 
       NoteEntity, 
-      ReportEntity
+      ReportEntity,
+      MonthlyUpdateEntity
     ],
     migrations: [
       __dirname + '/migration/**/*.ts'
     ],
   }
   let config = { ...configDefault, ...options };
-  console.log(config);
   AppDataSource = new DataSource(config);
 
   return AppDataSource.initialize();

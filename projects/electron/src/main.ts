@@ -64,6 +64,8 @@ const setupDatabase = async () : Promise<DataSource> => {
     config.password = dbsettings.password;
     config.database = dbsettings.database;
     config.logging = false;
+
+    //config.synchronize = false;
   }
 
   let dsPromise = initializeDatabase(config);

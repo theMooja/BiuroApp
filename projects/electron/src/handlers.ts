@@ -55,12 +55,12 @@ export const setIPCHandlers = async (window: BrowserWindow, rawClient: Client) =
     console.log('📣 Notification received:', msg.channel, msg.payload);
 
     if (msg.channel === 'monthly_update_channel') {
-      const payload = JSON.parse(msg.payload) as { id: number, operation: string };
-      let monthly = await MonthlyController.getMonthly(payload.id);
-      if (!monthly) monthly = { id: payload.id } as IMonthlyEntity;
+      const payload = JSON.parse(msg.payload) as { monthlyId: number, operation: string };
+      let monthly = await MonthlyController.getMonthly(payload.monthlyId);
+      if (!monthly) monthly = { id: payload.monthlyId } as IMonthlyEntity;
       console.log('📣 Monthly update:', monthly, payload.operation);
       window.webContents.send('trigger:monthly', monthly, payload.operation);
-    }
+    }    
   });
 
   await rawClient.query('LISTEN monthly_update_channel');
@@ -675,7 +675,7 @@ export const ReportController = {
         seconds: 0,
         invoice: 0,
         share: 0,
-        records: []
+        records: [] as { user: string; march: string; cost: number; seconds: number }[]
       };
     });
 
