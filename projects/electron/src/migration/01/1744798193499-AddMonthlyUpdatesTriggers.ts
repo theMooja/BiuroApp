@@ -78,6 +78,30 @@ export class AddMonthlyUpdatesTriggers1744798193499 implements MigrationInterfac
             $$ LANGUAGE plpgsql;
         `);
 
+        await queryRunner.query(`
+            CREATE OR REPLACE FUNCTION trg_invoicelines_update()
+            RETURNS TRIGGER AS $$
+            DECLARE
+                inv_id INT;
+                m_id INT;
+            BEGIN
+                IF (TG_OP = 'DELETE') THEN
+                    inv_id := OLD."invoiceId";
+                ELSE
+                    inv_id := NEW."invoiceId";
+                END IF;
+        
+                SELECT "monthlyId" INTO m_id FROM invoices WHERE id = inv_id;
+        
+                IF m_id IS NOT NULL THEN
+                    PERFORM insert_into_monthlyupdates(m_id, TG_OP);
+                END IF;
+        
+                RETURN COALESCE(NEW, OLD);
+            END;
+            $$ LANGUAGE plpgsql;
+        `);
+
         // 4. Create triggers on monthlies
         await queryRunner.query(`
             CREATE TRIGGER trg_monthlies_changes
@@ -104,6 +128,12 @@ export class AddMonthlyUpdatesTriggers1744798193499 implements MigrationInterfac
             AFTER INSERT OR UPDATE OR DELETE ON invoices
             FOR EACH ROW
             EXECUTE FUNCTION trg_related_to_monthlies_update();
+        `);
+        await queryRunner.query(`
+            CREATE TRIGGER trg_invoicelines_changes
+            AFTER INSERT OR UPDATE OR DELETE ON invoicelines
+            FOR EACH ROW
+            EXECUTE FUNCTION trg_invoicelines_update();
         `);
     }
 

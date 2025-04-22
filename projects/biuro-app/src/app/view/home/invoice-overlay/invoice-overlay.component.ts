@@ -87,7 +87,7 @@ export class InvoiceOverlayComponent {
       monthly: this.monthly
     });
     console.log(invoice);
-    this.monthly.invoices[0] = invoice;
+    //this.monthly.invoices[0] = invoice;
     this.close();
   }
 
