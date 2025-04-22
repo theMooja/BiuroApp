@@ -58,7 +58,7 @@ export const setIPCHandlers = async (window: BrowserWindow, rawClient: Client) =
       const payload = JSON.parse(msg.payload) as { monthlyId: number, operation: string };
       let monthly = await MonthlyController.getMonthly(payload.monthlyId);
       if (!monthly) monthly = { id: payload.monthlyId } as IMonthlyEntity;
-      console.log('📣 Monthly update:', monthly, payload.operation);
+      //console.log('📣 Monthly update:', monthly, payload.operation);
       window.webContents.send('trigger:monthly', monthly, payload.operation);
     }    
   });
@@ -97,6 +97,7 @@ export const MonthlyController = {
       .leftJoinAndSelect('m.notes', 'not')
       .leftJoinAndSelect('not.user', 'user')
       .where('m.id = :id', { id })
+      .orderBy('mar.sequence', 'ASC')
       .getOne();
   },
 
