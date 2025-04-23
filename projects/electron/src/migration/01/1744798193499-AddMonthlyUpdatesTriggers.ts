@@ -72,7 +72,7 @@ export class AddMonthlyUpdatesTriggers1744798193499 implements MigrationInterfac
                     m_id := NEW."monthlyId";
                 END IF;
 
-                PERFORM insert_into_monthlyupdates(m_id, TG_OP);
+                PERFORM insert_into_monthlyupdates(m_id, 'UPDATE');
                 RETURN COALESCE(NEW, OLD);
             END;
             $$ LANGUAGE plpgsql;
@@ -94,7 +94,7 @@ export class AddMonthlyUpdatesTriggers1744798193499 implements MigrationInterfac
                 SELECT "monthlyId" INTO m_id FROM invoices WHERE id = inv_id;
         
                 IF m_id IS NOT NULL THEN
-                    PERFORM insert_into_monthlyupdates(m_id, TG_OP);
+                    PERFORM insert_into_monthlyupdates(m_id, 'UPDATE');
                 END IF;
         
                 RETURN COALESCE(NEW, OLD);
