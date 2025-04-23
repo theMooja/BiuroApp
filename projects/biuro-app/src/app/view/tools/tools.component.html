@@ -1,4 +1,11 @@
-<mat-toolbar class="toolbar">
-    <button mat-raised-button routerLink="/tools/sort-pdf">Sortowanie PDF</button>
-</mat-toolbar>
-<router-outlet></router-outlet>
+<div class="view">
+    <mat-toolbar class="toolbar">
+        <button mat-raised-button routerLink="/tools/sort-pdf">Sortowanie PDF</button>
+        <button mat-raised-button routerLink="/tools/account-swap">Podmiana rachunków</button>
+    </mat-toolbar>
+    <div class="outlet">
+        <router-outlet></router-outlet>
+    </div>
+    
+
+</div>

@@ -43,6 +43,7 @@
     "electron-settings": "^4.0.4",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^6.3.9",
+    "papaparse": "^5.5.2",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^4.10.38",
     "pg": "^8.13.0",
@@ -51,6 +52,7 @@
     "tslib": "^2.3.0",
     "typeorm": "^0.3.20",
     "update-electron-app": "^3.1.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
@@ -65,7 +67,9 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.3.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^22.7.4",
+    "@types/papaparse": "^5.3.15",
     "@types/pg": "^8.11.10",
+    "@types/xlsx": "^0.0.36",
     "concurrently": "^8.2.2",
     "copyfiles": "^2.4.1",
     "electron": "^29.1.5",

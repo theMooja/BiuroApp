@@ -1,0 +1,70 @@
+<div class="view">
+    <div class="inputs">
+        <div class="input-container">
+            <button type="button" mat-raised-button (click)="clientsInput.click()" matBadge="{{clients.length}}">Wybierz
+                plik z zestawieniem</button>
+            <input hidden id="clients-input" type="file" accept=".xlsx" (change)="onClientsFileSelected($event)"
+                #clientsInput>
+            @for(c of clientsColumns; track c) {
+            <mat-form-field appearance="outline">
+                <mat-label>{{c.label}}</mat-label>
+                <input matInput type="text" [(ngModel)]="clientsColumns[$index].value" (blur)="parseClientsFile()">
+            </mat-form-field>
+            }
+
+        </div>
+        <div class="input-container">
+            <button type="button" mat-raised-button (click)="transactionsInput.click()" matBadge="{{transactions.length}}">Wybierz plik z
+                wyciągiem</button>
+
+            <input hidden id="accounts-input" type="file" accept=".csv" (change)="onTransactionsFileSelected($event)"
+                #transactionsInput>
+            <mat-form-field appearance="outline">
+                <mat-label>Do pominięcia</mat-label>
+                <input matInput type="number" [(ngModel)]="ommit" (change)="parseTransactionsFile()">
+            </mat-form-field>
+            @for(c of transactionColumns; track c) {
+            <mat-form-field appearance="outline">
+                <mat-label>{{c.label}}</mat-label>
+                <input matInput type="number" [(ngModel)]="transactionColumns[$index].value"
+                    (change)="parseTransactionsFile()">
+            </mat-form-field>
+            }
+        </div>
+        <div class="input-container">
+            <button type="button" mat-raised-button (click)="onSwap()">Podmień</button>
+            <button type="button" mat-raised-button (click)="onDownload()">Pobierz</button>
+        </div>
+
+    </div>
+    <div class="preview">
+        <div class="panel">
+            <div class="row">
+                <span class="cell">Nazwa</span>
+                <span class="cell">NIP</span>
+                <span class="cell">Konto</span>
+            </div>
+            @for(c of clients; track c.nip) {
+            <div class="row" [ngClass]="{'matched': c.matched}">
+                <span class="cell">{{c.name}}</span>
+                <span class="cell">{{c.nip}}</span>
+                <span class="cell">{{c.account}}</span>
+            </div>
+            }
+        </div>
+        <div class="panel">
+            <div class="row">
+                <span class="cell">Nazwa</span>
+                <span class="cell">NIP</span>
+                <span class="cell">Konto</span>
+            </div>
+            @for(t of transactions; track t.nip) {
+            <div class="row" [ngClass]="{'matched': t.matched}">
+                <span class="cell">{{t.name}}</span>
+                <span class="cell">{{t.nip}}</span>
+                <span class="cell">{{t.account}}</span>
+            </div>
+            }
+        </div>
+    </div>
+</div>

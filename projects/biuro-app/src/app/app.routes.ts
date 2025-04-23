@@ -12,6 +12,7 @@ import { ClientSetupComponent } from './view/client-setup/client-setup.component
 import { InfoComponent } from './view/info/info.component';
 import { ToolsComponent } from './view/tools/tools.component';
 import { SortPdfComponent } from './view/tools/sort-pdf/sort-pdf.component';
+import { AccountSwapComponent } from './view/tools/account-swap/account-swap.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -23,7 +24,8 @@ export const routes: Routes = [
     { path: 'clientSetup', component: ClientSetupComponent },
     {
         path: 'tools', component: ToolsComponent, children: [
-            { path: 'sort-pdf', component: SortPdfComponent }]
+            { path: 'sort-pdf', component: SortPdfComponent },
+            { path: 'account-swap', component: AccountSwapComponent }]
     },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     {
