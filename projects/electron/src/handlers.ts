@@ -446,18 +446,6 @@ export const InvoiceController = {
   },
 
   async integrateInvoice(invoice: IInvoiceEntity): Promise<IInvoiceEntity> {
-    /*
-    try {
-      const response = await axios.post(
-        `https://finka.fakturownia.pl/invoices/100.json?api_token=API_TOKEN`
-      );
-      console.log(response.data); // Handle the response as needed
-    } catch (error) {
-      console.error('Error creating invoice:', error);
-      throw error; // Re-throw the error for further handling
-    }
-  */
-
     let repo = AppDataSource.getRepository(InvoiceEntity);
     let invoiceEntity = await repo.createQueryBuilder('i')
       .leftJoinAndSelect('i.lines', 'l')

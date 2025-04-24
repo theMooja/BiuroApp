@@ -285,6 +285,7 @@ export class HomeComponent {
       if (result) {
         for (let selected of this.selection.selected) {
           selected.invoices[0].sendDate = result;
+          selected.invoices[0].monthly = selected;
         }
         await this.invoiceDataService.saveInvoiceDates(this.selection.selected.map(x => x.invoices[0]));
       }
@@ -300,6 +301,7 @@ export class HomeComponent {
       if (result) {
         for (let selected of this.selection.selected) {
           selected.invoices[0].paidDate = result;
+          selected.invoices[0].monthly = selected;
         }
         await this.invoiceDataService.saveInvoiceDates(this.selection.selected.map(x => x.invoices[0]));
       }
@@ -329,6 +331,5 @@ export class HomeComponent {
 
   async integrateInvoice(element: IMonthlyEntity) {
     let invoice = await this.invoiceDataService.integrateInvoice(element.invoices[0]);
-    element.invoices[0] = invoice;
   }
 }

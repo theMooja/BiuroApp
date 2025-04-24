@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { IUserEntity } from '../../../../electron/src/interfaces';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class UserDataService {
   data: IUserEntity[] = [];
 
 
-  constructor() { }
+  constructor(private notificationsService: NotificationsService) { }
 
   async getUsers(refresh: boolean = false): Promise<IUserEntity[]> {
     if (this.data.length === 0 || refresh)
@@ -19,7 +20,11 @@ export class UserDataService {
   }
 
   async saveUser(user: IUserEntity) {
-    return await window.electron.saveUser(user);
+    return await window.electron.saveUser(user).then((res) => {
+      this.notificationsService.success('Użytkownik został zapisany', res.name);
+    }, (err) => {
+      this.notificationsService.error('Nie można zapisać użytkownika', err.message);
+    });
   }
 
   async setLoggedUser(user: IUserEntity) {

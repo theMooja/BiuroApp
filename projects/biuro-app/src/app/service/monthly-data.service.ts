@@ -1,6 +1,6 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { IClientEntity, IMarchEntity, IMonthlyEntity, INoteEntity, PayloadOperation } from '../../../../electron/src/interfaces';
-import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class MonthlyDataService {
   monthlies: WritableSignal<IMonthlyEntity[]> = signal([]);
 
 
-  constructor() {
+  constructor(private notificationsService: NotificationsService) {
     window.electron.onMonthlyTrigger((monthly, operation) => this.handleTrigger(monthly, operation));
   }
 
@@ -80,8 +80,12 @@ export class MonthlyDataService {
     return await window.electron.getLatestMonthly(client);
   }
 
-  async updateMarches(monthlyId: number, marches: IMarchEntity[]) {
-    await window.electron.updateMarches(monthlyId, marches);
+  async updateMarches(monthly: IMonthlyEntity, marches: IMarchEntity[]) {
+    await window.electron.updateMarches(monthly.id, marches).then((res) => {
+      this.notificationsService.success('Zapisano marsz', monthly.client.name);
+    }, (err) => {
+      this.notificationsService.error('Nie można zapisać marszu', err.message);
+    });
   }
 
   async recreateMonthlies(year: number, month: number, monthlies: IMonthlyEntity[]) {
@@ -89,6 +93,10 @@ export class MonthlyDataService {
   }
 
   async updateInfo(entity: IMonthlyEntity) {
-    await window.electron.updateInfo(entity);
+    await window.electron.updateInfo(entity).then((res) => {
+      this.notificationsService.success('Zapisano informacje', entity.client.name);
+    }, (err) => {
+      this.notificationsService.error('Nie można zapisać informacji', err.message);
+    });;
   }
 }

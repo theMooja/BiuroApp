@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import './app/variables.scss';
 
 html,
 body {
@@ -21,4 +22,35 @@ body {
 
 .mat-mdc-tab-body-wrapper {
     flex-grow: 1;
+}
+
+.my-notification {
+    &.success {
+        background-color: $secondary-green !important;
+    }
+
+    &.error {
+        background-color: $app-red !important;
+    }
+
+    &.warning {
+        background-color: $app-yellow !important;
+    }
+
+    .sn-progress-loader {
+        background-color: $secondary-black !important;
+        span {
+            background-color: $secondary-green !important;
+        }
+    }
+
+    .sn-title {
+        color: $primary-black !important;
+        font-size: 1.5em;
+    }
+
+    .sn-content {
+        color: $secondary-black !important;
+        font-size: 1em;
+    }
 }

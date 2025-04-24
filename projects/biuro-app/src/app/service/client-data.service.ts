@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IClientEntity } from "./../../../../electron/src/interfaces";
+import { NotificationsService } from 'angular2-notifications';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { IClientEntity } from "./../../../../electron/src/interfaces";
 export class ClientDataService {
   data: IClientEntity[] = [];
 
-  constructor() { }
+  constructor(private notificationsService: NotificationsService) { }
 
   async getClients(refresh: boolean = false): Promise<IClientEntity[]> {
     if (refresh || this.data.length === 0)
@@ -16,8 +17,15 @@ export class ClientDataService {
   }
 
   async saveClient(client: IClientEntity): Promise<IClientEntity> {
-    let saved = await window.electron.saveClient(client);
-    await this.getClients(true);
+    let saved = await window.electron.saveClient(client).then(async (res) => {
+      this.notificationsService.success('Klient został zapisany', res.name);
+      await this.getClients(true);
+      return res;
+    }, (err) => {
+      this.notificationsService.error('Nie można zapisać klienta', err.message);
+      return null;
+    });
+
     return saved;
   }
 }

@@ -21,11 +21,13 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       SimpleNotificationsModule.forRoot({
         position: ['bottom', 'right'],
-        timeOut: 3000,
+        timeOut: 300000,
         showProgressBar: true,
         pauseOnHover: true,
         clickToClose: true,
-        clickIconToClose: true
+        clickIconToClose: true,
+        theClass: 'my-notification',
+        
       })
     ),
     {

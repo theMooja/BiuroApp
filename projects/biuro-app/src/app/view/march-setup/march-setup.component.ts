@@ -120,6 +120,6 @@ export class MarchSetupComponent {
 
   onSubmit() {
     this.updateSequenceNumbers();
-    this.monthlyDataService.updateMarches(this.monthly.id, this.marchForm.value.steps);
+    this.monthlyDataService.updateMarches(this.monthly, this.marchForm.value.steps);
   }
 }
