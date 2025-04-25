@@ -54,6 +54,10 @@ export class ClientSetupComponent {
     this.form.get('isActive')?.setValue(true);
   }
 
+  onFakturownia() {
+    this.clientService.syncFakturowniaIds();
+  }
+
   get clients() {
     return this.clientService.data;
   }

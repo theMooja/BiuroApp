@@ -28,4 +28,13 @@ export class ClientDataService {
 
     return saved;
   }
+
+  async syncFakturowniaIds(): Promise<void> {
+    await window.electron.syncFakturowniaIds().then(async () => {
+      this.notificationsService.success('Pobrano indentyfikatory fakturowni');
+    }, (err) => {
+      this.notificationsService.error('Błąd', err.message);
+    });
+  }
+
 }

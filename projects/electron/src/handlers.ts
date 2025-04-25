@@ -26,6 +26,7 @@ export const setIPCHandlers = async (window: BrowserWindow, rawClient: Client) =
 
   ipcMain.handle('db:Client:getClients', (e) => ClientController.getClients());
   ipcMain.handle('db:Client:saveClient', (e, client) => ClientController.saveClient(client));
+  ipcMain.handle('db:Client:syncFakturowniaIds', (e) => ClientController.syncFakturowniaIds());
 
   ipcMain.handle('db:March:updateMarchValue', (e, march) => MarchController.updateMarchValue(march));
   ipcMain.handle('db:March:addStopper', (e, march, seconds, from) => MarchController.addStopper(march, seconds, from));
@@ -60,7 +61,7 @@ export const setIPCHandlers = async (window: BrowserWindow, rawClient: Client) =
       if (!monthly) monthly = { id: payload.monthlyId } as IMonthlyEntity;
       //console.log('📣 Monthly update:', monthly, payload.operation);
       window.webContents.send('trigger:monthly', monthly, payload.operation);
-    }    
+    }
   });
 
   await rawClient.query('LISTEN monthly_update_channel');
@@ -353,6 +354,42 @@ export const ClientController = {
   async saveClient(client: IClientEntity): Promise<IClientEntity> {
     let repo = AppDataSource.getRepository(ClientEntity);
     return await repo.save(client);
+  },
+
+  async syncFakturowniaIds() {
+    // /curl "https://YOUR_DOMAIN.fakturownia.pl/clients.json?page=1&per_page=25&api_token=API_TOKEN"
+
+    let apiKey = await AppDataSource.getRepository(ListValueEntity).findOneBy({
+      target: 'finka-fakturownia'
+    });
+
+    const fakturowniaDomain = 'finka';
+    const apiToken = apiKey.value;
+
+    const url = `https://${fakturowniaDomain}.fakturownia.pl/clients.json`;
+    const params = {
+      api_token: apiToken,
+    };
+    const response = await axios.get(url, { params });
+    const data = response.data;
+
+    const clients = await AppDataSource.getRepository(ClientEntity)
+      .createQueryBuilder('i')
+      .getMany();
+
+    const fakturowniaMap = new Map<string, number>(); // tax_no -> id
+    for (const fc of data) {
+      if (fc.tax_no) {
+        fakturowniaMap.set(fc.tax_no, fc.id);
+      }
+    }
+
+    clients.forEach(async client => {
+      if(client.nip && fakturowniaMap.has(client.nip)) {
+        client.details.fakturowniaId = fakturowniaMap.get(client.nip).toString();
+        await client.save();
+      }
+    });
   }
 }
 
@@ -522,10 +559,11 @@ export const InvoiceController = {
           }
         }
       );
-      return response.data; // Handle the response as needed
+      return response.data;
+
     } catch (error) {
       console.error('Error creating invoice:', error);
-      throw error; // Re-throw the error for further handling
+      throw error;
     }
   }
 }

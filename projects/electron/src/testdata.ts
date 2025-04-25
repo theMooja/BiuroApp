@@ -626,6 +626,12 @@ const createListValues = async function (data: any) {
         text: 'cit',
         target: 'info-forma',
     });
+
+    await repo.save({
+        text: 'fakturownia',
+        target: 'finka-fakturownia',
+        value: 'kHE7JZiTeBCtW7L3xP4l'
+    });
 }
 
 export default {
@@ -642,5 +648,7 @@ export default {
         await createInvoices(data);
         await createListValues(data);
         await createReports(data);
+
+
     }
 }
