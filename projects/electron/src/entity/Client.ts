@@ -18,6 +18,12 @@ export class ClientEntity extends BaseEntity {
 
     @OneToMany(() => MonthlyEntity, monthly => monthly.client)
     monthlies: MonthlyEntity[];
+
+    @Column({ type: 'jsonb', default: () => "'{}'::jsonb" })
+    details: {
+        fakturowniaId: string,
+        folderPath: string,
+    }
 }
 
 

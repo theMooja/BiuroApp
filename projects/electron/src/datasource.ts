@@ -10,6 +10,7 @@ import { ListValueEntity } from './entity/ListValue';
 import { NoteEntity } from './entity/Note';
 import { ReportEntity } from './entity/Report';
 import { MonthlyUpdateEntity } from './entity/MonthlyUpdate';
+import { migrations } from './migration/migrations';
 
 export let AppDataSource: DataSource;
 
@@ -36,9 +37,7 @@ export const initializeDatabase = async (options: any) => {
       ReportEntity,
       MonthlyUpdateEntity
     ],
-    migrations: [
-      __dirname + '/migration/**/*.ts'
-    ],
+    migrations: migrations,
   }
   let config = { ...configDefault, ...options };
   AppDataSource = new DataSource(config);
