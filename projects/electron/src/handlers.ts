@@ -525,6 +525,21 @@ export const InvoiceController = {
 
   async sendInvoiceToFakturownia(invoiceEntity: InvoiceEntity, fakturowniaDomain: string, apiToken: string) {
 
+    const positions = invoiceEntity.lines.reduce((acc, line) => {
+      const existingPosition = acc.find((pos) => pos.name === line.category);
+      if (existingPosition) {
+        existingPosition.total_price_gross += line.price * line.qtty;
+      } else {
+        acc.push({
+          name: line.category,
+          tax: 'disabled',
+          total_price_gross: line.price * line.qtty,
+          quantity: 1
+        });
+      }
+      return acc;
+    }, [] as any[]);
+
     const invoiceData = {
       api_token: apiToken,
       invoice: {
@@ -533,18 +548,9 @@ export const InvoiceController = {
         sell_date: format(invoiceEntity.sendDate, 'yyyy-MM-dd'),
         issue_date: format(invoiceEntity.sendDate, 'yyyy-MM-dd'),
         payment_to: format(addWeeks(invoiceEntity.sendDate, 1), 'yyyy-MM-dd'),
-        buyer_name: invoiceEntity.monthly.client.name,
-        buyer_email: invoiceEntity.monthly.info.email,
-        buyer_tax_no: invoiceEntity.monthly.client.nip,
+        client_id: invoiceEntity.monthly.client.details.fakturowniaId,
         payment_type: 'transfer',
-        positions: invoiceEntity.lines.map(e => {
-          return {
-            name: e.description,
-            tax: 'disabled',
-            total_price_gross: e.price * e.qtty,
-            quantity: e.qtty
-          } as any;
-        })
+        positions: positions,
       }
     };
 

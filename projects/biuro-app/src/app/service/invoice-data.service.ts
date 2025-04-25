@@ -33,7 +33,7 @@ export class InvoiceDataService {
 
   async integrateInvoice(invoice: IInvoiceEntity): Promise<IInvoiceEntity> {
     return await window.electron.integrateInvoice(invoice).then((res) => {
-      this.notificationsService.success('Faktura wysłana do fakturowni', invoice.no);
+      this.notificationsService.success('Faktura wysłana do fakturowni', res.no);
       return res;
     }, (err) => {
       this.notificationsService.error('Nie można wysłać faktury', err.message);

@@ -43,6 +43,10 @@ export interface IClientEntity {
     isActive: boolean;
     monthlies: IMonthlyEntity[];
     nip: string;
+    details: {
+        fakturowniaId?: string,
+        folderPath?: string,
+    }
 }
 
 export interface IMarchEntity {
