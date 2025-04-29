@@ -302,7 +302,7 @@ export const UserController = {
     user.password = data.password;
     user.permission = data.permission;
 
-    await user.save();
+    return await user.save();
   }
 }
 
