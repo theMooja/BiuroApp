@@ -1,8 +1,11 @@
-<button mat-raised-button [matMenuTriggerFor]="clientMenu"> Edytuj </button>
-<button mat-raised-button (click)="onNew()"> Nowy </button>
-<button mat-raised-button (click)="onFakturownia()"> Synchronizuj z fakturownią </button>
+<div class="button-container">
+    <button mat-raised-button [matMenuTriggerFor]="clientMenu"> Edytuj </button>
+    <button mat-raised-button (click)="onNew()"> Nowy </button>
+    <button mat-raised-button (click)="onFakturownia()"> Synchronizuj z fakturownią </button>
+</div>
 
-<form id="marchForm" [formGroup]="form">
+
+<form id="marchForm" [formGroup]="form" class="client-form">
     <mat-form-field>
         <mat-label>Id</mat-label>
         <input matInput formControlName="id" readonly>
@@ -15,10 +18,13 @@
         <mat-label>Nip</mat-label>
         <input matInput formControlName="nip">
     </mat-form-field>
-    <mat-checkbox formControlName="isActive">Aktywny</mat-checkbox>
-</form>
+    <mat-checkbox formControlName="isActive" class="big-checkbox">Aktywny</mat-checkbox>
 
-<button mat-raised-button (click)="onSave()" [disabled]="!form.valid">Zapisz</button>
+
+</form>
+<div class="button-container">
+    <button mat-raised-button (click)="onSave()" [disabled]="!form.valid">Zapisz</button>
+</div>
 
 <mat-menu #clientMenu="matMenu">
     @for(client of clients; track client.id) {
