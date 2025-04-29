@@ -2,25 +2,27 @@
     <mat-tab-group mat-stretch-tabs="true" [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event">
         <mat-tab label="Dane">
             <div class="input-tab">
-                <mat-form-field class="mgap">
-                    <mat-label>Nazwa raportu</mat-label>
-                    <input matInput placeholder="nazwa" [(ngModel)]="header.name">
-                </mat-form-field>
-                <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)"></app-monthly-picker>
-
                 @if(inputForm){
                 <ng-container>
-                    <button mat-fab color="primary" (click)="addEmployeeLine()"><mat-icon>add</mat-icon></button>
-
                     <form id="inputForm" [formGroup]="inputForm">
-                        <mat-form-field>
-                            <mat-label>Udział kosztów ogólnych</mat-label>
-                            <input matInput placeholder="%" formControlName="costSharePercent" type="text">
-                        </mat-form-field>
+                        <div class="form-section header-section">
+                            <mat-form-field class="name-input">
+                                <mat-label>Nazwa raportu</mat-label>
+                                <input matInput placeholder="nazwa" [(ngModel)]="header.name" formControlName="name"
+                                    type="text">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Udział kosztów ogólnych</mat-label>
+                                <input matInput placeholder="%" formControlName="costSharePercent" type="text">
+                            </mat-form-field>
+                            <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)"></app-monthly-picker>
+                        </div>
+
                         <div class="form-section">
                             <div class="section-title">
                                 Pracownicy
                             </div>
+
 
                             <div formArrayName="employees" class="">
                                 <div *ngFor="let line of employeeInputLines.controls; let i = index"
@@ -47,6 +49,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
+                            <button mat-fab (click)="addEmployeeLine()"><mat-icon>add</mat-icon></button>
                         </div>
                     </form>
                 </ng-container>
@@ -70,7 +73,8 @@
                                     {{client.client}}
                                 </mat-panel-title>
                                 <mat-panel-description>
-                                    {{client.cost | number:'1.2-2'}} zł / {{client.invoice | number:'1.2-2'}} zł {{client.seconds |
+                                    {{client.cost | number:'1.2-2'}} zł / {{client.invoice | number:'1.2-2'}} zł
+                                    {{client.seconds |
                                     secondsToHHMMSSPipe}} {{client.share | number:'1.2-2'}}
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
@@ -78,7 +82,8 @@
                                 @for (record of client.records; track record.user) {
 
                                 <mat-list-item>
-                                    {{record.user}} {{record.march}} {{record.seconds | secondsToHHMMSSPipe}} {{record.cost |
+                                    {{record.user}} {{record.march}} {{record.seconds | secondsToHHMMSSPipe}}
+                                    {{record.cost |
                                     number:'1.2-2'}} zł
                                 </mat-list-item>
 

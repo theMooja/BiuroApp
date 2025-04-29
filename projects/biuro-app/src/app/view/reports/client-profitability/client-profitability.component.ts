@@ -169,19 +169,15 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
     this.tabIndex = 1;
   }
 
-  secondsToTime(index: number) {
-    return 'asd';
-  }
-
   getBarWidth(share: number) {
     if(!share) return '0%';
     return `${share}%`;
   }
 
   getBarColorClass(share: number) {
-    if (share < 30)
+    if (share < 60)
       return 'bar-green';
-    else if (share > 30 && share < 70)
+    else if (share < 80)
       return 'bar-yellow';
     else
       return 'bar-red';

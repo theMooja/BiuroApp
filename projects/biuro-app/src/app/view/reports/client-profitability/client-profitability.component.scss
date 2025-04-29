@@ -21,6 +21,16 @@
     }
 
     border: 1px solid black;
+
+    &.header-section {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    mat-form-field.name-input {
+        flex: 2;
+        max-width: 30%;
+    }
 }
 
 .user-line {

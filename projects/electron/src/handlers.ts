@@ -385,7 +385,7 @@ export const ClientController = {
     }
 
     clients.forEach(async client => {
-      if(client.nip && fakturowniaMap.has(client.nip)) {
+      if (client.nip && fakturowniaMap.has(client.nip)) {
         client.details.fakturowniaId = fakturowniaMap.get(client.nip).toString();
         await client.save();
       }
@@ -712,6 +712,7 @@ export const ReportController = {
       };
     });
 
+    //sum invoices per client
     invoices.forEach(invoice => {
       let sum = invoice.lines.reduce((sum, line) => {
         return sum + (line.qtty * line.price);
@@ -723,6 +724,7 @@ export const ReportController = {
       }
     });
 
+    //aggregate stoppers per client
     stoppers.forEach(stopper => {
       let client = output.clients.find(x => x.client === stopper.march.monthly.client.name);
       let user = output.employees.find(x => x.userId === stopper.user.id);
@@ -740,8 +742,13 @@ export const ReportController = {
       }
     });
 
+    //calculate share per client
     output.clients.forEach(client => {
-      client.share = (client.cost / (client.invoice * (1 - costShare))) * 100;
+      if (client.invoice !== 0) {
+        client.share = ((client.cost + (costShare * client.invoice)) / client.invoice) * 100;
+      } else {
+        client.share = 0;
+      }
     });
 
     return output;
