@@ -32,6 +32,7 @@ import { InvoiceDateDialogComponent } from '../../utils/invoice-date-dialog/invo
 import { TaskbarComponent } from './taskbar/taskbar.component';
 import { MonthlyPickerComponent } from '../../utils/monthly-picker/monthly-picker.component';
 import { computed, effect, Signal } from '@angular/core';
+import { ClientDataService } from '../../service/client-data.service';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel', 'place'];
 
@@ -76,6 +77,7 @@ export class HomeComponent {
     private settingsDataService: SettingsDataService,
     private userService: UserDataService,
     private invoiceDataService: InvoiceDataService,
+    private clientDataService: ClientDataService,
     private router: Router,
     private overlay: Overlay,
     private dialog: MatDialog
@@ -331,5 +333,17 @@ export class HomeComponent {
 
   async integrateInvoice(element: IMonthlyEntity) {
     let invoice = await this.invoiceDataService.integrateInvoice(element.invoices[0]);
+  }
+
+  async onFolder(element: IMonthlyEntity) {
+    if (!element.client.details?.folderPath) {
+      const path = await window.electron.pickFolder();
+      if (path) {
+        element.client.details.folderPath = path;
+        await this.clientDataService.saveClient(element.client);
+      }
+    } else {
+      window.electron.openFolder(element.client.details.folderPath as string);
+    }
   }
 }

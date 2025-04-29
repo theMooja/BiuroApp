@@ -17,6 +17,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 })
 export class ClientSetupComponent {
   form: FormGroup;
+  currentClient: IClientEntity | null;
 
   constructor(private clientService: ClientDataService,
     private formBuilder: FormBuilder
@@ -25,7 +26,8 @@ export class ClientSetupComponent {
       id: this.formBuilder.control(null),
       name: this.formBuilder.control(''),
       nip: this.formBuilder.control(''),
-      isActive: this.formBuilder.control(true)
+      isActive: this.formBuilder.control(true),
+      folderPath: this.formBuilder.control(''),
     })
   }
 
@@ -34,15 +36,27 @@ export class ClientSetupComponent {
   }
 
   onEdit(client: IClientEntity) {
+    this.currentClient = client;
     this.form.get('name')?.setValue(client.name);
     this.form.get('id')?.setValue(client.id);
     this.form.get('isActive')?.setValue(client.isActive);
     this.form.get('nip')?.setValue(client.nip);
+    this.form.get('folderPath')?.setValue(client.details.folderPath);
   }
 
   onSave() {
     if (this.form.valid) {
-      let client = this.form.value;
+      const formValue = this.form.value;
+
+      const client: IClientEntity = {
+        ...this.currentClient,
+        ...formValue,
+        details: {
+          ...this.currentClient?.details,
+          folderPath: formValue.folderPath
+        }
+      };
+
       this.clientService.saveClient(client).then((res) => {
         this.form.get('id')?.setValue(res.id);
       });
@@ -52,6 +66,7 @@ export class ClientSetupComponent {
   onNew() {
     this.form.reset();
     this.form.get('isActive')?.setValue(true);
+    this.currentClient = null;
   }
 
   onFakturownia() {
@@ -60,5 +75,12 @@ export class ClientSetupComponent {
 
   get clients() {
     return this.clientService.data;
+  }
+
+  async pickFolder() {
+    const folderPath = await window.electron.pickFolder();
+    if (folderPath) {
+      this.form.get('folderPath')?.setValue(folderPath);
+    }
   }
 }

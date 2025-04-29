@@ -9,10 +9,22 @@
 .client-form {
     margin-top: 1em;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1em;
     align-items: center;
     justify-content: center;
+}
+
+.row {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.folder-input {
+    min-width: 20em;
 }
 
 ::ng-deep .big-checkbox .mdc-checkbox {

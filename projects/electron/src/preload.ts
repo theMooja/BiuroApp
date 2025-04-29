@@ -12,6 +12,8 @@ const contextBridgeApi = {
   setAppSettings: (key: string, value: string) => ipcRenderer.invoke('app:setAppSettings', key, value),
   toggleDevTools: () => ipcRenderer.invoke('app:toggleDevTools'),
   setTitle: (title: string) => ipcRenderer.invoke('app:setTitle', title),
+  pickFolder: () => ipcRenderer.invoke('app:pickFolder'),
+  openFolder: (path: string) => ipcRenderer.invoke('app:openFolder', path),
 
   getListValues: (target: string) => ipcRenderer.invoke('db:listValues', target),
 

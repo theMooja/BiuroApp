@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, screen, shell } from "electron";
 import path from 'path';
 import testdata from './testdata';
 import * as settings from 'electron-settings';
@@ -53,7 +53,7 @@ const createWindow = (): BrowserWindow => {
   return mainWindow;
 };
 
-const setupDatabase = async () : Promise<DataSource> => {
+const setupDatabase = async (): Promise<DataSource> => {
   let config: any = {};
 
   if (app.isPackaged) {
@@ -97,6 +97,9 @@ const setAppHandlers = () => {
 
   ipcMain.handle('app:getVersion', () => app.getVersion());
 
+  ipcMain.handle('app:pickFolder', async () => pickFolder());
+  ipcMain.handle('app:openFolder', async (e, path) => openFolder(path));
+
 }
 
 const getRawClient = async (AppDataSource: DataSource) => {
@@ -113,7 +116,7 @@ const getRawClient = async (AppDataSource: DataSource) => {
   await rawClient.connect();
 
   return rawClient;
-  
+
 };
 
 // This method will be called when Electron has finished
@@ -195,4 +198,14 @@ function toggleDevTools() {
 
 function setTitle(title: string) {
   mainWindow.setTitle(title);
+}
+
+async function pickFolder() {
+  const { canceled, filePaths } = await dialog.showOpenDialog({ properties: ['openDirectory'] });
+  if (canceled) return null;
+  return filePaths[0];
+}
+
+async function openFolder(path: string) {
+  return shell.openPath(path);
 }

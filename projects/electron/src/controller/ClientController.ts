@@ -11,6 +11,9 @@ export const ClientController = {
             .find({
                 where: {
                     isActive: true
+                },
+                order: {
+                    name: "ASC"
                 }
             });
     },
