@@ -13,6 +13,7 @@ import { InfoComponent } from './view/info/info.component';
 import { ToolsComponent } from './view/tools/tools.component';
 import { SortPdfComponent } from './view/tools/sort-pdf/sort-pdf.component';
 import { AccountSwapComponent } from './view/tools/account-swap/account-swap.component';
+import { AppSetupComponent } from './view/app-setup/app-setup.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
     { path: 'info', component: InfoComponent },
     { path: 'marchSetup', component: MarchSetupComponent },
     { path: 'userSetup', component: UserSetupComponent },
+    { path: 'appSetup', component: AppSetupComponent },
     { path: 'reports', component: ReportsComponent },
     { path: 'clientSetup', component: ClientSetupComponent },
     {
