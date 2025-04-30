@@ -7,12 +7,16 @@ import { initializeDatabase } from './datasource';
 import { setIPCHandlers } from "./handlers";
 import { DataSource } from "typeorm";
 import { Client } from "pg";
+import * as fs from 'fs';
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 
 const { updateElectronApp } = require('update-electron-app');
 if (app.isPackaged)
   updateElectronApp();
 
+const userDataDir = app.getPath('userData');
+const userSettingsPath = path.join(userDataDir, 'app-settings.json');
+const defaultSettingsPath = path.join(__dirname, 'app-settings.json');
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -20,14 +24,7 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-
 let mainWindow: BrowserWindow | null;
-settings.configure({
-  fileName: 'app-settings.json',
-  dir: app.isPackaged ? process.resourcesPath : __dirname
-});
-
-
 const createWindow = (): BrowserWindow => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -64,8 +61,7 @@ const setupDatabase = async (): Promise<DataSource> => {
     config.password = dbsettings.password;
     config.database = dbsettings.database;
     config.logging = false;
-
-    //config.synchronize = false;
+    config.synchronize = false;
   }
 
   let dsPromise = initializeDatabase(config);
@@ -116,13 +112,13 @@ const getRawClient = async (AppDataSource: DataSource) => {
   await rawClient.connect();
 
   return rawClient;
-
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
+  initializeAppSettings();
   let ds = await setupDatabase();
   let window = createWindow();
   let pgClient = await getRawClient(ds);
@@ -208,4 +204,32 @@ async function pickFolder() {
 
 async function openFolder(path: string) {
   return shell.openPath(path);
+}
+
+function initializeAppSettings() {
+  // Ensure userData directory exists
+  if (!fs.existsSync(userDataDir)) {
+    fs.mkdirSync(userDataDir, { recursive: true });
+  }
+
+  // Copy default settings if they don't exist in userData
+  if (!fs.existsSync(userSettingsPath)) {
+    if (fs.existsSync(defaultSettingsPath)) {
+      fs.copyFileSync(defaultSettingsPath, userSettingsPath);
+      console.log('Copied default app-settings.json to userData');
+    } else {
+      // Optionally: create a blank or fallback version
+      fs.writeFileSync(userSettingsPath, JSON.stringify({}));
+      console.warn('Default app-settings.json not found, created empty one');
+    }
+  }
+
+  // Configure electron-settings to use the file in userData
+  settings.configure({
+    fileName: 'app-settings.json',
+    dir: app.isPackaged ? userDataDir : __dirname
+  });
+
+
+  console.log('App settings initialized at:', userSettingsPath);
 }
