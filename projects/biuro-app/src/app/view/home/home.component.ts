@@ -336,14 +336,18 @@ export class HomeComponent {
   }
 
   async onFolder(element: IMonthlyEntity) {
+    //listValues useNetworkDiscForFolderPath
     if (!element.client.details?.folderPath) {
-      const path = await window.electron.pickFolder();
+      let path = await window.electron.pickFolder() as string;
       if (path) {
+        path = path.replace(/^[^:\\/]+(?=:[\\/])/, 'DISC');
         element.client.details.folderPath = path;
         await this.clientDataService.saveClient(element.client);
       }
     } else {
-      window.electron.openFolder(element.client.details.folderPath as string);
+      let path = element.client.details.folderPath as string;
+      let networkDiscName = await this.settingsDataService.getSettings('networkDiscName');
+      window.electron.openFolder(path.replace(/^[^:\\/]+(?=:[\\/])/, networkDiscName));
     }
   }
 }

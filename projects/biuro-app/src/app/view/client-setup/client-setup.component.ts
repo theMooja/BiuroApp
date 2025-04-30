@@ -78,8 +78,10 @@ export class ClientSetupComponent {
   }
 
   async pickFolder() {
-    const folderPath = await window.electron.pickFolder();
+    let folderPath = await window.electron.pickFolder();
+
     if (folderPath) {
+      folderPath = folderPath.replace(/^[^:\\/]+(?=:[\\/])/, 'DISC')
       this.form.get('folderPath')?.setValue(folderPath);
     }
   }
