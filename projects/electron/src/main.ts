@@ -95,7 +95,8 @@ const setAppHandlers = () => {
 
   ipcMain.handle('app:pickFolder', async () => pickFolder());
   ipcMain.handle('app:openFolder', async (e, path) => openFolder(path));
-
+  ipcMain.handle('app:pickFile', async () => pickFile());
+  ipcMain.handle('app:openFile', async (e, path) => openFolder(path));
 }
 
 const getRawClient = async (AppDataSource: DataSource) => {
@@ -204,6 +205,12 @@ async function pickFolder() {
 
 async function openFolder(path: string) {
   return shell.openPath(path);
+}
+
+async function pickFile() {
+  const { canceled, filePaths } = await dialog.showOpenDialog({ properties: ['openFile'] });
+  if (canceled) return null;
+  return filePaths[0];
 }
 
 function initializeAppSettings() {

@@ -36,5 +36,4 @@ export class ClientDataService {
       this.notificationsService.error('Błąd', err.message);
     });
   }
-
 }

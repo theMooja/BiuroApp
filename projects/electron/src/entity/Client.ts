@@ -23,6 +23,7 @@ export class ClientEntity extends BaseEntity {
     details: {
         fakturowniaId: string,
         folderPath: string,
+        programPath: string,
     }
 }
 

@@ -46,6 +46,7 @@ export interface IClientEntity {
     details: {
         fakturowniaId?: string,
         folderPath?: string,
+        programPath?: string,
     }
 }
 

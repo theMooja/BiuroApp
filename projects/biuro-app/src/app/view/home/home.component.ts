@@ -33,6 +33,7 @@ import { TaskbarComponent } from './taskbar/taskbar.component';
 import { MonthlyPickerComponent } from '../../utils/monthly-picker/monthly-picker.component';
 import { computed, effect, Signal } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
+import { SystemService } from '../../service/system.service';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel', 'place'];
 
@@ -78,6 +79,7 @@ export class HomeComponent {
     private userService: UserDataService,
     private invoiceDataService: InvoiceDataService,
     private clientDataService: ClientDataService,
+    private systemService: SystemService,
     private router: Router,
     private overlay: Overlay,
     private dialog: MatDialog
@@ -338,7 +340,7 @@ export class HomeComponent {
   async onFolder(element: IMonthlyEntity) {
     //listValues useNetworkDiscForFolderPath
     if (!element.client.details?.folderPath) {
-      let path = await window.electron.pickFolder() as string;
+      let path = await this.systemService.pickFolder();
       if (path) {
         path = path.replace(/^[^:\\/]+(?=:[\\/])/, 'DISC');
         element.client.details.folderPath = path;
@@ -347,7 +349,22 @@ export class HomeComponent {
     } else {
       let path = element.client.details.folderPath as string;
       let networkDiscName = await this.settingsDataService.getSettings('networkDiscName');
-      window.electron.openFolder(path.replace(/^[^:\\/]+(?=:[\\/])/, networkDiscName));
+      path = path.replace(/^[^:\\/]+(?=:[\\/])/, networkDiscName);
+      this.systemService.openFolder(path);
+    }
+  }
+
+  async onStartProgram(element: IMonthlyEntity) {
+    if (!element.client.details?.programPath) {
+      let path = await this.systemService.pickFile();
+      path = path.replace(/^[^:\\/]+(?=:[\\/])/, 'DISC');
+      element.client.details.programPath = path;
+      await this.clientDataService.saveClient(element.client);
+    } else {
+      let path = element.client.details.programPath as string;
+      let networkDiscName = await this.settingsDataService.getSettings('networkDiscName');
+      path = path.replace(/^[^:\\/]+(?=:[\\/])/, networkDiscName);
+      this.systemService.openFile(path);
     }
   }
 }

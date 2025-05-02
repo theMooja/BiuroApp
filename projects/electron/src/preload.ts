@@ -14,6 +14,8 @@ const contextBridgeApi = {
   setTitle: (title: string) => ipcRenderer.invoke('app:setTitle', title),
   pickFolder: () => ipcRenderer.invoke('app:pickFolder'),
   openFolder: (path: string) => ipcRenderer.invoke('app:openFolder', path),
+  pickFile: () => ipcRenderer.invoke('app:pickFile'),
+  openFile: (path: string) => ipcRenderer.invoke('app:openFile', path),
 
   getListValues: (target: string) => ipcRenderer.invoke('db:listValues', target),
 
