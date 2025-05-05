@@ -219,7 +219,6 @@ export class HomeComponent {
     if (this.isRecreating) {
       this.isRecreating = false;
       await this.monthlyDataService.recreateMonthlies(this.currentMonthly.year, this.currentMonthly.month, this.selection.selected);
-      await this.refreshData();
     }
     else {
       this.isRecreating = true;

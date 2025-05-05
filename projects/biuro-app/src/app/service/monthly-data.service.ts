@@ -14,13 +14,13 @@ export class MonthlyDataService {
     window.electron.onMonthlyTrigger((monthly, operation) => this.handleTrigger(monthly, operation));
   }
 
-  private emit(data: IMonthlyEntity[]) {
+  private emitMonthly(data: IMonthlyEntity[]) {
     this.monthlies.set([...data]);
   }
 
   handleTrigger(monthly: IMonthlyEntity, operation: string) {
     console.log('handleTrigger', monthly, operation);
-    const current = this.monthlies();
+    const current = [...this.monthlies()];
 
     switch (operation) {
       case PayloadOperation.UPDATE: {
@@ -33,14 +33,14 @@ export class MonthlyDataService {
         break;
       }
       case PayloadOperation.DELETE:
-        this.emit(current.filter(m => m.id !== monthly.id));
+        this.emitMonthly(current.filter(m => m.id !== monthly.id));
         return;
       case PayloadOperation.INSERT:
         current.push(monthly);
         break;
     }
 
-    this.emit(current);
+    this.emitMonthly(current);
   }
 
   async getMonthlies(month: number, year: number): Promise<IMonthlyEntity[]> {
@@ -50,6 +50,7 @@ export class MonthlyDataService {
   }
 
   async getMonthly(id: number): Promise<IMonthlyEntity> {
+    
     let monthly = await window.electron.getMonthly(id);
 
     const current = this.monthlies(); // get current value
