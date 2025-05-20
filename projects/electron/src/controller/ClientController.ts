@@ -36,6 +36,8 @@ export const ClientController = {
         const url = `https://${fakturowniaDomain}.fakturownia.pl/clients.json`;
         const params = {
             api_token: apiToken,
+            page: 1,
+            per_page: 1000
         };
         const response = await axios.get(url, { params });
         const data = response.data;
@@ -45,11 +47,16 @@ export const ClientController = {
             .getMany();
 
         const fakturowniaMap = new Map<string, number>(); // tax_no -> id
+
+        let idx = 0;
         for (const fc of data) {
+            console.log('f', idx++, fc.name, fc.tax_no, fc.id);
             if (fc.tax_no) {
                 fakturowniaMap.set(fc.tax_no, fc.id);
+
             }
         }
+        console.log(fakturowniaMap);
 
         clients.forEach(async client => {
             if (client.nip && fakturowniaMap.has(client.nip)) {
