@@ -67,6 +67,8 @@
                     padding: 0 0.5rem;
                     font-size: 0.9rem;
                     word-break: break-word;
+                    max-height: 5em;
+                    overflow: auto;
                 }
 
                 &:first-child {

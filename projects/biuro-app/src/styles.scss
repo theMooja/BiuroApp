@@ -54,3 +54,10 @@ body {
         font-size: 1em;
     }
 }
+
+.mat-badge-content {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    max-width: none !important;
+  }

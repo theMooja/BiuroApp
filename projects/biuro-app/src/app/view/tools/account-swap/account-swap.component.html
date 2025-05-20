@@ -1,6 +1,13 @@
 <div class="view">
     <div class="inputs">
         <div class="input-container">
+            <button type="button" mat-raised-button (click)="mtInput.click()" matBadge="{{mt940File.length}}">Wybierz
+                pliki z PKO</button>
+            <input hidden id="clients-input" type="file" accept=".txt" (change)="onMtFileSelected($event)" #mtInput
+                multiple>
+
+        </div>
+        <div class="input-container">
             <button type="button" mat-raised-button (click)="clientsInput.click()" matBadge="{{clients.length}}">Wybierz
                 plik z zestawieniem</button>
             <input hidden id="clients-input" type="file" accept=".xlsx" (change)="onClientsFileSelected($event)"
@@ -14,7 +21,8 @@
 
         </div>
         <div class="input-container">
-            <button type="button" mat-raised-button (click)="transactionsInput.click()" matBadge="{{transactions.length}}">Wybierz plik z
+            <button type="button" mat-raised-button (click)="transactionsInput.click()"
+                matBadge="{{transactions.length}}">Wybierz plik z
                 wyciągiem</button>
 
             <input hidden id="accounts-input" type="file" accept=".csv" (change)="onTransactionsFileSelected($event)"
@@ -38,33 +46,60 @@
 
     </div>
     <div class="preview">
+        @if(mt940File.length){
+        <div class="panel">
+            <div class="row">
+                <span class="cell">Desc</span>
+                <span class="cell">Name</span>
+                <span class="cell">Bank</span>
+                <span class="cell">Ref</span>
+            </div>
+            @for(row of mt940File; track row.description) {
+            <div class="row" [ngClass]="{'matched': row.matched}">
+                <span class="cell">{{row.description}}</span>
+                <span class="cell">{{row.name}}</span>
+                <span class="cell">{{row.bank}}</span>
+                <span class="cell">{{row.ref}}</span>
+
+            </div>
+            }
+        </div>
+        }
+        @if(clients.length) {
         <div class="panel">
             <div class="row">
                 <span class="cell">Nazwa</span>
-                <span class="cell">NIP</span>
-                <span class="cell">Konto</span>
+                <span class="cell">Nr faktury</span>
             </div>
-            @for(c of clients; track c.nip) {
-            <div class="row" [ngClass]="{'matched': c.matched}">
+            @for(c of clients; track c.no) {
+            <div class="row">
                 <span class="cell">{{c.name}}</span>
-                <span class="cell">{{c.nip}}</span>
-                <span class="cell">{{c.account}}</span>
+                <span class="cell">{{c.no}}</span>
             </div>
             }
         </div>
+        }
+        @if(transactions.length){
         <div class="panel">
             <div class="row">
-                <span class="cell">Nazwa</span>
-                <span class="cell">NIP</span>
+                <span class="cell">Tytuł</span>
                 <span class="cell">Konto</span>
+                <span class="cell">Kwota</span>
+                <span class="cell">Data</span>
+                <span class="cell">Nr Faktury</span>
+                <span class="cell">REF</span>
             </div>
-            @for(t of transactions; track t.nip) {
+            @for(t of transactions; track t.title) {
             <div class="row" [ngClass]="{'matched': t.matched}">
-                <span class="cell">{{t.name}}</span>
-                <span class="cell">{{t.nip}}</span>
+                <span class="cell">{{t.title}}</span>
                 <span class="cell">{{t.account}}</span>
+                <span class="cell">{{t.amount}}</span>
+                <span class="cell">{{t.date}}</span>
+                <span class="cell">{{t.no}}</span>
+                <span class="cell">{{t.ref}}</span>
             </div>
             }
         </div>
+        }
     </div>
 </div>
