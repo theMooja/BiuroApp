@@ -8,12 +8,12 @@
                         <div class="form-section header-section">
                             <mat-form-field class="name-input">
                                 <mat-label>Nazwa raportu</mat-label>
-                                <input matInput placeholder="nazwa" [(ngModel)]="header.name" formControlName="name"
+                                <input matInput placeholder="nazwa" formControlName="name"
                                     type="text">
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Udział kosztów ogólnych</mat-label>
-                                <input matInput placeholder="%" formControlName="costSharePercent" type="text">
+                                <input matInput placeholder="%" formControlName="costSharePercent" type="text" appCommaToDot>
                             </mat-form-field>
                             <app-monthly-picker [date]="date" (dateChange)="onDateChange($event)"></app-monthly-picker>
                         </div>
@@ -45,7 +45,7 @@
                                     </div>
                                     <mat-form-field>
                                         <mat-label>Koszt</mat-label>
-                                        <input matInput placeholder="Wynagrodzenie" formControlName="cost">
+                                        <input matInput placeholder="Wynagrodzenie" formControlName="cost" appCommaToDot>
                                     </mat-form-field>
                                 </div>
                             </div>

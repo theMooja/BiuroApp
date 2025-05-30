@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { SecondsToHHMMSSPipe } from '../../../utils/seconds-to-mmss.pipe';
+import { CommaToDotDirective } from './../../../utils/comma-to-dot.directive';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { SecondsToHHMMSSPipe } from '../../../utils/seconds-to-mmss.pipe';
   standalone: true,
   imports: [MatSidenavModule, MonthlyPickerComponent, MatFormFieldModule, MatInputModule, MatButtonModule,
     MatAutocompleteModule, MatTabsModule, FormsModule, ReactiveFormsModule, MatIconModule, CommonModule, MatExpansionModule, 
-    MatListModule, SecondsToHHMMSSPipe],
+    MatListModule, SecondsToHHMMSSPipe, CommaToDotDirective],
   templateUrl: './client-profitability.component.html',
   styleUrl: './client-profitability.component.scss'
 })
@@ -70,6 +71,7 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
 
     this.inputForm = this.formBuilder.group({
       costSharePercent: this.formBuilder.control(this.input.costSharePercent),
+      name: this.formBuilder.control(this.header.name || ''),
       employees: this.formBuilder.array(this.input.employees.map(x => this.formBuilder.group({
         user: this.formBuilder.group({
           name: this.formBuilder.control(x.user?.name || ''),
@@ -128,8 +130,10 @@ export class ClientProfitabilityComponent extends ReportComponent<IProfitability
 }
 
   async onSave() {
-    this.report.name = this.header.name;
-    this.report.input = JSON.stringify(this.getInput());
+    const input = this.getInput();
+    this.report.name = this.inputForm.get('name')?.value || '';
+    this.header.name = this.report.name;
+    this.report.input = JSON.stringify(input);
     console.log('save', this.report);
     await this.reportService.saveReport(this.report);
   }

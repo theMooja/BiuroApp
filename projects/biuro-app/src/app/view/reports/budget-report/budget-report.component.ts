@@ -10,12 +10,13 @@ import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { ListValuesService } from '../../../service/list-values.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { CommaToDotDirective } from './../../../utils/comma-to-dot.directive';
 
 @Component({
   selector: 'app-budget-report',
   standalone: true,
   imports: [MatTabsModule, MonthlyPickerComponent, MatInputModule, FormsModule,
-    ReactiveFormsModule, CommonModule, MatButtonModule, MatIconModule, MatAutocompleteModule],
+    ReactiveFormsModule, CommonModule, MatButtonModule, MatIconModule, MatAutocompleteModule, CommaToDotDirective],
   templateUrl: './budget-report.component.html',
   styleUrl: './budget-report.component.scss'
 })
