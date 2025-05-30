@@ -18,7 +18,7 @@
 
 <ng-template #tooltipTemplate>
     <mat-card>
-        <mat-card-actions *ngIf="isEdit">
+        <mat-card-actions *ngIf="isEdit" class="note-actions">
             <button mat-stroked-button (click)="onPinUser()" [class.pinned]="currentNote.user">
                 Dla mnie</button>
             <button mat-stroked-button (click)="onPersists()" [class.pinned]="currentNote.persists">Na zawsze</button>
@@ -30,6 +30,23 @@
             </button>
         </mat-card-actions>
         <mat-card-content>
+            @if(currentNote.dueDate || isEdit){
+            <div class="due-date-container">
+                <mat-form-field appearance="outline" class="due-date-field">
+                    <mat-label>Data powiadomienia</mat-label>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="currentNote.dueDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <button mat-icon-button (click)="onAddMonth()" [disabled]="!currentNote.dueDate">
+                    <mat-icon> add</mat-icon>
+                </button>
+                <button mat-icon-button (click)="onClearDueDate()" [disabled]="!currentNote.dueDate">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </div>
+
+            }
             <textarea matInput [(ngModel)]="currentText" placeholder="Notatki" cdkTextareaAutosize class="note-area"
                 #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="20"></textarea>
         </mat-card-content>

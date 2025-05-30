@@ -58,7 +58,8 @@ export const MonthlyController = {
         monthly: note.monthly,
         text: note.text,
         persists: note.persists,
-        user: note.user === undefined ? null : note.user
+        user: note.user === undefined ? null : note.user,
+        dueDate: note.dueDate ? new Date(note.dueDate) : null,
       });
   
       return updated as INoteEntity;

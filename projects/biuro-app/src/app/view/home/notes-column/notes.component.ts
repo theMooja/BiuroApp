@@ -12,12 +12,15 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { UserDataService } from '../../../service/user-data.service';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { addMonths } from 'date-fns';
 
 @Component({
   selector: 'notes-column',
   standalone: true,
-  imports: [MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, TextFieldModule, CommonModule, MatIconModule, MatCardModule],
+  imports: [MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, TextFieldModule, CommonModule, MatIconModule, MatCardModule,
+    MatDatepickerModule,
+  ],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.scss'
 })
@@ -28,7 +31,6 @@ export class NotesComponent {
   private _injector = inject(Injector);
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
   currentNote: INoteEntity;
-  //@Output() refresh = new EventEmitter();
 
   constructor(private monthlyDataService: MonthlyDataService, private userDataService: UserDataService,
     private overlay: Overlay, private vcr: ViewContainerRef) { }
@@ -141,5 +143,15 @@ export class NotesComponent {
 
   isForMe(note: INoteEntity) {
     return !note.user || note.user.id === this.userDataService?.user?.id;
+  }
+
+  onAddMonth() {
+    if (this.currentNote.dueDate) {
+      this.currentNote.dueDate = addMonths(this.currentNote.dueDate, 1);
+    }
+  }
+
+  onClearDueDate() {
+    this.currentNote.dueDate = undefined;
   }
 }

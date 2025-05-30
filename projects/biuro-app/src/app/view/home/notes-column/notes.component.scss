@@ -53,5 +53,23 @@
 }
 
 .note-area {
-    width: 290px;
+    width: 400px;
+}
+
+.due-date-container {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
+    width: 100%;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.note-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 0.5em;
 }

@@ -18,7 +18,10 @@ export class NoteEntity extends BaseEntity {
     monthly: MonthlyEntity;
 
     @Column()
-    persists: boolean
+    persists: boolean;
+
+    @Column({nullable: true})
+    dueDate: Date;
 }
 
 

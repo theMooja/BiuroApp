@@ -311,11 +311,11 @@ export class HomeComponent {
     });
   }
 
-  onTaskTrigger(march: IMarchEntity) {
+  onTaskTrigger(monthly: IMonthlyEntity) {
     this.searchValue = '';
     this.onSearch('');
 
-    let row = document.querySelector(`mat-row[data-id="${march.monthly.id}"]`);
+    let row = document.querySelector(`mat-row[data-id="${monthly.id}"]`);
     if (row) {
       this.searchResults = [row as Element];
     }

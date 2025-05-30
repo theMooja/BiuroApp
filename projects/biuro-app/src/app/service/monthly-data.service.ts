@@ -1,6 +1,7 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { IClientEntity, IMarchEntity, IMonthlyEntity, INoteEntity, PayloadOperation } from '../../../../electron/src/interfaces';
 import { NotificationsService } from 'angular2-notifications';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,8 @@ export class MonthlyDataService {
 
   monthlies: WritableSignal<IMonthlyEntity[]> = signal([]);
 
+  private noteChange: Subject<void> = new Subject();
+  public noteChange$ = this.noteChange.asObservable();
 
   constructor(private notificationsService: NotificationsService) {
     window.electron.onMonthlyTrigger((monthly, operation) => this.handleTrigger(monthly, operation));
@@ -50,7 +53,7 @@ export class MonthlyDataService {
   }
 
   async getMonthly(id: number): Promise<IMonthlyEntity> {
-    
+
     let monthly = await window.electron.getMonthly(id);
 
     const current = this.monthlies(); // get current value
@@ -70,7 +73,9 @@ export class MonthlyDataService {
   }
 
   async updateNote(note: INoteEntity): Promise<INoteEntity> {
-    return await window.electron.updateNote(note);
+    let res = await window.electron.updateNote(note);
+    this.noteChange.next();
+    return res as INoteEntity;
   }
 
   async deleteNote(note: INoteEntity) {
