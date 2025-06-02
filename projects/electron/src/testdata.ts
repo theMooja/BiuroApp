@@ -117,7 +117,7 @@ const createMonthlies = async function (data: any) {
         year: 2025,
         info: {
             email: 'c3@email.com',
-            firma: 'finka',
+            firma: 'fintax',
             forma: 'skala',
             ZUS: '666',
             VAT: '777',
@@ -616,21 +616,34 @@ const createListValues = async function (data: any) {
     });
     await repo.save({
         text: 'VM',
+        value: 'VM',
         target: 'info-ZUS',
     });
     await repo.save({
         text: 'VK',
+        value: 'VK',
         target: 'info-ZUS',
     });
     await repo.save({
         text: 'cit',
+        value: 'cit',
         target: 'info-forma',
     });
     await repo.save({
-        text: 'fakturownia',
-        target: 'finka-fakturownia',
-        value: 'kHE7JZiTeBCtW7L3xP4l'
+        text: 'pit',
+        value: 'pit',
+        target: 'info-forma',
     });
+    await repo.save({
+        text: 'finka',
+        value: 'finka',
+        target: 'info-firma',
+    });
+    await repo.save({
+        text: 'fintax',
+        value: 'fintax',
+        target: 'info-firma',
+    });    
 }
 
 export default {
