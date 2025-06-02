@@ -40,8 +40,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/biuro-app/src/favicon.ico",
-              "projects/biuro-app/src/assets",
-              "projects/biuro-app/src/assets/pdf.worker.min.mjs"
+              "projects/biuro-app/src/assets"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/purple-green.css",
