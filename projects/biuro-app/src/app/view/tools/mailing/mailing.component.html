@@ -4,14 +4,14 @@
             <div formArrayName="filters">
                 <div *ngFor="let filter of filtersArray.controls; let i = index" [formGroupName]="i" class="filter-row">
                     <mat-form-field appearance="fill" class="filter-field">
-                        <mat-label>Field</mat-label>
+                        <mat-label>Pole</mat-label>
                         <mat-select matInput formControlName="field" placeholder="Enter field name">
                             <mat-option *ngFor="let field of infoColumns" [value]="field">{{ field }}</mat-option>
                         </mat-select>
                     </mat-form-field>
 
                     <mat-form-field appearance="fill" class="filter-field">
-                        <mat-label>Value</mat-label>
+                        <mat-label>Wartość</mat-label>
                         <mat-select (selectionChange)="applyFilters()" matInput formControlName="value"
                             placeholder="Enter value">
                             <mat-option *ngFor="let value of infoValues[(filter.get('field')?.value || '')]"
@@ -31,24 +31,26 @@
             <div class="actions">
                 <button mat-raised-button color="primary" type="button" (click)="addFilter()">
                     <mat-icon>add</mat-icon>
-                    Add Filter
+                    Dodaj filtr
                 </button>
             </div>
         </form>
     </div>
-    <div class="result-container">
+    <div class="left-panel">
         <div class="actions">
             <button mat-raised-button color="primary" (click)="onCopy()">Do schowka</button>
         </div>
-        <div class="row">
-            <span class="cell">Klient</span>
-            <span class="cell">Adres</span>
+        <div class="result-container">
+            <div class="row">
+                <span class="cell">Klient</span>
+                <span class="cell">Adres</span>
+            </div>
+            @for(c of clients; track c.name) {
+            <div class="row" [ngClass]="{'matched': c.matched}">
+                <span class="cell">{{c.name}}</span>
+                <span class="cell">{{c.email}}</span>
+            </div>
+            }
         </div>
-        @for(c of clients; track c.name) {
-        <div class="row" [ngClass]="{'matched': c.matched}">
-            <span class="cell">{{c.name}}</span>
-            <span class="cell">{{c.email}}</span>
-        </div>
-        }
     </div>
 </div>

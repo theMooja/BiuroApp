@@ -14,37 +14,55 @@
 
     .filters-container {}
 
-    .result-container {
+    .left-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+        max-height: calc(100vh - 66px); // adjust based on actual input height
+
         .actions {
-            margin: 1em;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            margin-top: 1em;
+            margin-left: 1em;
         }
 
-        .row {
-            display: flex;
-            border-bottom: 1px solid #eee;
-            padding: 0.5rem 0;
-            background-color: $app-red;
+        .result-container {
 
-            &.matched {
-                background-color: $primary-green;
-            }
 
-            .cell {
-                flex: 1;
-                padding: 0 0.5rem;
-                font-size: 0.9rem;
-                word-break: break-word;
-                max-height: 5em;
-                overflow: auto;
-            }
+            .row {
+                display: flex;
+                border-bottom: 1px solid #eee;
+                padding: 0.5rem 0;
+                background-color: $app-red;
 
-            &:first-child {
-                font-weight: bold;
-                background-color: #f0f0f0 !important;
-                position: sticky;
-                top: 0;
-                z-index: 1;
+                height: 200px;
+
+                &.matched {
+                    background-color: $primary-green;
+                }
+
+                .cell {
+                    flex: 1;
+                    padding: 0 0.5rem;
+                    font-size: 0.9rem;
+                    word-break: break-word;
+                    max-height: 5em;
+                    overflow: auto;
+                }
+
+                &:first-child {
+                    font-weight: bold;
+                    background-color: #f0f0f0 !important;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1;
+                }
             }
         }
     }
+
+
 }
