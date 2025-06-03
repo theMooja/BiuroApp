@@ -1,6 +1,6 @@
 <div class="view">
     @for(task of tasks; track task) {
-    <button mat-flat-button class="item" (click)="triggerTask(task)">
+    <button mat-flat-button class="item" (click)="triggerTask(task)" [ngClass]="task.origin">
         <div class="button-line">{{task.monthly.client.name}}</div>
         <div class="button-line">{{task.title}}</div></button>
     }

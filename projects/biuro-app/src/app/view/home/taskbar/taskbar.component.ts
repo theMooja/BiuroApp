@@ -4,11 +4,12 @@ import { UserDataService } from '../../../service/user-data.service';
 import { MarchDataService } from '../../../service/march-data.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MonthlyDataService } from '../../../service/monthly-data.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-taskbar',
   standalone: true,
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, CommonModule],
   templateUrl: './taskbar.component.html',
   styleUrl: './taskbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -18,6 +19,7 @@ export class TaskbarComponent {
   tasks: {
     monthly: IMonthlyEntity;
     title: string;
+    origin: string;
   }[] = [];
   @Output() trigger = new EventEmitter<IMonthlyEntity>();
 
@@ -52,7 +54,8 @@ export class TaskbarComponent {
         .filter(march => march.isReady && march.owner?.id === userId)
         .map(march => ({
           monthly: march.monthly,
-          title: march.name
+          title: march.name,
+          origin: 'march'
         }));
 
       const noteTasks = this.monthlies
@@ -65,7 +68,8 @@ export class TaskbarComponent {
             )
             .map(note => ({
               monthly: monthly,
-              title: note.text
+              title: note.text,
+              origin: 'note'
             }))
         );
 
