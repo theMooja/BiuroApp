@@ -23,6 +23,7 @@ export const setIPCHandlers = async (window: BrowserWindow, rawClient: Client) =
 
   ipcMain.handle('db:March:updateMarchValue', (e, march) => MarchController.updateMarchValue(march));
   ipcMain.handle('db:March:addStopper', (e, march, seconds, from) => MarchController.addStopper(march, seconds, from));
+  ipcMain.handle('db:March:updateStopper', (e, stopper) => MarchController.updateStopper(stopper));
 
   ipcMain.handle('db:Monthly:getMonthlies', (e, year, month) => MonthlyController.getMonthlies(year, month));
   ipcMain.handle('db:Monthly:getMonthly', (e, id) => MonthlyController.getMonthly(id));

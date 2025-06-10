@@ -38,9 +38,10 @@
 
             </div>
 
-            <button mat-button (mouseup)="onFifteen($event); $event.stopPropagation()"
+            
+            <button mat-button (mouseup)="onOverlay($event); $event.stopPropagation()"
                 (click)="$event.stopPropagation()">
-                +/- 15
+                <mat-icon>menu</mat-icon>
             </button>
         </div>
 

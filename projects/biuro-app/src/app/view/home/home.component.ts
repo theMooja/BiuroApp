@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Injector, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { hasAccess, IClientEntity, IMarchEntity, IMonthlyEntity, Permission, StepType } from '../../../../../electron/src/interfaces';
+import { hasAccess, IClientEntity, IMarchEntity, IMonthlyEntity, IStopperEntity, Permission, StepType } from '../../../../../electron/src/interfaces';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -34,6 +34,7 @@ import { MonthlyPickerComponent } from '../../utils/monthly-picker/monthly-picke
 import { computed, effect, Signal } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { SystemService } from '../../service/system.service';
+import { SecondsToMMSSPipe } from '../../utils/seconds-to-mmss.pipe';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel', 'place'];
 
@@ -43,7 +44,8 @@ export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma
   imports: [NotesComponent, MarchColumnComponent, MatSort, MatSortModule, MatRippleModule,
     MatButtonModule, CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule, CommonModule, MatTableModule,
     MatIconModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule,
-    MatDatepicker, MatMenuModule, InvoiceColumnComponent, MatDialogModule, TaskbarComponent, MonthlyPickerComponent],
+    MatDatepicker, MatMenuModule, InvoiceColumnComponent, MatDialogModule, TaskbarComponent, MonthlyPickerComponent,
+    SecondsToMMSSPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations: [
@@ -366,4 +368,6 @@ export class HomeComponent {
       this.systemService.openFile(path);
     }
   }
+
+  
 }

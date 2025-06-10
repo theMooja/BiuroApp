@@ -1,0 +1,22 @@
+<div class="view">
+    <div class="edit-container">
+        @if (currentStopper) {
+        <mat-form-field>
+            <input matInput [(ngModel)]="seconds" type="number" placeholder="Czas w sekundach"
+                (keyup.enter)="onStopperSave()">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="onStopperSave()">
+            <mat-icon>save</mat-icon>
+        </button>
+        }
+    </div>
+    <div class="stoppers-container">
+        @for(stopper of stoppers; track stopper.id) {
+
+        <button mat-raised-button class="stopper-block" (click)="onStopperSelect(stopper); $event.stopPropagation()">
+            <span class="stopper-name">{{stopper.createdAt | date:'yyyy-MM-dd'}} </span>
+            <span class="stopper-date">{{stopper.seconds | secondsToMMSSPipe}}</span>
+        </button>
+        }
+
+    </div>

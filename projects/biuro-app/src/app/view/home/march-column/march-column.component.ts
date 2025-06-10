@@ -11,6 +11,9 @@ import { CommonModule } from '@angular/common';
 import { MatCalendar, MatDatepicker, MatDatepickerModule, MatDatepickerToggle } from '@angular/material/datepicker';
 import { UserDataService } from '../../../service/user-data.service';
 import { StopperService } from '../../../service/stopper.service';
+import { Overlay } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { StopperOverlayComponent } from '../stopper-overlay/stopper-overlay.component';
 
 @Component({
   selector: 'march-column',
@@ -84,10 +87,10 @@ export class MarchColumnComponent {
   startStopper() {
     this.stopperService.start(this.currentStep, this.monthly.client.name);
   }
-  
+
   async stopStopper() {
     if (!this.isRunning) return;
-  
+
     let seconds = this.stopperService.getElapsedSeconds();
     let startedAt = this.stopperService['startTime']();
     let stopper = await this.marchDataService.addStopper(this.currentStep, seconds, startedAt ?? new Date());
@@ -121,7 +124,7 @@ export class MarchColumnComponent {
       this.marchDataService.marchChanged();
       return last;
     }
-    
+
     this.marchDataService.marchChanged();
     return visible.slice()
       .sort((a, b) => b.sequence - a.sequence)[0];
@@ -195,5 +198,24 @@ export class MarchColumnComponent {
         return ''
     }
 
+  }
+
+  private overlay = inject(Overlay);
+  onOverlay(event: MouseEvent) {
+    const overlayRef = this.overlay.create({
+      positionStrategy: this.overlay.position()
+        .global()
+        .centerHorizontally()
+        .centerVertically(),
+      hasBackdrop: true,
+    });
+
+    const portal = new ComponentPortal(StopperOverlayComponent);
+    const componentRef = overlayRef.attach(portal);
+    componentRef.instance.monthly = this.monthly;
+
+    overlayRef.backdropClick().subscribe(() => {
+      overlayRef.dispose();
+    });
   }
 }
