@@ -98,16 +98,7 @@ export class MarchColumnComponent {
     this.stopperService.stop();
   }
 
-  async onFifteen(e: MouseEvent) {
-    if (e.button === 0) {
-      let stopper = await this.marchDataService.addStopper(this.currentStep, 15 * 60, new Date())
-      this.currentStep.stoppers.push(stopper);
-    }
-    if (e.button === 2) {
-      let stopper = await this.marchDataService.addStopper(this.currentStep, -15 * 60, new Date())
-      this.currentStep.stoppers.push(stopper);
-    }
-  }
+  
 
   findLastStep(): IMarchEntity {
     let visible = this.monthly.marches

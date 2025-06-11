@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MarchDataService } from '../../../service/march-data.service';
+import { create } from 'domain';
 
 @Component({
   selector: 'app-stopper-overlay',
@@ -21,30 +22,60 @@ export class StopperOverlayComponent {
   @Input() monthly!: IMonthlyEntity;
   private userService = inject(UserDataService);
   private marchDataService = inject(MarchDataService);
-  currentStopper?: IStopperEntity;
+  currentStopper!: IStopper;
 
   get user() {
     return this.userService.user;
   }
 
-  get stoppers(): IStopperEntity[] {
-    let stoppers = this.getStoppers();
-    return stoppers;
-  }
-
-  seconds: number = 0;
-
-  onStopperSelect(stopper: IStopperEntity) {
+  onStopperSelect(stopper: IStopper) {
     this.currentStopper = stopper;
-    this.seconds = stopper.seconds;
   }
 
-  getStoppers(): IStopperEntity[] {
+  ngOnInit() {
+    this.currentStopper = this.getStoppers()[0];
+  }
+
+  getStoppers(): IStopper[] {
     let monthly = this.monthly;
     return monthly.marches
+      .map(march =>
+        (march.stoppers || [])
+          .filter(stopper => stopper && stopper.user.id === this.user?.id)
+          .map(stopper => ({
+            name: march.name,
+            seconds: stopper.seconds,
+            id: stopper.id,
+            createdAt: stopper.from
+          }))
+      )
+      .flat()
+      .sort((a, b) => {
+        if (a.createdAt && b.createdAt) {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }
+        return 0;
+      });
+  }
+
+  getStopperEntity(): IStopperEntity {
+    let s = this.monthly.marches
       .map(march => march.stoppers)
       .flat()
-      .filter(stopper => stopper && stopper.user.id === this.user?.id);
+      .find(stopper => stopper.id === this.currentStopper?.id);
+
+    if (s) return s;
+    else throw new Error("Stopper not found");
+  }
+
+  async onFifteen(e: MouseEvent) {
+    let seconds = 15 * 60;
+
+    if (e.button === 2) {
+      seconds = -seconds;
+    }
+
+    this.currentStopper.seconds += seconds;
   }
 
   async onStopperSave() {
@@ -52,14 +83,16 @@ export class StopperOverlayComponent {
       return;
     }
 
-    // Update the current stopper with the new seconds
-    this.currentStopper.seconds = this.seconds;
+    let stopperToSave = this.getStopperEntity();
+    stopperToSave.seconds = this.currentStopper.seconds;
 
-    // Save the updated stopper
-    await this.marchDataService.updateStopper(this.currentStopper);
-
+    await this.marchDataService.updateStopper(stopperToSave);
   }
+}
 
-  async onStopperDelete() {
-  }
+interface IStopper {
+  name: string;
+  seconds: number;
+  createdAt?: Date;
+  id?: number;
 }

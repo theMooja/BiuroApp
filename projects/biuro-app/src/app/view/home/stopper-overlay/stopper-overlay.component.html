@@ -2,20 +2,30 @@
     <div class="edit-container">
         @if (currentStopper) {
         <mat-form-field>
-            <input matInput [(ngModel)]="seconds" type="number" placeholder="Czas w sekundach"
+            <mat-label>Czas w sekundach</mat-label>
+            <input matInput [(ngModel)]="currentStopper.seconds" type="number" placeholder="Czas w sekundach"
                 (keyup.enter)="onStopperSave()">
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="onStopperSave()">
+        <button mat-fab (mouseup)="onFifteen($event); $event.stopPropagation()" (click)="$event.stopPropagation()">
+            +/- 15min
+        </button>
+        <button mat-fab  (click)="onStopperSave()" class="icon-button">
             <mat-icon>save</mat-icon>
         </button>
         }
     </div>
     <div class="stoppers-container">
-        @for(stopper of stoppers; track stopper.id) {
+        @if(getStoppers().length === 0) {
+        <div class="stopper-block">
+            Brak zarejestrowanych stoperów.
+        </div>
+        }
+        @for(stopper of getStoppers(); track stopper.id) {
 
         <button mat-raised-button class="stopper-block" (click)="onStopperSelect(stopper); $event.stopPropagation()">
-            <span class="stopper-name">{{stopper.createdAt | date:'yyyy-MM-dd'}} </span>
-            <span class="stopper-date">{{stopper.seconds | secondsToMMSSPipe}}</span>
+            <span class="stopper-field">{{stopper.name}} </span>
+            <span class="stopper-field">{{stopper.createdAt | date:'yyyy-MM-dd'}} </span>
+            <span class="stopper-field">{{stopper.seconds | secondsToMMSSPipe}}</span>
         </button>
         }
 

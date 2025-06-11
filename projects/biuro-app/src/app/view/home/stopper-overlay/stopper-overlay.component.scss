@@ -1,5 +1,30 @@
+@import './../../../variables.scss';
+
 .stopper-block {
     width: 400px;
     margin-bottom: 0.5rem;
     display: block;
+    font-size: 700;
+    align-items: center;
+    justify-content: center;
+}
+
+.view {
+    background-color: $overlay-background;
+    padding: 1em;
+    border-radius: 1em;
+
+    .edit-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1em;
+        gap: 1em;
+    }
+
+    .stoppers-container {
+        max-height: 600px;
+        overflow-y: auto;
+    }
 }
