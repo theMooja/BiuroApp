@@ -22,4 +22,8 @@ export class SystemService {
   async openFile(path: string) {
     await window.electron.openFile(path);
   }
+
+  async convertFromOEM852(data: string): Promise<string> {
+    return await window.electron.convertFromOEM852(data) as string;
+  }
 }

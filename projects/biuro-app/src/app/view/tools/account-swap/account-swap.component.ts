@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,7 @@ import Papa from 'papaparse';
 import { FormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import * as mt940 from 'mt940-js';
+import { SystemService } from '../../../service/system.service';
 
 
 @Component({
@@ -19,6 +20,7 @@ import * as mt940 from 'mt940-js';
   styleUrl: './account-swap.component.scss'
 })
 export class AccountSwapComponent {
+  private systemService = inject(SystemService);
   clients: {
     name: string;
     no: string;
@@ -71,31 +73,37 @@ export class AccountSwapComponent {
       reader.onload = async () => {
         try {
           const arrayBuffer = reader.result as ArrayBuffer;
+
+          // Step 1: Parse raw OEM852 buffer as-is
           const statements = await mt940.read(arrayBuffer);
 
           console.log(`Parsed ${statements.length} MT940 statements from ${file.name}`);
 
-          statements.forEach((statement: any, index: number) => {
+          for (const [index, statement] of statements.entries()) {
             console.log(`Statement ${index + 1}:`, statement);
 
-            if (statement.transactions && Array.isArray(statement.transactions)) {
-              statement.transactions.forEach((transaction: any) => {
-                const description = transaction.description;
-                const nameMatch = description.match(/~32([^\r\n~]+)/);
-                const bankMatch = description.match(/~38([^\r\n~]+)/);
-                const refMatch = description.match(/\b\d{5}-\d{3}-\d{4}\b/);
+            if (Array.isArray(statement.transactions)) {
+              for (const transaction of statement.transactions) {
+                // Step 2: Decode description from OEM852 to UTF-8
+                const decodedDescription = await this.systemService.convertFromOEM852(transaction.description);
+
+                const nameMatch = decodedDescription.match(/~32([^\r\n~]+)/);
+                const bankMatch = decodedDescription.match(/~38([^\r\n~]+)/);
+                const refMatch = decodedDescription.match(/\b\d{5}-\d{3}-\d{4}\b/);
 
                 if (bankMatch && refMatch) {
-                  this.mt940File.push({
-                    description: transaction.description,
+                  const t = {
+                    description: decodedDescription,
                     bank: bankMatch[1],
                     ref: refMatch[0],
                     name: nameMatch ? nameMatch[1] : '',
-                  });
+                  };
+                  this.mt940File.push(t);
+                  console.log(`Transaction added:`, t);
                 }
-              });
+              }
             }
-          });
+          }
 
         } catch (error) {
           console.error(`Error parsing MT940 file "${file.name}":`, error);
@@ -106,10 +114,9 @@ export class AccountSwapComponent {
         console.error(`Error reading file "${file.name}":`, reader.error);
       };
 
-      reader.readAsArrayBuffer(file);
+      reader.readAsArrayBuffer(file); // Use original OEM852 bytes
     });
   }
-
 
   onTransactionsFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;

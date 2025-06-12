@@ -9,6 +9,7 @@ import { DataSource } from "typeorm";
 import { Client } from "pg";
 import * as fs from 'fs';
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+import iconv from 'iconv-lite';
 
 const { updateElectronApp } = require('update-electron-app');
 if (app.isPackaged)
@@ -97,6 +98,8 @@ const setAppHandlers = () => {
   ipcMain.handle('app:openFolder', async (e, path) => openFolder(path));
   ipcMain.handle('app:pickFile', async () => pickFile());
   ipcMain.handle('app:openFile', async (e, path) => openFolder(path));
+
+  ipcMain.handle('app:convertFromOEM852', (e, data: string) => convertFromOEM852(data));
 }
 
 const getRawClient = async (AppDataSource: DataSource) => {
@@ -239,4 +242,14 @@ function initializeAppSettings() {
 
 
   console.log('App settings initialized at:', userSettingsPath);
+}
+
+function convertFromOEM852(data: string): string {
+  // Step 1: Convert JS string to Buffer using latin1 (1:1 byte mapping)
+  const binaryBuffer = Buffer.from(data, 'binary');
+
+  // Step 2: Decode the buffer from OEM852 to a proper UTF-8 string
+  const utf8String = iconv.decode(binaryBuffer, 'cp852');
+
+  return utf8String;
 }

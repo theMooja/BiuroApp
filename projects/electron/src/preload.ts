@@ -16,6 +16,7 @@ const contextBridgeApi = {
   openFolder: (path: string) => ipcRenderer.invoke('app:openFolder', path),
   pickFile: () => ipcRenderer.invoke('app:pickFile'),
   openFile: (path: string) => ipcRenderer.invoke('app:openFile', path),
+  convertFromOEM852: (data: string) => ipcRenderer.invoke('app:convertFromOEM852', data),
 
   getListValues: (target: string) => ipcRenderer.invoke('db:listValues', target),
 
