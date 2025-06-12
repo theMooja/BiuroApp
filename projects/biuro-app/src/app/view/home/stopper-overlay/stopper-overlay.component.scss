@@ -7,6 +7,11 @@
     font-size: 700;
     align-items: center;
     justify-content: center;
+
+    &.selected {
+        background-color: $primary-green;
+        color: white;
+    }
 }
 
 .view {
@@ -21,6 +26,11 @@
         justify-content: center;
         margin-bottom: 1em;
         gap: 1em;
+
+        .dirty {
+            color: $primary-red;
+            font-weight: bold;
+        }
     }
 
     .stoppers-container {

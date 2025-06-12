@@ -1,20 +1,19 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, ViewChild } from '@angular/core';
 import { IMonthlyEntity, IStopperEntity } from '../../../../../../electron/src/interfaces';
 import { UserDataService } from '../../../service/user-data.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SecondsToMMSSPipe } from '../../../utils/seconds-to-mmss.pipe';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MarchDataService } from '../../../service/march-data.service';
-import { create } from 'domain';
 
 @Component({
   selector: 'app-stopper-overlay',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, SecondsToMMSSPipe, DatePipe, FormsModule, MatFormFieldModule, MatInputModule],
+  imports: [MatButtonModule, MatIconModule, SecondsToMMSSPipe, DatePipe, FormsModule, MatFormFieldModule, MatInputModule, CommonModule],
   templateUrl: './stopper-overlay.component.html',
   styleUrl: './stopper-overlay.component.scss'
 })
@@ -23,6 +22,7 @@ export class StopperOverlayComponent {
   private userService = inject(UserDataService);
   private marchDataService = inject(MarchDataService);
   currentStopper!: IStopper;
+  @ViewChild('secondsInput') secondsInput: any;
 
   get user() {
     return this.userService.user;
@@ -30,6 +30,7 @@ export class StopperOverlayComponent {
 
   onStopperSelect(stopper: IStopper) {
     this.currentStopper = stopper;
+    this.secondsInput.control.markAsPristine();
   }
 
   ngOnInit() {
@@ -87,6 +88,7 @@ export class StopperOverlayComponent {
     stopperToSave.seconds = this.currentStopper.seconds;
 
     await this.marchDataService.updateStopper(stopperToSave);
+    this.secondsInput.control.markAsPristine();
   }
 }
 
