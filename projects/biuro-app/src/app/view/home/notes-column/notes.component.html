@@ -19,8 +19,15 @@
 <ng-template #tooltipTemplate>
     <mat-card>
         <mat-card-actions *ngIf="isEdit" class="note-actions">
-            <button mat-stroked-button (click)="onPinUser()" [class.pinned]="currentNote.user">
-                Dla mnie</button>
+            <mat-form-field class="note-user-select" appearance="outline">
+                <mat-label>Dla kogo</mat-label>
+                <mat-select [(value)]="userId">
+                    <mat-option [value]="0">Wszyscy</mat-option>
+                    @for (option of users; track option.id) {
+                    <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
             <button mat-stroked-button (click)="onPersists()" [class.pinned]="currentNote.persists">Na zawsze</button>
             <button mat-icon-button (click)="onSave()">
                 <mat-icon>check</mat-icon>

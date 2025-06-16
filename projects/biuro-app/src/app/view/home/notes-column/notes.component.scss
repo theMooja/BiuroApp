@@ -7,6 +7,8 @@
     justify-items: start;
 }
 
+
+
 .note-container {
     flex: 1;
     display: flex;
@@ -54,6 +56,8 @@
 
 .note-area {
     width: 400px;
+    min-height: 100px;
+    font-size: larger;
 }
 
 .due-date-container {
@@ -72,4 +76,9 @@
     align-items: center;
     justify-content: start;
     gap: 0.5em;
+
+    .note-user-select {
+        color: $primary-white;
+        margin-left: .5em;
+    }
 }
