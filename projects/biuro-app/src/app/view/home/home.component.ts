@@ -23,7 +23,7 @@ import { MonthlyDataService } from '../../service/monthly-data.service';
 import { DATA_INJECTION_TOKEN, InvoiceColumnComponent } from './invoice-column/invoice-column.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { EditInfoColumnsOverlayComponent } from '../edit-info-columns-overlay/edit-info-columns-overlay.component';
+import { EditInfoColumnsOverlayComponent } from './edit-info-columns-overlay/edit-info-columns-overlay.component';
 import { SettingsDataService } from '../../service/settings-data.service';
 import { UserDataService } from '../../service/user-data.service';
 import { InvoiceDataService } from '../../service/invoice-data.service';

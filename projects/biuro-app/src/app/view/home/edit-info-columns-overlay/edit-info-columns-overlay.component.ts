@@ -1,15 +1,15 @@
 import { Component, Inject, ChangeDetectorRef } from '@angular/core';
-import { IListValue, IMonthlyEntity } from '../../../../../electron/src/interfaces';
+import { IListValue, IMonthlyEntity } from '../../../../../../electron/src/interfaces';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { allInfoColumns } from '../home/home.component';
+import { allInfoColumns } from '../home.component';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { DATA_INJECTION_TOKEN } from '../home/invoice-column/invoice-column.component';
-import { MonthlyDataService } from '../../service/monthly-data.service';
+import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
+import { MonthlyDataService } from '../../../service/monthly-data.service';
 import { MatButtonModule } from '@angular/material/button';
-import { ListValuesService } from '../../service/list-values.service';
+import { ListValuesService } from '../../../service/list-values.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
