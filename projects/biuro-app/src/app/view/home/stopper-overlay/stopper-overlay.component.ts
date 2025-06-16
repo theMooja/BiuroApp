@@ -3,7 +3,7 @@ import { IMonthlyEntity, IStopperEntity } from '../../../../../../electron/src/i
 import { UserDataService } from '../../../service/user-data.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { SecondsToMMSSPipe } from '../../../utils/seconds-to-mmss.pipe';
+import { SecondsToHHMMSSPipe, SecondsToMMSSPipe } from '../../../utils/seconds-to-mmss.pipe';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,7 +13,9 @@ import { MarchDataService } from '../../../service/march-data.service';
 @Component({
   selector: 'app-stopper-overlay',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, SecondsToMMSSPipe, DatePipe, FormsModule, MatFormFieldModule, MatInputModule, CommonModule],
+  imports: [MatButtonModule, MatIconModule, SecondsToMMSSPipe, DatePipe, FormsModule, MatFormFieldModule, MatInputModule, CommonModule,
+    SecondsToHHMMSSPipe
+  ],
   templateUrl: './stopper-overlay.component.html',
   styleUrl: './stopper-overlay.component.scss'
 })
@@ -77,6 +79,7 @@ export class StopperOverlayComponent {
     }
 
     this.currentStopper.seconds += seconds;
+    this.secondsInput.control.markAsDirty();
   }
 
   async onStopperSave() {

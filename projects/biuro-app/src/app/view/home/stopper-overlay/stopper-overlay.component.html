@@ -5,6 +5,7 @@
             <mat-label>Czas w sekundach</mat-label>
             <input matInput [(ngModel)]="currentStopper.seconds" #secondsInput="ngModel" type="number"
                 placeholder="Czas w sekundach" (keyup.enter)="onStopperSave()">
+            <mat-hint align="start"><strong>{{currentStopper.seconds | secondsToHHMMSSPipe}}</strong> </mat-hint>
         </mat-form-field>
         <button mat-fab (mouseup)="onFifteen($event); $event.stopPropagation()" (click)="$event.stopPropagation()">
             +/- 15min
@@ -23,7 +24,7 @@
         @for(stopper of getStoppers(); track stopper.id) {
 
         <button mat-raised-button class="stopper-block" (click)="onStopperSelect(stopper); $event.stopPropagation()"
-            [ngClass]="{'selected': stopper.id === currentStopper?.id}">
+            [ngClass]="{'selected': stopper.id === currentStopper.id}">
             <span class="stopper-field">{{stopper.name}} </span>
             <span class="stopper-field">{{stopper.createdAt | date:'yyyy-MM-dd'}} </span>
             <span class="stopper-field">{{stopper.seconds | secondsToMMSSPipe}}</span>
