@@ -28,6 +28,7 @@ export class ClientSetupComponent {
       nip: this.formBuilder.control(''),
       isActive: this.formBuilder.control(true),
       folderPath: this.formBuilder.control(''),
+      programPath: this.formBuilder.control('')
     })
   }
 
@@ -42,6 +43,7 @@ export class ClientSetupComponent {
     this.form.get('isActive')?.setValue(client.isActive);
     this.form.get('nip')?.setValue(client.nip);
     this.form.get('folderPath')?.setValue(client.details.folderPath);
+    this.form.get('programPath')?.setValue(client.details.programPath);
   }
 
   onSave() {
@@ -53,7 +55,8 @@ export class ClientSetupComponent {
         ...formValue,
         details: {
           ...this.currentClient?.details,
-          folderPath: formValue.folderPath
+          folderPath: formValue.folderPath,
+          programPath: formValue.programPath
         }
       };
 
@@ -83,6 +86,15 @@ export class ClientSetupComponent {
     if (folderPath) {
       folderPath = folderPath.replace(/^[^:\\/]+(?=:[\\/])/, 'DISC')
       this.form.get('folderPath')?.setValue(folderPath);
+    }
+  }
+
+  async pickProgram() {
+    let programPath = await window.electron.pickFile();
+
+    if (programPath) {
+      programPath = programPath.replace(/^[^:\\/]+(?=:[\\/])/, 'DISC')
+      this.form.get('programPath')?.setValue(programPath);
     }
   }
 }

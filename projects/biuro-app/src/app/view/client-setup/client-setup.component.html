@@ -21,11 +21,18 @@
         </mat-form-field>
     </div>
     <div class="row">
-        <mat-form-field class="folder-input">
+        <mat-form-field class="path-input">
             <mat-label>Folder</mat-label>
             <input matInput formControlName="folderPath" readonly>
         </mat-form-field>
         <button mat-raised-button (click)="pickFolder()">Wybierz</button>
+    </div>
+    <div class="row">
+        <mat-form-field class="path-input">
+            <mat-label>Program</mat-label>
+            <input matInput formControlName="programPath" readonly>
+        </mat-form-field>
+        <button mat-raised-button (click)="pickProgram()">Wybierz</button>
     </div>
 
 

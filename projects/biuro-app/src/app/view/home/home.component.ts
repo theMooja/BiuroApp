@@ -367,7 +367,5 @@ export class HomeComponent {
       path = path.replace(/^[^:\\/]+(?=:[\\/])/, networkDiscName);
       this.systemService.openFile(path);
     }
-  }
-
-  
+  }  
 }
