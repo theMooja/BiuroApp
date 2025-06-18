@@ -141,6 +141,7 @@
             [disabled]="!element.client.details?.fakturowniaId">Fakturownia</button>
           <button mat-raised-button (click)="onFolder(element)">Folder</button>
           <button mat-raised-button (click)="onStartProgram(element)">NEXO</button>
+          <button mat-raised-button (click)="onInvoiceOverlay(element)">Faktura</button>
         </div>
       </mat-cell>
     </ng-container>
@@ -149,7 +150,8 @@
     <mat-row (click)="selectionMode ? selection.toggle(element): null" *matRowDef="let element; columns: columns"
       [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element"
       [attr.data-id]="element.id"
-      (dblclick)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+      [class.highlighted-row]="element === expandedElement"
+      (click)="onRowClick(element); $event.stopPropagation()">
     </mat-row>
 
     <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>

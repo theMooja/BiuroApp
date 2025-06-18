@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 
-export const DATA_INJECTION_TOKEN = new InjectionToken<{ monthly: IMonthlyEntity, invoice: IInvoiceEntity, overlayRef: OverlayRef }>('DATA_INJECTION_TOKEN');
+export const MONTHLY_INJECTION_TOKEN = new InjectionToken<{ monthly: IMonthlyEntity, overlayRef: OverlayRef }>('MONTHLY_INJECTION_TOKEN');
 
 @Component({
   selector: 'invoice-column',
@@ -26,15 +26,8 @@ export class InvoiceColumnComponent {
   sumCat1 = this.getSumInvoice('księgowość');
   sumCat2 = this.getSumInvoice('kadry');
 
-  constructor(
-    private overlay: Overlay
-  ) {
-  }
-
   ngOnInit() {
-    this.sumCat1 = this.getSumInvoice('księgowość');
-    this.sumCat2 = this.getSumInvoice('kadry');
-
+    this.calculateSums();
   }
 
   get lines() {
@@ -48,36 +41,8 @@ export class InvoiceColumnComponent {
       .reduce((acc, line) => acc + (line.price * line.qtty), 0);
   }
 
-  onEdit() {
-    const overlayRef = this.overlay.create({
-      positionStrategy: this.overlay.position().global().centerHorizontally().centerVertically(),
-      hasBackdrop: true,
-      backdropClass: 'cdk-overlay-dark-backdrop',
-      disposeOnNavigation: true,
-    });
-
-    let invoice = this.monthly.invoices[0] || {
-      no: '',
-      lines: []
-    };
-
-    let data = Injector.create({
-      providers: [{
-        provide: DATA_INJECTION_TOKEN, useValue: {
-          invoice: invoice,
-          overlayRef: overlayRef,
-          monthly: this.monthly
-        }
-      }],
-    });
-
-    const overlayPortal = new ComponentPortal(InvoiceOverlayComponent, null, data);
-    overlayRef.attach(overlayPortal);
-    overlayRef.backdropClick().subscribe(() => overlayRef.dispose());
-    overlayRef.detachments().subscribe(() => {
-
-      this.sumCat1 = this.getSumInvoice('księgowość');
-      this.sumCat2 = this.getSumInvoice('kadry');
-    });
+  calculateSums() {
+    this.sumCat1 = this.getSumInvoice('księgowość');
+    this.sumCat2 = this.getSumInvoice('kadry');
   }
 }

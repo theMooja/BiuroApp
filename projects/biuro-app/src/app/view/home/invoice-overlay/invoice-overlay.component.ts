@@ -1,11 +1,9 @@
-import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, Inject } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { IInvoiceEntity, IListValue, IMonthlyEntity, ListValueTargets } from '../../../../../../electron/src/interfaces';
-import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
-import { OverlayRef } from '@angular/cdk/overlay';
 import { InvoiceDataService } from '../../../service/invoice-data.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +11,8 @@ import { ListValuesService } from '../../../service/list-values.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
+import { MONTHLY_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
+import { OverlayRef } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-invoice-overlay',
@@ -23,19 +23,24 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './invoice-overlay.component.scss'
 })
 export class InvoiceOverlayComponent {
+  monthly: IMonthlyEntity;
+  invoice: IInvoiceEntity;
+
   invoiceForm: FormGroup;
   previousForm: FormGroup;
-  invoice: IInvoiceEntity;
   previousInvoice: IInvoiceEntity;
-  monthly: IMonthlyEntity;
   descriptionValues: IListValue[] = [];
   categoryValues: IListValue[] = [];
 
-  constructor(@Inject(DATA_INJECTION_TOKEN) private data: { invoice: IInvoiceEntity, overlayRef: OverlayRef, monthly: IMonthlyEntity },
-    private formBuilder: FormBuilder, private invoiceDataService: InvoiceDataService, private listValuesService: ListValuesService) {
+  private invoiceDataService: InvoiceDataService = inject(InvoiceDataService);
+  private listValuesService: ListValuesService = inject(ListValuesService);
 
-    this.invoice = this.data.invoice;
+  constructor(private formBuilder: FormBuilder,
+    @Inject(MONTHLY_INJECTION_TOKEN) public data: { monthly: IMonthlyEntity, overlayRef: OverlayRef }
+  ) {
+
     this.monthly = this.data.monthly;
+    this.invoice = this.monthly.invoices[0];
 
     this.invoiceForm = this.formBuilder.group({
       no: this.formBuilder.control(this.invoice.no),
@@ -86,8 +91,8 @@ export class InvoiceOverlayComponent {
       ...this.invoiceForm.value,
       monthly: this.monthly
     });
+    this.monthly.invoices[0] = invoice;
     console.log(invoice);
-    //this.monthly.invoices[0] = invoice;
     this.close();
   }
 
@@ -120,7 +125,7 @@ export class InvoiceOverlayComponent {
   }
 
   getDefaultVat() {
-    if(this.monthly.info.firma == 'FinKa') {
+    if (this.monthly.info.firma == 'FinKa') {
       return 'zw';
     } else {
       return '23%';

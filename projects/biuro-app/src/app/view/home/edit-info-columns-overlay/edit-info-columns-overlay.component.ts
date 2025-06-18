@@ -6,7 +6,7 @@ import { allInfoColumns } from '../home.component';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { DATA_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
+import { MONTHLY_INJECTION_TOKEN } from '../invoice-column/invoice-column.component';
 import { MonthlyDataService } from '../../../service/monthly-data.service';
 import { MatButtonModule } from '@angular/material/button';
 import { ListValuesService } from '../../../service/list-values.service';
@@ -25,7 +25,7 @@ export class EditInfoColumnsOverlayComponent {
   allInfoColumns: string[] = allInfoColumns;
   descriptionValues: { [key: string]: IListValue[] } = {};
 
-  constructor(@Inject(DATA_INJECTION_TOKEN) private data: { entity: IMonthlyEntity, overlayRef: OverlayRef },
+  constructor(@Inject(MONTHLY_INJECTION_TOKEN) private data: { entity: IMonthlyEntity, overlayRef: OverlayRef },
     private formBuilder: FormBuilder, private monthlyDataService: MonthlyDataService, private listValuesService: ListValuesService,
     private cdr: ChangeDetectorRef) {
 

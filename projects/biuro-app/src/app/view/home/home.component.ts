@@ -9,9 +9,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCalendar, MatDatepicker, MatDatepickerToggle } from '@angular/material/datepicker';
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { CommonModule, JsonPipe } from '@angular/common';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MatMenuModule } from '@angular/material/menu';
+import { CommonModule } from '@angular/common';
 import { CdkContextMenuTrigger, CdkMenuItem, CdkMenuModule } from '@angular/cdk/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
@@ -20,7 +20,7 @@ import { MarchColumnComponent } from './march-column/march-column.component';
 import { NotesComponent } from './notes-column/notes.component';
 import { Router } from '@angular/router';
 import { MonthlyDataService } from '../../service/monthly-data.service';
-import { DATA_INJECTION_TOKEN, InvoiceColumnComponent } from './invoice-column/invoice-column.component';
+import { MONTHLY_INJECTION_TOKEN, InvoiceColumnComponent } from './invoice-column/invoice-column.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { EditInfoColumnsOverlayComponent } from './edit-info-columns-overlay/edit-info-columns-overlay.component';
@@ -35,6 +35,7 @@ import { computed, effect, Signal } from '@angular/core';
 import { ClientDataService } from '../../service/client-data.service';
 import { SystemService } from '../../service/system.service';
 import { SecondsToMMSSPipe } from '../../utils/seconds-to-mmss.pipe';
+import { InvoiceOverlayComponent } from './invoice-overlay/invoice-overlay.component';
 
 export const allInfoColumns = ['email', 'ZUS', 'VAT', 'forma', 'skladki', 'firma', 'wlasciciel', 'place'];
 
@@ -195,6 +196,22 @@ export class HomeComponent {
     // Add highlight and scroll into view
     nextRow.classList.add('highlighted-row');
     nextRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    const id = nextRow.getAttribute('data-id');
+    if (id) {
+      const matchingElement = this.tableData.data.find(row => row.id?.toString() === id);
+      if (matchingElement) {
+        this.expandedElement = matchingElement;
+      }
+    }
+  }
+
+  onRowClick(element: IMonthlyEntity) {
+    if(this.expandedElement === element) {
+      this.expandedElement = null; 
+    } else {
+      this.expandedElement = element;
+    }
   }
 
   onMarchFilterChange(name?: string) {
@@ -238,7 +255,7 @@ export class HomeComponent {
 
     let data = Injector.create({
       providers: [{
-        provide: DATA_INJECTION_TOKEN, useValue: {
+        provide: MONTHLY_INJECTION_TOKEN, useValue: {
           entity: element,
           overlayRef: overlayRef
         }
@@ -367,5 +384,37 @@ export class HomeComponent {
       path = path.replace(/^[^:\\/]+(?=:[\\/])/, networkDiscName);
       this.systemService.openFile(path);
     }
-  }  
+  }
+
+  @ViewChildren(InvoiceColumnComponent) invoiceColumns!: QueryList<InvoiceColumnComponent>;
+
+  onInvoiceOverlay(element: IMonthlyEntity) {
+    const overlayRef = this.overlay.create({
+      positionStrategy: this.overlay.position()
+        .global()
+        .centerHorizontally()
+        .centerVertically(),
+      hasBackdrop: true,
+    });
+
+    const injector = Injector.create({
+      providers: [{
+        provide: MONTHLY_INJECTION_TOKEN,
+        useValue: {
+          monthly: element,
+          overlayRef: overlayRef
+        }
+      }]
+    });
+
+    const portal = new ComponentPortal(InvoiceOverlayComponent, null, injector);
+    overlayRef.attach(portal);
+
+    overlayRef.backdropClick().subscribe(() => overlayRef.dispose());
+
+    overlayRef.detachments().subscribe(() => {
+      const target = this.invoiceColumns.find(ic => ic.monthly?.id === element.id);
+      target?.calculateSums();
+    });
+  }
 }
