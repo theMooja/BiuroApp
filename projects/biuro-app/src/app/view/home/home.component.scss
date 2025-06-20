@@ -6,9 +6,20 @@
   height: 100%;
 }
 
-.client-table {
+.scrollbar-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.client-table {
+  //overflow-y: auto;
+  //overflow-x: hidden;
+
+  .mat-header-row {
+    padding-right: 0 !important;
+  }
 
   .cdk-header-row {
     background-color: $primary-green;
@@ -48,7 +59,7 @@
     background: transparent; // Remove any cell background override
   }
 
-  
+
 }
 
 .expanded-detail {

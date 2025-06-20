@@ -44,119 +44,119 @@
     </mat-menu>
   </mat-toolbar>
   <app-taskbar [monthlies]="monthlies()" (trigger)="onTaskTrigger($event)"></app-taskbar>
-  <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
+  <div class="scrollbar-wrapper">
+    <mat-table [dataSource]="tableData" multiTemplateDataRows class="client-table" matSort>
 
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
 
-        Nazwa
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        {{element.client.name}} </mat-cell>
-    </ng-container>
-    <!-- info columns -->
-    <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
-        (contextmenu)="onInfoColumnRightClick('email')"> eMail </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
-    </ng-container>
+          Nazwa
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{element.client.name}} </mat-cell>
+      </ng-container>
+      <!-- info columns -->
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+          (contextmenu)="onInfoColumnRightClick('email')"> eMail </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.info.email}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="ZUS">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
-        (contextmenu)="onInfoColumnRightClick('ZUS')"> ZUS </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.ZUS}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="ZUS">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+          (contextmenu)="onInfoColumnRightClick('ZUS')"> ZUS </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.info.ZUS}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="VAT">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
-        (contextmenu)="onInfoColumnRightClick('VAT')"> VAT </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.VAT}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="VAT">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+          (contextmenu)="onInfoColumnRightClick('VAT')"> VAT </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.info.VAT}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="forma">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
-        (contextmenu)="onInfoColumnRightClick('forma')"> forma </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.forma}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="forma">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+          (contextmenu)="onInfoColumnRightClick('forma')"> forma </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.info.forma}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="skladki">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
-        (contextmenu)="onInfoColumnRightClick('skladki')"> składki </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.skladki}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="skladki">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+          (contextmenu)="onInfoColumnRightClick('skladki')"> składki </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.info.skladki}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="firma">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
-        (contextmenu)="onInfoColumnRightClick('firma')"> firma </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.firma}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="firma">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+          (contextmenu)="onInfoColumnRightClick('firma')"> firma </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.info.firma}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="wlasciciel">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
-        (contextmenu)="onInfoColumnRightClick('wlasciciel')"> właściciel </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.wlasciciel}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="wlasciciel">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+          (contextmenu)="onInfoColumnRightClick('wlasciciel')"> właściciel </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.info.wlasciciel}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="place">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
-        (contextmenu)="onInfoColumnRightClick('place')"> płace </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.info.place}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="place">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [cdkContextMenuTriggerFor]="infoColumnsMenu"
+          (contextmenu)="onInfoColumnRightClick('place')"> płace </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.info.place}} </mat-cell>
+      </ng-container>
 
-    <!-- /info columns -->
+      <!-- /info columns -->
 
-    <ng-container matColumnDef="invoices">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Faktura </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <invoice-column [monthly]="element"></invoice-column></mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="invoices">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Faktura </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <invoice-column [monthly]="element"></invoice-column></mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="notes">
-      <mat-header-cell *matHeaderCellDef> Notki </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <notes-column [monthly]="element"></notes-column>
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="notes">
+        <mat-header-cell *matHeaderCellDef> Notki </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <notes-column [monthly]="element"></notes-column>
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="marchValues">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Marsz
-        <button class="march-filter-button" mat-icon-button [matMenuTriggerFor]="marchMenu"
-          (click)="$event.stopPropagation()">
-          <mat-icon>filter_list</mat-icon>
-        </button>
-      </mat-header-cell>
-      <mat-cell *matCellDef=" let element">
-        <march-column [monthly]="element"> </march-column>
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="marchValues">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Marsz
+          <button class="march-filter-button" mat-icon-button [matMenuTriggerFor]="marchMenu"
+            (click)="$event.stopPropagation()">
+            <mat-icon>filter_list</mat-icon>
+          </button>
+        </mat-header-cell>
+        <mat-cell *matCellDef=" let element">
+          <march-column [monthly]="element"> </march-column>
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="expandedDetail">
-      <mat-cell *matCellDef="let element" [attr.colspan]="2">
-        <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          @if(hasAccess(user, Permission.FULL)) {
-          <button mat-raised-button (click)="onSetMarch(element)">Edytuj marsz</button>}
-          <button mat-raised-button (click)="onEditInfoColumns(element)">Edytuj info</button>
-          <button mat-raised-button (click)="onAddNote(element)">Dodaj notke</button>
-          <button mat-raised-button (click)="integrateInvoice(element)"
-            [disabled]="!element.client.details?.fakturowniaId">Fakturownia</button>
-          <button mat-raised-button (click)="onFolder(element)">Folder</button>
-          <button mat-raised-button (click)="onStartProgram(element)">NEXO</button>
-          <button mat-raised-button (click)="onInvoiceOverlay(element)">Faktura</button>
-        </div>
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="expandedDetail">
+        <mat-cell *matCellDef="let element" [attr.colspan]="2">
+          <div class="expanded-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            @if(hasAccess(user, Permission.FULL)) {
+            <button mat-raised-button (click)="onSetMarch(element)">Edytuj marsz</button>}
+            <button mat-raised-button (click)="onEditInfoColumns(element)">Edytuj info</button>
+            <button mat-raised-button (click)="onAddNote(element)">Dodaj notke</button>
+            <button mat-raised-button (click)="integrateInvoice(element)"
+              [disabled]="!element.client.details?.fakturowniaId">Fakturownia</button>
+            <button mat-raised-button (click)="onFolder(element)">Folder</button>
+            <button mat-raised-button (click)="onStartProgram(element)">NEXO</button>
+            <button mat-raised-button (click)="onInvoiceOverlay(element)">Faktura</button>
+          </div>
+        </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
-    <mat-row (click)="selectionMode ? selection.toggle(element): null" *matRowDef="let element; columns: columns"
-      [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element"
-      [attr.data-id]="element.id"
-      [class.highlighted-row]="element === expandedElement"
-      (click)="onRowClick(element); $event.stopPropagation()">
-    </mat-row>
+      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+      <mat-row (click)="selectionMode ? selection.toggle(element): null" *matRowDef="let element; columns: columns"
+        [class.selected]="selection.isSelected(element)" [class.expanded-row]="expandedElement === element"
+        [attr.data-id]="element.id" [class.highlighted-row]="element === expandedElement"
+        (click)="onRowClick(element); $event.stopPropagation()">
+      </mat-row>
 
-    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
-  </mat-table>
-
+      <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></mat-row>
+    </mat-table>
+  </div>
   <ng-template #infoColumnsMenu>
     <div class="column-menu" cdkMenu>
       @for(c of allInfoColumns; track c; let idx = $index) {
