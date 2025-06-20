@@ -14,8 +14,12 @@
     height: 100%;
 
     .mdc-card {
-        margin: 1em;
         background-color: $tetiary-black;
+        margin-bottom: 1em;
+    }
+
+    .plan-container {
+        margin-right: 1em;
     }
 }
 
