@@ -4,16 +4,39 @@
     display: flex;
     flex-direction: row;
 
+    .absence-view {
+        width: 100%;
+    }
+
+    .inputs {
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+        margin: 1em;
+
+        .secondary-badge {
+            position: relative;
+            background-color: $app-yellow;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-size: 12px;
+            bottom: -15px;
+            right: 10px;
+        }
+    }
+
     .panel {
         flex: 1 1 50%;
         display: flex;
         flex-direction: column;
         border: 1px solid #ccc;
         border-radius: 4px;
-        padding: 0.5rem;
+        padding: 0 0.5rem;
         overflow-y: auto;
         max-height: calc(100vh - 64px - 188px - 32px); // adjust based on actual input height
         box-sizing: border-box;
+        background-color: $tetiary-green;
 
         .row {
             display: flex;
@@ -21,7 +44,7 @@
             padding: 0.5rem 0;
 
             &.matched {
-                background-color: #e6ffe6;
+                background-color: $secondary-green;
             }
 
             .cell {
@@ -35,7 +58,7 @@
 
             &:first-child {
                 font-weight: bold;
-                background-color: #f0f0f0;
+                background-color: $primary-white;
                 position: sticky;
                 top: 0;
                 z-index: 1;

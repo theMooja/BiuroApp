@@ -5,15 +5,19 @@
                 <button type="button" mat-raised-button (click)="absenceInput.click()"
                     matBadge="{{absences.length}}">Urlopy</button>
                 <input hidden type="file" accept=".xlsx" (change)="onLoadAbsences($event)" #absenceInput>
-
+                <span class="secondary-badge">{{results.length}}</span>
             </div>
             <div class="input-container">
-                <button type="button" mat-raised-button (click)="employeesInput.click()"
-                    matBadge="{{absences.length}}">Pracownicy</button>
-                <input hidden type="file" accept=".xlsx" (change)="onLoadEmployees($event)" #employeesInput>
-
+                <button type="button" mat-raised-button (click)="definitionsInput.click()"
+                    matBadge="{{employees.length}}">Definicje</button>
+                <input hidden type="file" accept=".xlsx" (change)="onLoadDefinitions($event)" #definitionsInput>
+                <span class="secondary-badge">{{definitions.length}}</span>
             </div>
-            <button mat-raised-button (click)="onLoadDefinitions()">Definicje urlopów</button>
+            <div class="spacer"></div>
+            <div class="input-container">
+                <button type="button" mat-raised-button (click)="onMatch()">Dopasuj</button>
+                <button type="button" mat-raised-button (click)="onExport()">Do schowka</button>
+            </div>
         </div>
         @if(absences.length) {
         <div class="panel">
@@ -24,9 +28,10 @@
 
             </div>
             @for(row of absences; track row) {
-            <div class="row">
+            <div class="row" [ngClass]="{'matched': row.matched}">
                 <span class="cell">{{row.employee}}</span>
                 <span class="cell">{{row.absenceType}}</span>
+                <span class="cell">{{row.startDate | date: 'dd-MM-yyyy'}} - {{row.endDate | date: 'dd-MM-yyyy'}}</span>
             </div>
             }
         </div>
