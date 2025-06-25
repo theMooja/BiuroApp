@@ -92,7 +92,7 @@ export class ZalandoComponent {
       result.from,
       result.to
     ]);
-    aoa.unshift(['Class', 'Pracownik:Class', 'Pracownik:Kod', 'Definicja:nazwa', 'Zwolnienie.Przyczyna', 'Okres.Od', 'Okres.Do']);
+    aoa.unshift(['Class', 'Pracownik:Class', 'Pracownik:Kod', 'Definicja:Nazwa', 'Zwolnienie.Przyczyna', 'Okres.Od', 'Okres.Do']);
 
     const worksheet = XLSX.utils.aoa_to_sheet(aoa);
     const tsv = XLSX.utils.sheet_to_txt(worksheet, { FS: '\t' });
