@@ -15,6 +15,7 @@ import { SortPdfComponent } from './view/tools/sort-pdf/sort-pdf.component';
 import { AccountSwapComponent } from './view/tools/account-swap/account-swap.component';
 import { MailingComponent } from './view/tools/mailing/mailing.component';
 import { AppSetupComponent } from './view/app-setup/app-setup.component';
+import { ZalandoComponent } from './view/tools/zalando/zalando.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -29,6 +30,7 @@ export const routes: Routes = [
         path: 'tools', component: ToolsComponent, children: [
             { path: 'sort-pdf', component: SortPdfComponent },
             { path: 'account-swap', component: AccountSwapComponent },
+            { path: 'zalando', component: ZalandoComponent },
             { path: 'mailing', component: MailingComponent }]
     },
     { path: '', redirectTo: '/login', pathMatch: 'full' },

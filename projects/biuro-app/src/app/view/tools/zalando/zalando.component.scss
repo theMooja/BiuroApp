@@ -1,0 +1,45 @@
+@import './../../../variables.scss';
+
+.view {
+    display: flex;
+    flex-direction: row;
+
+    .panel {
+        flex: 1 1 50%;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 0.5rem;
+        overflow-y: auto;
+        max-height: calc(100vh - 64px - 188px - 32px); // adjust based on actual input height
+        box-sizing: border-box;
+
+        .row {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            padding: 0.5rem 0;
+
+            &.matched {
+                background-color: #e6ffe6;
+            }
+
+            .cell {
+                flex: 1;
+                padding: 0 0.5rem;
+                font-size: 0.9rem;
+                word-break: break-word;
+                max-height: 5em;
+                overflow: auto;
+            }
+
+            &:first-child {
+                font-weight: bold;
+                background-color: #f0f0f0;
+                position: sticky;
+                top: 0;
+                z-index: 1;
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+<div class="view">
+    <div class="absence-view">
+        <div class="inputs">
+            <div class="input-container">
+                <button type="button" mat-raised-button (click)="absenceInput.click()"
+                    matBadge="{{absences.length}}">Urlopy</button>
+                <input hidden type="file" accept=".xlsx" (change)="onLoadAbsences($event)" #absenceInput>
+
+            </div>
+            <div class="input-container">
+                <button type="button" mat-raised-button (click)="employeesInput.click()"
+                    matBadge="{{absences.length}}">Pracownicy</button>
+                <input hidden type="file" accept=".xlsx" (change)="onLoadEmployees($event)" #employeesInput>
+
+            </div>
+            <button mat-raised-button (click)="onLoadDefinitions()">Definicje urlopów</button>
+        </div>
+        @if(absences.length) {
+        <div class="panel">
+            <div class="row">
+                <span class="cell">Pracownik</span>
+                <span class="cell">Urlop</span>
+                <span class="cell">Od - do</span>
+
+            </div>
+            @for(row of absences; track row) {
+            <div class="row">
+                <span class="cell">{{row.employee}}</span>
+                <span class="cell">{{row.absenceType}}</span>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>
