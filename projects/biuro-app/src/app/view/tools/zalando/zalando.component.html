@@ -1,40 +1,76 @@
 <div class="view">
-    <div class="absence-view">
-        <div class="inputs">
-            <div class="input-container">
-                <button type="button" mat-raised-button (click)="absenceInput.click()"
-                    matBadge="{{absences.length}}">Urlopy</button>
-                <input hidden type="file" accept=".xlsx" (change)="onLoadAbsences($event)" #absenceInput>
-                <span class="secondary-badge">{{results.length}}</span>
+    <mat-tab-group mat-stretch-tabs="true" [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event"
+        class="tabs">
+
+        <mat-tab mat-stretch-tabs="true" label="Karty">
+            <div class="cards-view">
+                <div class="input-container">
+                    <button type="button" mat-raised-button (click)="cardInput.click()">Karty</button>
+                    <input hidden id="file-input" type="file" accept=".pdf" (change)="onCardsSelected($event)"
+                        #cardInput>
+                    <mat-label>{{cardsFile?.path}}</mat-label>
+                </div>
+                <div class="input-container">
+                    <button type="button" mat-raised-button (click)="definitionsInput.click()"
+                        matBadge="{{employees.length}}">Definicje</button>
+                    <input hidden type="file" accept=".xlsx" (change)="onLoadDefinitions($event)" #definitionsInput>
+                </div>
+
+                <div class="input-container">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Prefix</mat-label>
+                        <input matInput [(ngModel)]="prefix">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Suffix</mat-label>
+                        <input matInput [(ngModel)]="suffix">
+                    </mat-form-field>
+                    <div class="datepicker-container">
+                        <app-monthly-picker [date]="date" (dateChange)="date = $event"></app-monthly-picker>
+                    </div>
+                </div>
+
+                <button type="button" [disabled]="isSorting" mat-raised-button (click)="onSort()">Sortuj</button>
+                <button type="button" mat-raised-button (click)="onExtract()">Czas pracy CSV</button>
             </div>
-            <div class="input-container">
-                <button type="button" mat-raised-button (click)="definitionsInput.click()"
-                    matBadge="{{employees.length}}">Definicje</button>
-                <input hidden type="file" accept=".xlsx" (change)="onLoadDefinitions($event)" #definitionsInput>
-                <span class="secondary-badge">{{definitions.length}}</span>
-            </div>
-            <div class="spacer"></div>
-            <div class="input-container">
+        </mat-tab>
+        <mat-tab label="Nieobecności" class="absence-view">
+            <div class="inputs">
+                <div class="input-container">
+                    <button type="button" mat-raised-button (click)="absenceInput.click()"
+                        matBadge="{{absences.length}}">Urlopy
+                        <span class="secondary-badge">{{results.length}}</span></button>
+                    <input hidden type="file" accept=".xlsx" (change)="onLoadAbsences($event)" #absenceInput>
+
+                </div>
+                <div class="input-container">
+                    <button type="button" mat-raised-button (click)="definitionsInput.click()"
+                        matBadge="{{employees.length}}">Definicje
+                    <span class="secondary-badge">{{definitions.length}}</span></button>
+                    <input hidden type="file" accept=".xlsx" (change)="onLoadDefinitions($event)" #definitionsInput>
+                </div>
+                <div class="spacer"></div>
                 <button type="button" mat-raised-button (click)="onMatch()">Dopasuj</button>
                 <button type="button" mat-raised-button (click)="onExport()">Do schowka</button>
             </div>
-        </div>
-        @if(absences.length) {
-        <div class="panel">
-            <div class="row">
-                <span class="cell">Pracownik</span>
-                <span class="cell">Urlop</span>
-                <span class="cell">Od - do</span>
+            @if(absences.length) {
+            <div class="panel">
+                <div class="row">
+                    <span class="cell">Pracownik</span>
+                    <span class="cell">Urlop</span>
+                    <span class="cell">Od - do</span>
 
-            </div>
-            @for(row of absences; track row) {
-            <div class="row" [ngClass]="{'matched': row.matched}">
-                <span class="cell">{{row.employee}}</span>
-                <span class="cell">{{row.absenceType}}</span>
-                <span class="cell">{{row.startDate | date: 'dd-MM-yyyy'}} - {{row.endDate | date: 'dd-MM-yyyy'}}</span>
+                </div>
+                @for(row of absences; track row) {
+                <div class="row" [ngClass]="{'matched': row.matched}">
+                    <span class="cell">{{row.employee}}</span>
+                    <span class="cell">{{row.absenceType}}</span>
+                    <span class="cell">{{row.startDate | date: 'dd-MM-yyyy'}} - {{row.endDate | date:
+                        'dd-MM-yyyy'}}</span>
+                </div>
+                }
             </div>
             }
-        </div>
-        }
-    </div>
+        </mat-tab>
+    </mat-tab-group>
 </div>
