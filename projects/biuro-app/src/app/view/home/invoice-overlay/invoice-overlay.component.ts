@@ -42,11 +42,22 @@ export class InvoiceOverlayComponent {
     this.monthly = this.data.monthly;
     this.invoice = this.monthly.invoices[0];
 
+    if(!this.invoice) {
+      this.invoice = {
+        id: undefined,
+        no: '',
+        sendDate: undefined,
+        paidDate: undefined,
+        lines: [],
+        monthly: this.monthly
+      };
+    }
+
     this.invoiceForm = this.formBuilder.group({
-      no: this.formBuilder.control(this.invoice.no),
-      id: this.formBuilder.control(this.invoice.id),
-      sendDate: this.formBuilder.control(this.invoice.sendDate),
-      paidDate: this.formBuilder.control(this.invoice.paidDate),
+      no: this.formBuilder.control(this.invoice?.no),
+      id: this.formBuilder.control(this.invoice?.id),
+      sendDate: this.formBuilder.control(this.invoice?.sendDate),
+      paidDate: this.formBuilder.control(this.invoice?.paidDate),
       lines: this.formBuilder.array(this.invoice.lines.map(x => this.formBuilder.group({
         id: this.formBuilder.control(x.id),
         description: this.formBuilder.control(x.description),
